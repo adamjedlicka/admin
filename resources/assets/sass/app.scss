@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu');
+
 /**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.
@@ -62,5 +64,6 @@
  */
 
 #app {
+    font-family: 'Ubuntu', sans-serif;
     height: 100vh;
 }
