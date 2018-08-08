@@ -7,7 +7,9 @@
             <div v-for="(field, j) in fields" :key="j"
                 class="font-thin text-lg text-grey-darkest p-4"
                 :class="[$parent.fieldWidth(field)]" >
-                {{ row[field.field] }}
+
+                <component :is="`${field.type}-index-field`" :value="row[field.field]" />
+
             </div>
 
         </div>
