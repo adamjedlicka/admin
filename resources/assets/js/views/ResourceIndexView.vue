@@ -1,6 +1,10 @@
 <template>
-    <div class="p-4" >
-        <Dial v-if="resourceName" :source="`/api/resources/${resourceName}`" />
+    <div v-if="resourceName" class="p-4" >
+        <div class="text-2xl font-bold pb-4">
+            Index
+        </div>
+
+        <Dial ref="dial" :source="`/api/resources/${resourceName}`" />
     </div>
 </template>
 
