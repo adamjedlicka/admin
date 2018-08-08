@@ -1,8 +1,6 @@
 import Vue from 'vue'
-import router from '~/router'
-
-import fetch from '~/vue/plugins/fetch'
-Vue.use(fetch)
+import router from '~/vue/router'
+import '~/vue/plugins'
 
 new Vue({
     el: '#app',

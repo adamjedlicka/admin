@@ -10,6 +10,12 @@ export default new VueRouter({
         {
             path: '/',
             component: require('~/views/HomeView'),
-        }
+            children: [
+                {
+                    path: 'resources/:resource',
+                    component: require('~/views/ResourceIndexView'),
+                }
+            ]
+        },
     ]
 })

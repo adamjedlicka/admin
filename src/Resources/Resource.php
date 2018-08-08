@@ -2,6 +2,8 @@
 
 namespace AdamJedlicka\Admin\Resources;
 
+use Illuminate\Support\Str;
+
 abstract class Resource
 {
     /**
@@ -21,11 +23,16 @@ abstract class Resource
      *
      * @return array
      */
-    public abstract function fields() : array;
+    abstract public function fields() : array;
 
-    public function name() : string
+    /**
+     * Display name of the resource. By default plural version of the model name
+     *
+     * @return string
+     */
+    public function displayName() : string
     {
-        return (new \ReflectionClass($this))->getShortName();
+        return Str::plural((new \ReflectionClass($this))->getShortName());
     }
 
     /**
@@ -34,7 +41,7 @@ abstract class Resource
      *
      * @return string
      */
-    protected function modelName() : string
+    public function modelName() : string
     {
         return (new \ReflectionClass($this))->getName();
     }

@@ -14,15 +14,27 @@
                 Resources
             </router-link>
 
+            <router-link
+                v-for="(resource, i) in resources" :key="i"
+                class="pl-8 p-2 block hover:bg-grey-dark cursor-pointer text-white no-underline"
+                :to="`/resources/${resource.name.toLowerCase()}`" >
+                {{ resource.displayName }}
+            </router-link>
+
         </nav>
     </div>
 </template>
 
 <script>
 export default {
+    data() {
+        return {
+            resources: [],
+        }
+    },
+
     async mounted() {
-        let resources = await this.$get('/api/resources')
-        console.log(resources)
+        this.resources = await this.$get('/api/resources')
     }
 }
 </script>

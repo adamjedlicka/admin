@@ -7,6 +7,7 @@
             <SideBar id="sidebar" />
 
             <div class="flex-1 p-4">
+                <router-view />
             </div>
 
         </div>
