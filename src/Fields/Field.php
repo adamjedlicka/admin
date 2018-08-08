@@ -21,6 +21,20 @@ abstract class Field implements JsonSerializable
      */
     protected $field;
 
+    /**
+     * Is this field visible on the index view?
+     *
+     * @var boolean
+     */
+    protected $visibleIndex = false;
+
+    /**
+     * Is this field visible on the detail view?
+     *
+     * @param boolean
+     */
+    protected $visibleDetail = true;
+
     private function __construct(string $displayName, ? string $field = null)
     {
         $this->name = $displayName;
@@ -39,12 +53,58 @@ abstract class Field implements JsonSerializable
         return $self;
     }
 
+    /**
+     * Show field on index view
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function showOnIndex()
+    {
+        $this->visibleIndex = true;
+        return $this;
+    }
+
+    /**
+     * Show field on detail view
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function showOnDetail()
+    {
+        $this->visibleDetail = true;
+        return $this;
+    }
+
+    /**
+     * Hide field from index view
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function hideFromIndex()
+    {
+        $this->visibleIndex = false;
+        return $this;
+    }
+
+    /**
+     * Hide field from detail view
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function hideFromDetail()
+    {
+        $this->visibleDetail = false;
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'field' => $this->field,
+            'visibleIndex' => $this->visibleIndex,
+            'visibleDetail' => $this->visibleDetail,
         ];
     }
 }

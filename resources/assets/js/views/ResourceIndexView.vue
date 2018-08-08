@@ -1,6 +1,12 @@
 <template>
-    <div>
-        <h1>{{ resource.displayName }}</h1>
+    <div
+        class="p-4" >
+        <h1
+            class="pb-4" >
+            {{ resource.displayName }}
+        </h1>
+
+        <Dial :resource="resource" />
     </div>
 </template>
 
