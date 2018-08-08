@@ -1,5 +1,6 @@
 let mix = require('laravel-mix');
 let tailwindcss = require('tailwindcss');
+let { exec } = require('child_process');
 
 /*
  |--------------------------------------------------------------------------
@@ -29,3 +30,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
         processCssUrls: false,
         postCss: [tailwindcss('tailwind.js')],
     })
+
+mix.then(() => {
+    exec('php artisan vendor:publish --force --provider AdamJedlicka\Admin\ServiceProvider')
+})

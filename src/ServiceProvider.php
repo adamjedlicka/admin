@@ -15,11 +15,12 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
-        // $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'admin');
 
         $this->publishes([
-            __DIR__ . '/../public' => public_path('/vendor/admin')
-        ], 'public');
+            __DIR__ . '/../public' => public_path('/vendor/admin'),
+            __DIR__ . '/../config/admin.php' => config_path('admin.php'),
+        ]);
     }
 }

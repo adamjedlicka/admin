@@ -17,3 +17,12 @@
         </nav>
     </div>
 </template>
+
+<script>
+export default {
+    async mounted() {
+        let resources = await this.$get('/api/resources')
+        console.log(resources)
+    }
+}
+</script>

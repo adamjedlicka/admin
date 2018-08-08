@@ -3,7 +3,7 @@
 Route::group([
     'namespace' => 'AdamJedlicka\Admin\Http\Controllers',
     'middleware' => 'web',
-    'prefix' => 'admin',
+    'prefix' => config('admin.prefix'),
 ], function () {
 
     Route::get('/{any?}', 'AdminController@index')
