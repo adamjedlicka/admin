@@ -8,8 +8,8 @@ class ID extends Field
 
     protected $indexSize = 'small';
 
-    public static function make(string $displayName = 'ID', ? string $field = 'id')
+    public static function make(string $displayName = 'ID', $options = 'id')
     {
-        return parent::make($displayName, $field);
+        return parent::make($displayName, $options);
     }
 }

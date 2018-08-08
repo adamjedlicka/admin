@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin\Fields;
 
 use JsonSerializable;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 abstract class Field implements JsonSerializable
 {
@@ -49,10 +50,15 @@ abstract class Field implements JsonSerializable
      */
     protected $sortable = false;
 
-    private function __construct(string $displayName, ? string $field = null)
+    private function __construct(string $displayName, $options = null)
     {
         $this->name = $displayName;
-        $this->field = $field ?? Str::snake($this->name);
+
+        if (is_null($options)) {
+            $this->field = Str::snake($displayName);
+        } else if (is_string($options)) {
+            $this->field = $options;
+        }
     }
 
     /**
@@ -62,9 +68,9 @@ abstract class Field implements JsonSerializable
      * @param string|null $field Name fo the field in database
      * @return self
      */
-    public static function make(string $displayName, ? string $field = null)
+    public static function make(string $displayName, $options = null)
     {
-        $self = new static($displayName, $field);
+        $self = new static($displayName, $options);
         return $self;
     }
 
