@@ -9,7 +9,7 @@ let getSync = async (url) => {
     let parameters = router.app.$route.query
 
     for (let parameter in parameters) {
-        if (url[parameter]) continue
+        if (url[parameter] !== undefined) continue
 
         url[parameter] = parameters[parameter]
     }

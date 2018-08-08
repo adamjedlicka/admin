@@ -31,16 +31,23 @@ abstract class Field implements JsonSerializable
     /**
      * Is this field visible on the detail view?
      *
-     * @param boolean
+     * @var boolean
      */
     protected $detailVisible = true;
 
     /**
      * Size of the field in the index view
      *
-     * @param string
+     * @var string
      */
     protected $indexSize = 'normal';
+
+    /**
+     * Indicates whether it is possible to sort using this field
+     *
+     * @var boolean
+     */
+    protected $sortable = false;
 
     private function __construct(string $displayName, ? string $field = null)
     {
@@ -53,6 +60,7 @@ abstract class Field implements JsonSerializable
      *
      * @param string $displayName Display name of the field
      * @param string|null $field Name fo the field in database
+     * @return self
      */
     public static function make(string $displayName, ? string $field = null)
     {
@@ -63,7 +71,7 @@ abstract class Field implements JsonSerializable
     /**
      * Show field on index view
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return self
      */
     public function showOnIndex()
     {
@@ -74,7 +82,7 @@ abstract class Field implements JsonSerializable
     /**
      * Show field on detail view
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return self
      */
     public function showOnDetail()
     {
@@ -85,7 +93,7 @@ abstract class Field implements JsonSerializable
     /**
      * Hide field from index view
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return self
      */
     public function hideFromIndex()
     {
@@ -96,11 +104,22 @@ abstract class Field implements JsonSerializable
     /**
      * Hide field from detail view
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return self
      */
     public function hideFromDetail()
     {
         $this->detailVisible = false;
+        return $this;
+    }
+
+    /**
+     * Makes the field sortable in index views
+     *
+     * @return self
+     */
+    public function sortable()
+    {
+        $this->sortable = true;
         return $this;
     }
 
@@ -113,6 +132,7 @@ abstract class Field implements JsonSerializable
             'indexVisible' => $this->indexVisible,
             'detailVisible' => $this->detailVisible,
             'indexSize' => $this->indexSize,
+            'sortable' => $this->sortable,
         ];
     }
 }

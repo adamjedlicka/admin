@@ -2,7 +2,8 @@
     <div v-if="resource"
         class="bg-white shadow-md rounded-lg min-w-100 overflow-auto" >
 
-        <DialHeader :resource="resource" :fields="fields" />
+        <DialHeader :resource="resource" :fields="fields"
+            @sort="onSort" />
 
         <DialBody :resource="resource" :fields="fields" />
 
@@ -47,6 +48,12 @@ export default {
     methods: {
         onPageChange(page) {
             this.url.page = page
+            this.fetchData()
+        },
+
+        onSort(sort, order) {
+            this.url.sortBy = sort
+            this.url.orderBy = order
             this.fetchData()
         },
 

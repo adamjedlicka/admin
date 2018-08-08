@@ -18,7 +18,13 @@ class IndexSerializer implements JsonSerializable
 
     private function data()
     {
-        return $this->resource->model()::paginate();
+        $query = $this->resource->model()::query();
+
+        if ($sortBy = request('sortBy')) {
+            $query->orderBy($sortBy, request('orderBy', 'asc'));
+        }
+
+        return $query->paginate();
     }
 
     public function jsonSerialize()
