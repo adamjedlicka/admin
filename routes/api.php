@@ -12,4 +12,7 @@ Route::group([
     Route::get('/resources/{name}', 'ResourceController@index')
         ->name('resources.index');
 
+    Route::get('/resources/{name}/{id}', 'ResourceController@detail')
+        ->name('resources.detail');
+
 });

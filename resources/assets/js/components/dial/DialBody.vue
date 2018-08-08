@@ -13,12 +13,15 @@
             </div>
 
             <div class="flex justify-end pr-4 w-24">
-                <span class="text-grey hover:text-black cursor-pointer">
+                <router-link :to="detailUrl(row)"
+                    class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-eye"></i>
-                </span>
+                </router-link>
+
                 <span class="text-grey hover:text-black cursor-pointer">
                     <i class="py-4 px-1 far fa-edit"></i>
                 </span>
+
                 <span class="text-grey hover:text-red cursor-pointer">
                     <i class="py-4 px-1 far fa-trash-alt"></i>
                 </span>
@@ -41,5 +44,14 @@ export default {
             return this.resource.data.data
         }
     },
+
+    methods: {
+        detailUrl(row) {
+            let resourceName = this.$route.params.resource
+            let id = row.id
+
+            return `/resources/${resourceName}/${id}`
+        }
+    }
 }
 </script>

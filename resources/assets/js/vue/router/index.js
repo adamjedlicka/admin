@@ -14,6 +14,10 @@ export default new VueRouter({
                 {
                     path: 'resources/:resource',
                     component: require('~/views/ResourceIndexView'),
+                },
+                {
+                    path: 'resources/:resource/:id',
+                    component: require('~/views/ResourceDetailView'),
                 }
             ]
         },
