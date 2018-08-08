@@ -3,7 +3,7 @@
 
         <HeaderBar />
 
-        <div class="flex bg-grey-lighter">
+        <div class="flex bg-grey-light">
             <SideBar id="sidebar" />
 
             <div class="flex-1 p-4">

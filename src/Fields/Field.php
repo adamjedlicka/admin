@@ -26,14 +26,21 @@ abstract class Field implements JsonSerializable
      *
      * @var boolean
      */
-    protected $visibleIndex = false;
+    protected $indexVisible = false;
 
     /**
      * Is this field visible on the detail view?
      *
      * @param boolean
      */
-    protected $visibleDetail = true;
+    protected $detailVisible = true;
+
+    /**
+     * Size of the field in the index view
+     *
+     * @param string
+     */
+    protected $indexSize = 'normal';
 
     private function __construct(string $displayName, ? string $field = null)
     {
@@ -60,7 +67,7 @@ abstract class Field implements JsonSerializable
      */
     public function showOnIndex()
     {
-        $this->visibleIndex = true;
+        $this->indexVisible = true;
         return $this;
     }
 
@@ -71,7 +78,7 @@ abstract class Field implements JsonSerializable
      */
     public function showOnDetail()
     {
-        $this->visibleDetail = true;
+        $this->detailVisible = true;
         return $this;
     }
 
@@ -82,7 +89,7 @@ abstract class Field implements JsonSerializable
      */
     public function hideFromIndex()
     {
-        $this->visibleIndex = false;
+        $this->indexVisible = false;
         return $this;
     }
 
@@ -93,7 +100,7 @@ abstract class Field implements JsonSerializable
      */
     public function hideFromDetail()
     {
-        $this->visibleDetail = false;
+        $this->detailVisible = false;
         return $this;
     }
 
@@ -103,8 +110,9 @@ abstract class Field implements JsonSerializable
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'field' => $this->field,
-            'visibleIndex' => $this->visibleIndex,
-            'visibleDetail' => $this->visibleDetail,
+            'indexVisible' => $this->indexVisible,
+            'detailVisible' => $this->detailVisible,
+            'indexSize' => $this->indexSize,
         ];
     }
 }

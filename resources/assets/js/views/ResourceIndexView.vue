@@ -14,7 +14,7 @@
 export default {
     data() {
         return {
-            resource: null,
+            resource: {},
         }
     },
 

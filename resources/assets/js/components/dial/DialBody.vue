@@ -1,11 +1,12 @@
 <template>
-    <div>
+    <div class="bg-white">
 
-        <div v-for="(row, i) in resource.data.data" :key="i"
-            class="flex p-2 hover:bg-grey-lighter" >
+        <div v-for="(row, i) in rows" :key="i"
+            class="flex hover:bg-grey-lighter" >
 
             <div v-for="(field, j) in fields" :key="j"
-                class="flex-1" >
+                class="font-thin text-lg text-grey-darkest p-4"
+                :class="[$parent.fieldWidth(field)]" >
                 {{ row[field.field] }}
             </div>
 
@@ -19,7 +20,14 @@ export default {
     props: {
         resource: Object,
         fields: Array,
+    },
 
-    }
+    computed: {
+        rows() {
+            return this.resource.data
+                ? this.resource.data.data
+                : []
+        }
+    },
 }
 </script>

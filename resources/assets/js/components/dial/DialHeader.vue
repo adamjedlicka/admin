@@ -1,9 +1,10 @@
 <template>
-    <div class="flex p-4">
+    <div class="flex p-4 bg-grey-lighter border-b-2 border-grey">
 
         <div
             v-for="(field, i) in fields" :key="i"
-            class="flex-1 text-xl" >
+            class="font-bold text-grey-darker"
+            :class="[$parent.fieldWidth(field)]" >
             {{ field.name }}
         </div>
 
