@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Resources;
 
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class Resource
 {
@@ -63,5 +64,10 @@ abstract class Resource
     public function modelNamespace() : string
     {
         return get_namespace_from_file(app_path($this->modelName . '.php'));
+    }
+
+    public function model()
+    {
+        return $model = $this->modelNamespace . '\\' . $this->modelName;
     }
 }

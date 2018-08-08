@@ -16,12 +16,18 @@ class IndexSerializer implements JsonSerializable
         $this->resource = $resource;
     }
 
+    private function data()
+    {
+        return $this->resource->model()::paginate();
+    }
+
     public function jsonSerialize()
     {
         return [
             'name' => (new \ReflectionClass($this->resource))->getShortName(),
             'displayName' => $this->resource->displayName(),
             'fields' => $this->resource->fields(),
+            'data' => $this->data(),
         ];
     }
 }
