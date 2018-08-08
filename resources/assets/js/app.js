@@ -2,8 +2,9 @@ import Vue from 'vue'
 import router from '~/vue/router'
 import '~/vue/plugins'
 import '~/components'
+import '~/helpers'
 
-new Vue({
+window.Vue = new Vue({
     el: '#app',
     router: router,
 })

@@ -1,15 +1,15 @@
 <template>
     <div class="flex justify-between bg-blue-lightest border-t border-grey p-4">
 
-        <a href="#"
-            class="font-bold text-grey-darker no-underline" >
+        <div class="font-bold text-grey-darker no-underline"
+            @click="previous" >
             Previous
-        </a>
+        </div>
 
-        <a href="#"
-            class="font-bold text-grey-darker no-underline" >
+        <div class="font-bold text-grey-darker no-underline"
+            @click="next" >
             Next
-        </a>
+        </div>
 
     </div>
 </template>
@@ -18,14 +18,15 @@
 export default {
     props: {
         current: Number,
-        total: Number,
-        perPage: Number,
     },
 
-    computed: {
-        pages() {
-            let numOfPages = Math.ceil(this.total / this.perPage)
-            return [...Array(numOfPages).keys()]
+    methods: {
+        next() {
+            this.$emit('page', this.current + 1)
+        },
+
+        previous() {
+            this.$emit('page', this.current - 1)
         }
     }
 }

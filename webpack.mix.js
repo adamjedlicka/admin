@@ -22,7 +22,6 @@ mix.webpackConfig({
 })
 
 mix.setPublicPath('public')
-    .disableSuccessNotifications()
 
 mix.js('resources/assets/js/app.js', 'public/js')
     .sass('resources/assets/sass/app.scss', 'public/css')
@@ -30,6 +29,13 @@ mix.js('resources/assets/js/app.js', 'public/js')
         processCssUrls: false,
         postCss: [tailwindcss('tailwind.js')],
     })
+
+if (mix.inProduction()) {
+    mix.version()
+} else {
+    mix.sourceMaps()
+        .disableSuccessNotifications()
+}
 
 mix.then(() => {
     exec('php artisan vendor:publish --force --provider AdamJedlicka\Admin\ServiceProvider')
