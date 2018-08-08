@@ -12,6 +12,18 @@
 
             </div>
 
+            <div class="flex justify-end pr-4 w-24">
+                <span class="text-grey hover:text-black cursor-pointer">
+                    <i class="py-4 px-1 far fa-eye"></i>
+                </span>
+                <span class="text-grey hover:text-black cursor-pointer">
+                    <i class="py-4 px-1 far fa-edit"></i>
+                </span>
+                <span class="text-grey hover:text-red cursor-pointer">
+                    <i class="py-4 px-1 far fa-trash-alt"></i>
+                </span>
+            </div>
+
         </div>
 
     </div>

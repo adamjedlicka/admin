@@ -18,6 +18,9 @@
 
         </div>
 
+        <div class="w-24">
+        </div>
+
     </div>
 </template>
 
