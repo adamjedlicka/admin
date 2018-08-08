@@ -2,13 +2,20 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 use AdamJedlicka\Admin\Resources\ListSerializer;
+use AdamJedlicka\Admin\Resources\IndexSerializer;
 
 class ResourceController extends Controller
 {
-    public function index()
+    public function list()
     {
         return new ListSerializer();
+    }
+
+    public function index(string $name)
+    {
+        $resource = $this->getResourceFromName($name);
+
+        return new IndexSerializer($resource);
     }
 }

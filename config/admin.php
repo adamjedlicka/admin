@@ -4,4 +4,6 @@ return [
 
     'prefix' => 'admin',
 
+    'directory' => 'Admin',
+
 ];

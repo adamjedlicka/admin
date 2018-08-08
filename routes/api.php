@@ -6,7 +6,10 @@ Route::group([
     'prefix' => config('admin.prefix') . '/api',
 ], function () {
 
-    Route::get('/resources', 'ResourceController@index')
+    Route::get('/resources', 'ResourceController@list')
+        ->name('resources.list');
+
+    Route::get('/resources/{name}', 'ResourceController@index')
         ->name('resources.index');
 
 });

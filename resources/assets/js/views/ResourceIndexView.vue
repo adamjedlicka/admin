@@ -1,17 +1,21 @@
 <template>
-    <h1>Hello, World!</h1>
+    <div>
+        <h1>{{ resource.displayName }}</h1>
+    </div>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            resource: '',
+            resource: null,
         }
     },
 
-    mounted() {
-        this.resource = this.$route.params.resource
+    async mounted() {
+        let resourceName = this.$route.params.resource
+
+        this.resource = await this.$get(`/api/resources/${resourceName}`)
     },
 }
 </script>
