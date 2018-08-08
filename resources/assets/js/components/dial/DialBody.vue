@@ -24,9 +24,7 @@ export default {
 
     computed: {
         rows() {
-            return this.resource.data
-                ? this.resource.data.data
-                : []
+            return this.resource.data.data
         }
     },
 }

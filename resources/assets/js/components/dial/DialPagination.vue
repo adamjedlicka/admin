@@ -26,27 +26,29 @@ export default {
     computed: {
         classesPrevious() {
             return this.current == 1
-                ? [
-                    'text-grey',
-                    'cursor-not-allowed',
-                ]
-                : [
-                    'text-grey-darker',
-                    'cursor-pointer',
-                ]
+                ? this.classesDisabled
+                : this.classesEnabled
         },
 
         classesNext() {
             return this.current == this.last
-                ? [
-                    'text-grey',
-                    'cursor-not-allowed',
-                ]
-                : [
-                    'text-grey-darker',
-                    'cursor-pointer',
-                ]
-        }
+                ? this.classesDisabled
+                : this.classesEnabled
+        },
+
+        classesEnabled() {
+            return [
+                'text-grey-darker',
+                'cursor-pointer',
+            ]
+        },
+
+        classesDisabled() {
+            return [
+                'text-grey',
+                'cursor-not-allowed',
+            ]
+        },
     },
 
     methods: {
