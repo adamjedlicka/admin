@@ -6,7 +6,9 @@
 
         <DialBody :resource="resource" :fields="fields" />
 
-        <DialPagination :current="resource.data.current_page"
+        <DialPagination
+            :current="resource.data.current_page"
+            :last="resource.data.last_page"
             @page="onPageChange" />
 
     </div>
