@@ -8,31 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 abstract class Resource
 {
     /**
-     * Name of the model class this resource is prepresenting
-     *
-     * @var string
-     */
-    protected $modelName;
-
-    /**
-     * Namespace of the model class this resource is representing
-     *
-     * @var string
-     */
-    protected $modelNamespace;
-
-    public function __construct()
-    {
-        $this->modelName = $this->modelName();
-        $this->modelNamespace = $this->modelNamespace();
-    }
-
-    /**
      * Definition of fields
      *
      * @return array
      */
     abstract public function fields() : array;
+
+    /**
+     * Name of the resource
+     *
+     * @return string
+     */
+    public function name() : string
+    {
+        return (new \ReflectionClass($this))->getShortName();
+    }
 
     /**
      * Display name of the resource. By default plural version of the model name
@@ -41,7 +31,7 @@ abstract class Resource
      */
     public function displayName() : string
     {
-        return Str::plural((new \ReflectionClass($this))->getShortName());
+        return Str::plural($this->name());
     }
 
     /**
@@ -52,7 +42,7 @@ abstract class Resource
      */
     public function modelName() : string
     {
-        return (new \ReflectionClass($this))->getShortName();
+        return $this->name();
     }
 
     /**
@@ -63,11 +53,16 @@ abstract class Resource
      */
     public function modelNamespace() : string
     {
-        return get_namespace_from_file(app_path($this->modelName . '.php'));
+        return config('admin.models.namespace');
     }
 
-    public function model()
+    /**
+     * Returns class of the coresponding model
+     *
+     * @return string
+     */
+    public function model() : string
     {
-        return $model = $this->modelNamespace . '\\' . $this->modelName;
+        return $this->modelNamespace() . '\\' . $this->modelName();
     }
 }

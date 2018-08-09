@@ -13,7 +13,7 @@ class ListSerializer implements JsonSerializable
             $resource = new $resourceClass;
 
             $resources[] = [
-                'name' => (new \ReflectionClass($resource))->getShortName(),
+                'name' => $resource->name(),
                 'displayName' => $resource->displayName(),
             ];
         }

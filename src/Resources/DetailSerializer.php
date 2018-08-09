@@ -30,7 +30,7 @@ class DetailSerializer implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'name' => (new \ReflectionClass($this->resource))->getShortName(),
+            'name' => $this->resource->name(),
             'displayName' => $this->resource->displayName(),
             'fields' => $this->resource->fields(),
             'model' => $this->model(),
