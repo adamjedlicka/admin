@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
+use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resources\Resource;
 
 class DetailSerializer implements JsonSerializable
@@ -29,16 +30,13 @@ class DetailSerializer implements JsonSerializable
     {
         $model = $this->resource->query()->find($this->id);
 
-        $this->fillComputedFields($model);
-
-        return $model;
+        return new Model($model, $this->resource);
     }
 
     public function jsonSerialize()
     {
         return [
             'name' => $this->resource->name(),
-            'displayName' => $this->resource->displayName(),
             'fields' => $this->resource->fields(),
             'model' => $this->model(),
         ];

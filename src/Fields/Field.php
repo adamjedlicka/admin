@@ -5,6 +5,7 @@ namespace AdamJedlicka\Admin\Fields;
 use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class Field implements JsonSerializable
 {
@@ -143,14 +144,15 @@ abstract class Field implements JsonSerializable
         return $this;
     }
 
-    public function getField() : ? string
+    public function resolve(Model $model)
     {
-        return $this->field;
-    }
+        $value = $this->callable
+            ? call_user_func($this->callable, $model)
+            : $model->getAttribute($this->field);
 
-    public function getCallable() : ? callable
-    {
-        return $this->callable;
+        return [
+            'value' => $value,
+        ];
     }
 
     public function jsonSerialize()
@@ -164,5 +166,10 @@ abstract class Field implements JsonSerializable
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];
+    }
+
+    public function __toString()
+    {
+        return $this->field;
     }
 }

@@ -18,32 +18,6 @@ abstract class Resource
     abstract public function fields() : array;
 
     /**
-     * Returns collection of all regular, non-computed fields
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function regularFields() : Collection
-    {
-        return collect($this->fields())
-            ->filter(function (Field $field) {
-                return $field->getCallable() == null;
-            });
-    }
-
-    /**
-     * Returns collection of all computed fields
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function computedFields() : Collection
-    {
-        return collect($this->fields())
-            ->filter(function (Field $field) {
-                return $field->getCallable() != null;
-            });
-    }
-
-    /**
      * Name of the resource
      *
      * @return string

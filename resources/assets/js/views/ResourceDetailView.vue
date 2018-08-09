@@ -13,7 +13,7 @@
                 </div>
 
                 <div>
-                    <conponent :is="`${field.type}-detail-field`" :value="resource.model[field.field]" />
+                    <conponent :is="`${field.type}-detail-field`" :value="resource.model.fields[field.field]" />
                 </div>
 
             </div>
