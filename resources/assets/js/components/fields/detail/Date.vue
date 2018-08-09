@@ -10,7 +10,7 @@ export default {
 
     computed: {
         display() {
-            return new Date(this.value.value.date).toLocaleDateString(locale())
+            return new Date(this.value.date).toLocaleDateString(locale())
         }
     }
 }

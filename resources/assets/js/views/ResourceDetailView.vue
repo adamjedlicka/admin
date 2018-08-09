@@ -1,7 +1,13 @@
 <template>
     <div v-if="resource" class="p-4">
-        <div class="text-2xl font-bold pb-4">
-            {{ resource.name }}
+        <div class="flex justify-between pb-4">
+            <div class="text-2xl font-bold">
+                {{ resource.name }}
+            </div>
+
+            <a href="#" class="btn btn-blue">
+                Edit
+            </a>
         </div>
 
         <div class="bg-white shadow-md rounded-lg py-2 px-4">

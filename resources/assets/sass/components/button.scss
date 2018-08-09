@@ -1,0 +1,15 @@
+.btn {
+    @apply rounded-lg text-white py-2 px-6 font-bold no-underline shadow-md;
+
+    &:active {
+        @apply shadow-inner;
+    }
+}
+
+.btn-blue {
+    @apply bg-blue;
+
+    &:active {
+        @apply bg-blue-dark;
+    }
+}
