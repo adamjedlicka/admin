@@ -40,6 +40,8 @@ export default {
 
     methods: {
         onClick(field) {
+            if (!field.sortable) return
+
             if (field.field == this.sort) {
                 this.sort = field.field
                 this.order = {

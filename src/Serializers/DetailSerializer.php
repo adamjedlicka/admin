@@ -1,11 +1,14 @@
 <?php
 
-namespace AdamJedlicka\Admin\Resources;
+namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
+use AdamJedlicka\Admin\Resources\Resource;
 
 class DetailSerializer implements JsonSerializable
 {
+    use SerializesResources;
+
     /**
      * @var \AdamJedlicka\Admin\Resources\Resource
      */
@@ -24,7 +27,11 @@ class DetailSerializer implements JsonSerializable
 
     private function model()
     {
-        return $this->resource->model()::find($this->id);
+        $model = $this->resource->query()->find($this->id);
+
+        $this->fillComputedFields($model);
+
+        return $model;
     }
 
     public function jsonSerialize()

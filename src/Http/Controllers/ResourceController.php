@@ -2,9 +2,9 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use AdamJedlicka\Admin\Resources\ListSerializer;
-use AdamJedlicka\Admin\Resources\IndexSerializer;
-use AdamJedlicka\Admin\Resources\DetailSerializer;
+use AdamJedlicka\Admin\Serializers\ListSerializer;
+use AdamJedlicka\Admin\Serializers\IndexSerializer;
+use AdamJedlicka\Admin\Serializers\DetailSerializer;
 
 class ResourceController extends Controller
 {
