@@ -3,7 +3,10 @@
 namespace AdamJedlicka\Admin\Resources;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 abstract class Resource
 {
@@ -13,6 +16,32 @@ abstract class Resource
      * @return array
      */
     abstract public function fields() : array;
+
+    /**
+     * Returns collection of all regular, non-computed fields
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function regularFields() : Collection
+    {
+        return collect($this->fields())
+            ->filter(function (Field $field) {
+                return $field->getCallable() == null;
+            });
+    }
+
+    /**
+     * Returns collection of all computed fields
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function computedFields() : Collection
+    {
+        return collect($this->fields())
+            ->filter(function (Field $field) {
+                return $field->getCallable() != null;
+            });
+    }
 
     /**
      * Name of the resource
@@ -64,5 +93,15 @@ abstract class Resource
     public function model() : string
     {
         return $this->modelNamespace() . '\\' . $this->modelName();
+    }
+
+    /**
+     * Creates new query over the coresponding model
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query() : Builder
+    {
+        return $this->model()::query();
     }
 }

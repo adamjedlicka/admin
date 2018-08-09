@@ -20,7 +20,14 @@ abstract class Field implements JsonSerializable
      *
      * @var string
      */
-    protected $field;
+    protected $field = null;
+
+    /**
+     * Callback for computed field
+     *
+     * @var callable
+     */
+    protected $callable = null;
 
     /**
      * Is this field visible on the index view?
@@ -58,6 +65,9 @@ abstract class Field implements JsonSerializable
             $this->field = Str::snake($displayName);
         } else if (is_string($options)) {
             $this->field = $options;
+        } else if (is_callable($options)) {
+            $this->field = Str::snake($displayName);
+            $this->callable = $options;
         }
     }
 
@@ -125,8 +135,22 @@ abstract class Field implements JsonSerializable
      */
     public function sortable()
     {
+        if ($this->callable != null) {
+            return $this;
+        }
+
         $this->sortable = true;
         return $this;
+    }
+
+    public function getField() : ? string
+    {
+        return $this->field;
+    }
+
+    public function getCallable() : ? callable
+    {
+        return $this->callable;
     }
 
     public function jsonSerialize()

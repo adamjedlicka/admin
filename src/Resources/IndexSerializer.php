@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Resources;
 
 use JsonSerializable;
+use AdamJedlicka\Admin\Fields\Field;
 
 class IndexSerializer implements JsonSerializable
 {
@@ -18,13 +19,29 @@ class IndexSerializer implements JsonSerializable
 
     private function data()
     {
-        $query = $this->resource->model()::query();
+        $query = $this->resource->query();
+
+        $fields = $this->resource->regularFields()
+            ->map(function (Field $field) {
+                return $field->getField();
+            });
+
+        $query->select($fields->toArray());
 
         if ($sortBy = request('sortBy')) {
             $query->orderBy($sortBy, request('orderBy', 'asc'));
         }
 
-        return $query->paginate();
+        $items = $query->paginate();
+
+        foreach ($items as $item) {
+            foreach ($this->resource->computedFields() as $field) {
+                $result = call_user_func($field->getCallable(), $item);
+                $item->setAttribute($field->getField(), $result);
+            }
+        }
+
+        return $items;
     }
 
     public function jsonSerialize()
