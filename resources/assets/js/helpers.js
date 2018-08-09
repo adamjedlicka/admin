@@ -1,3 +1,7 @@
+window.locale = function() {
+    return document.getElementsByTagName("html")[0].getAttribute("lang")
+}
+
 window.clone = function (obj) {
     // Handle the 3 simple types, and null or undefined
     if (null == obj || "object" != typeof obj) return obj
