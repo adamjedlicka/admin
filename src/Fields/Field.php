@@ -76,6 +76,7 @@ abstract class Field implements JsonSerializable
         } else if (is_callable($options)) {
             $this->field = Str::snake($displayName);
             $this->callable = $options;
+            $this->editVisible = false;
         }
     }
 

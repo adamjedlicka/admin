@@ -22,9 +22,25 @@ let getSync = async (url) => {
     return await get(url.get())
 }
 
+let post = async (url, data) => {
+    let body = new FormData()
+
+    for (let prop in data) {
+        body.append(prop, data[prop])
+    }
+
+    let response = await fetch('/admin' + url, {
+        method: 'POST',
+        body: body,
+    })
+
+    return await response.json()
+}
+
 export default {
     install(Vue) {
         Vue.prototype.$get = get
+        Vue.prototype.$post = post
         Vue.prototype.$getSync = getSync
     }
 }

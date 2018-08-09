@@ -2,11 +2,16 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Str;
+use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
 {
+    /**
+     * Locates and returns resource based on name
+     *
+     * @return \AdamJedlicka\Admin\Resources\Resource
+     */
     public function getResourceFromName(string $name)
     {
         $fileName = Str::studly($name) . '.php';

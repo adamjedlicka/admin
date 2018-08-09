@@ -15,4 +15,7 @@ Route::group([
     Route::get('/resources/{name}/{id}', 'ResourceController@detail')
         ->name('resources.detail');
 
+    Route::post('/resources/{name}/{id}', 'ResourceController@update')
+        ->name('resources.update');
+
 });

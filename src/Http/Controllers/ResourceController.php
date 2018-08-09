@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use Illuminate\Support\Facades\Request;
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 use AdamJedlicka\Admin\Serializers\DetailSerializer;
@@ -25,5 +26,17 @@ class ResourceController extends Controller
         $resource = $this->getResourceFromName($name);
 
         return new DetailSerializer($resource, $id);
+    }
+
+    public function update(string $name, $id)
+    {
+        $resource = $this->getResourceFromName($name);
+
+        $model = $resource->model()::findOrFail($id);
+        $model->update(request()->all());
+
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
 }

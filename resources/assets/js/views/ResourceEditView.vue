@@ -10,9 +10,9 @@
                     Cancel
                 </router-link>
 
-                <router-link :to="detailUrl" class="btn btn-green">
+                <span @click.prevent="saveChanges" class="btn btn-green">
                     Save
-                </router-link>
+                </span>
             </div>
         </div>
 
@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-edit-field`" :value="resource.model.fields[field.field]" />
+                    <conponent :is="`${field.type}-edit-field`" v-model="resource.model.fields[field.field]" />
                 </div>
 
             </div>
@@ -38,6 +38,8 @@
 export default {
     data() {
         return {
+            resourceName: null,
+            resourceId: null,
             resource: null,
         }
     },
@@ -48,24 +50,32 @@ export default {
         },
 
         detailUrl() {
-            let resourceName = this.$route.params.resource
-            let id = this.$route.params.id
-
-            return `/resources/${resourceName}/${id}`
+            return `/resources/${this.resourceName}/${this.resourceId}`
         }
     },
 
     mounted() {
+        this.resourceName = this.$route.params.resource
+        this.resourceId = this.$route.params.id
+
         this.fetchData()
     },
 
     methods: {
         async fetchData() {
-            let resourceName = this.$route.params.resource
-            let id = this.$route.params.id
+            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}`)
+        },
 
-            this.resource = await this.$get(`/api/resources/${resourceName}/${id}`)
-        }
+        async saveChanges() {
+            let response = await this.$post(
+                `/api/resources/${this.resourceName}/${this.resourceId}`,
+                this.resource.model.fields
+            )
+
+            if (response.status == 'success') {
+                this.$router.push(`/resources/${this.resourceName}/${this.resourceId}`)
+            }
+        },
     }
 }
 </script>
