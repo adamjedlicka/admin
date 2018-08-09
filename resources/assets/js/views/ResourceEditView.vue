@@ -26,7 +26,9 @@
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-edit-field`" v-model="resource.model.attributes[field.field]" />
+                    <conponent :is="`${field.type}-edit-field`"
+                        v-model="resource.model.attributes[field.field]"
+                        :rules="field.rules" />
                 </div>
 
             </div>

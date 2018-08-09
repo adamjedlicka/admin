@@ -65,6 +65,13 @@ abstract class Field implements JsonSerializable
      */
     protected $sortable = false;
 
+    /**
+     * Validation rules
+     *
+     * @var boolean
+     */
+    protected $rules = [];
+
     private function __construct(string $displayName, $options = null)
     {
         $this->name = $displayName;
@@ -152,6 +159,17 @@ abstract class Field implements JsonSerializable
         return $this;
     }
 
+    /**
+     * Set validation rules
+     *
+     * @return self
+     */
+    public function rules(...$rules)
+    {
+        $this->rules = $rules;
+        return $this;
+    }
+
     public function resolve(Model $model)
     {
         return $this->callable
@@ -180,6 +198,7 @@ abstract class Field implements JsonSerializable
             'editVisible' => $this->editVisible,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
+            'rules' => $this->rules,
         ];
     }
 
