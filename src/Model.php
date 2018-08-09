@@ -25,22 +25,22 @@ class Model implements JsonSerializable
         $this->resource = $resource;
     }
 
-    private function fields() : array
+    private function attributes() : array
     {
-        $fields = [];
+        $attributes = [];
 
         foreach ($this->resource->fields() as $field) {
             $resolved = $field->resolve($this->model);
-            $fields[$field->getField()] = $resolved;
+            $attributes[$field->getField()] = $resolved;
         }
 
-        return $fields;
+        return $attributes;
     }
 
     public function jsonSerialize()
     {
         return [
-            'fields' => $this->fields(),
+            'attributes' => $this->attributes(),
         ];
     }
 }

@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-edit-field`" v-model="resource.model.fields[field.field]" />
+                    <conponent :is="`${field.type}-edit-field`" v-model="resource.model.attributes[field.field]" />
                 </div>
 
             </div>
@@ -69,7 +69,7 @@ export default {
         async saveChanges() {
             let response = await this.$post(
                 `/api/resources/${this.resourceName}/${this.resourceId}`,
-                this.resource.model.fields
+                this.resource.model.attributes
             )
 
             if (response.status == 'success') {

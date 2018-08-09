@@ -8,7 +8,7 @@
                 class="font-thin text-lg text-grey-darkest p-4"
                 :class="[$parent.fieldWidth(field)]" >
 
-                <component :is="`${field.type}-index-field`" :value="row.fields[field.field]" />
+                <component :is="`${field.type}-index-field`" :value="row.attributes[field.field]" />
 
             </div>
 
@@ -48,7 +48,7 @@ export default {
     methods: {
         detailUrl(row) {
             let resourceName = this.$route.params.resource
-            let id = row.fields.id
+            let id = row.attributes.id
 
             return `/resources/${resourceName}/${id}`
         }
