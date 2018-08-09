@@ -211,4 +211,14 @@ abstract class Field implements JsonSerializable
     {
         return $this->field;
     }
+
+    /**
+     * Rules getter
+     *
+     * @return array
+     */
+    public function getRules() : array
+    {
+        return $this->rules;
+    }
 }

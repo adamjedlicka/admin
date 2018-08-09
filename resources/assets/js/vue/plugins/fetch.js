@@ -31,6 +31,9 @@ let post = async (url, data) => {
 
     let response = await fetch('/admin' + url, {
         method: 'POST',
+        headers: {
+            'Accept': 'application/json'
+        },
         body: body,
     })
 

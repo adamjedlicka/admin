@@ -98,4 +98,23 @@ abstract class Resource
     {
         return 'asc';
     }
+
+    /**
+     * Returns array of fields and their rules for validation
+     *
+     * @return array
+     */
+    public function rules() : array
+    {
+        $rules = [];
+
+        foreach ($this->fields() as $field) {
+            $fieldRules = $field->getRules();
+            if (count($fieldRules) > 0) {
+                $rules[$field->getField()] = $fieldRules;
+            }
+        }
+
+        return $rules;
+    }
 }
