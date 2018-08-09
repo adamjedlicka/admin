@@ -1,8 +1,14 @@
 <template>
     <div v-if="resource" class="p-4">
         <div class="flex justify-between pb-4">
-            <div class="text-2xl font-bold">
-                {{ resource.name }}
+            <div class="flex">
+                <router-link :to="indexUrl" class="text-blue text-xl no-underline font-bold px-2">
+                    <i class="fas fa-chevron-left align-text-bottom"></i>
+                </router-link>
+
+                <div class="text-2xl font-bold">
+                    {{ resource.name }}
+                </div>
             </div>
 
             <router-link :to="editUrl" class="btn btn-blue">
@@ -41,12 +47,18 @@ export default {
             return this.resource.fields.filter(field => field.detailVisible)
         },
 
+        indexUrl() {
+            let resourceName = this.$route.params.resource
+
+            return `/resources/${resourceName}`
+        },
+
         editUrl() {
             let resourceName = this.$route.params.resource
             let id = this.$route.params.id
 
             return `/resources/${resourceName}/${id}/edit`
-        }
+        },
     },
 
     mounted() {

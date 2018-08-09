@@ -12,10 +12,16 @@ Route::group([
     Route::get('/resources/{name}', 'ResourceController@index')
         ->name('resources.index');
 
+    Route::post('/resources/{name}', 'ResourceController@create')
+        ->name('resources.create');
+
     Route::get('/resources/{name}/{id}', 'ResourceController@detail')
         ->name('resources.detail');
 
-    Route::post('/resources/{name}/{id}', 'ResourceController@update')
+    Route::put('/resources/{name}/{id}', 'ResourceController@update')
         ->name('resources.update');
+
+    Route::delete('/resources/{name}/{id}', 'ResourceController@delete')
+        ->name('resources.delete');
 
 });

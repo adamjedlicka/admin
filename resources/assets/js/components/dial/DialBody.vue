@@ -18,11 +18,13 @@
                     <i class="py-4 px-1 far fa-eye"></i>
                 </router-link>
 
-                <span class="text-grey hover:text-black cursor-pointer">
+                <router-link :to="editUrl(row)"
+                    class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-edit"></i>
-                </span>
+                </router-link>
 
-                <span class="text-grey hover:text-red cursor-pointer">
+                <span class="text-grey hover:text-red cursor-pointer"
+                    @click="onDelete(row)" >
                     <i class="py-4 px-1 far fa-trash-alt"></i>
                 </span>
             </div>
@@ -51,6 +53,23 @@ export default {
             let id = row.attributes.id
 
             return `/resources/${resourceName}/${id}`
+        },
+
+        editUrl(row) {
+            return this.detailUrl(row) + '/edit'
+        },
+
+        async onDelete(row) {
+            let resourceName = this.$route.params.resource
+            let id = row.attributes.id
+
+            let ok = await modalConfirm('Delete', 'Delete this record?', true)
+            if (ok) {
+                let response = await this.$delete(`/api/resources/${resourceName}/${id}`)
+                if (response.status == 'success') {
+                    this.$emit('update')
+                }
+            }
         }
     }
 }

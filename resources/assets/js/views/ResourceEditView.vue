@@ -69,7 +69,7 @@ export default {
         },
 
         async saveChanges() {
-            let response = await this.$post(
+            let response = await this.$put(
                 `/api/resources/${this.resourceName}/${this.resourceId}`,
                 this.resource.model.attributes
             )

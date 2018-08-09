@@ -20,6 +20,11 @@ class ResourceController extends Controller
         return new IndexSerializer($resource);
     }
 
+    public function create(string $name)
+    {
+        // TODO
+    }
+
     public function detail(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
@@ -35,6 +40,19 @@ class ResourceController extends Controller
 
         $model = $resource->model()::findOrFail($id);
         $model->update(request()->all());
+
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
+    public function delete(string $name, $id)
+    {
+        $resource = $this->getResourceFromName($name);
+
+        $model = $resource->model()::findOrFail($id);
+
+        $model->delete();
 
         return response()->json([
             'status' => 'success',

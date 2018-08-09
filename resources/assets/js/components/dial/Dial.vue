@@ -5,7 +5,8 @@
         <DialHeader :resource="resource" :fields="fields"
             @sort="onSort" />
 
-        <DialBody :resource="resource" :fields="fields" />
+        <DialBody :resource="resource" :fields="fields"
+            @update="fetchData" />
 
         <DialPagination
             :current="resource.data.current_page"

@@ -12,6 +12,8 @@
 
         </div>
 
+        <ConfirmModal />
+
     </div>
 </template>
 
