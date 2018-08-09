@@ -4,7 +4,7 @@ namespace AdamJedlicka\Admin;
 
 use JsonSerializable;
 use AdamJedlicka\Admin\Fields\Field;
-use AdamJedlicka\Admin\Resources\Resource;
+use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Model implements JsonSerializable
@@ -15,7 +15,7 @@ class Model implements JsonSerializable
     private $model;
 
     /**
-     * @var \AdamJedlicka\Admin\Resources\Resource
+     * @var \AdamJedlicka\Admin\Resource
      */
     private $resource;
 

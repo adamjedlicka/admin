@@ -10,7 +10,7 @@ class Controller extends BaseController
     /**
      * Locates and returns resource based on name
      *
-     * @return \AdamJedlicka\Admin\Resources\Resource
+     * @return \AdamJedlicka\Admin\Resource
      */
     public function getResourceFromName(string $name)
     {

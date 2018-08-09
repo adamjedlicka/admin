@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Resources;
+namespace AdamJedlicka\Admin;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;

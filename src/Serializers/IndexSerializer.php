@@ -5,14 +5,14 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Fields\Field;
-use AdamJedlicka\Admin\Resources\Resource;
+use AdamJedlicka\Admin\Resource;
 
 class IndexSerializer implements JsonSerializable
 {
     use SerializesResources;
 
     /**
-     * @var \AdamJedlicka\Admin\Resources\Resource
+     * @var \AdamJedlicka\Admin\Resource
      */
     private $resource;
 

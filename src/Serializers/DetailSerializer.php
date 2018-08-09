@@ -4,14 +4,14 @@ namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
-use AdamJedlicka\Admin\Resources\Resource;
+use AdamJedlicka\Admin\Resource;
 
 class DetailSerializer implements JsonSerializable
 {
     use SerializesResources;
 
     /**
-     * @var \AdamJedlicka\Admin\Resources\Resource
+     * @var \AdamJedlicka\Admin\Resource
      */
     private $resource;
 
