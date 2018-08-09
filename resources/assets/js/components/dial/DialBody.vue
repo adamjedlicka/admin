@@ -48,7 +48,7 @@ export default {
     methods: {
         detailUrl(row) {
             let resourceName = this.$route.params.resource
-            let id = row.fields.id.value
+            let id = row.fields.id
 
             return `/resources/${resourceName}/${id}`
         }

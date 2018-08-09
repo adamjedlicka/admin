@@ -6,6 +6,8 @@ class ID extends Field
 {
     protected $indexVisible = true;
 
+    protected $editVisible = false;
+
     protected $indexSize = 'small';
 
     public static function make(string $displayName = 'ID', $options = 'id')

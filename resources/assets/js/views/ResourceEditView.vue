@@ -5,9 +5,15 @@
                 {{ resource.name }}
             </div>
 
-            <router-link :to="editUrl" class="btn btn-blue">
-                Edit
-            </router-link>
+            <div class="flex">
+                <router-link :to="detailUrl" class="btn mr-2">
+                    Cancel
+                </router-link>
+
+                <router-link :to="detailUrl" class="btn btn-green">
+                    Save
+                </router-link>
+            </div>
         </div>
 
         <div class="bg-white shadow-md rounded-lg py-4 px-8">
@@ -20,7 +26,7 @@
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-detail-field`" :value="resource.model.fields[field.field]" />
+                    <conponent :is="`${field.type}-edit-field`" :value="resource.model.fields[field.field]" />
                 </div>
 
             </div>
@@ -38,14 +44,14 @@ export default {
 
     computed: {
         fields() {
-            return this.resource.fields.filter(field => field.detailVisible)
+            return this.resource.fields.filter(field => field.editVisible)
         },
 
-        editUrl() {
+        detailUrl() {
             let resourceName = this.$route.params.resource
             let id = this.$route.params.id
 
-            return `/resources/${resourceName}/${id}/edit`
+            return `/resources/${resourceName}/${id}`
         }
     },
 

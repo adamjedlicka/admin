@@ -45,6 +45,13 @@ abstract class Field implements JsonSerializable
     protected $detailVisible = true;
 
     /**
+     * Is this field visible on the edit view?
+     *
+     * @var boolean
+     */
+    protected $editVisible = true;
+
+    /**
      * Size of the field in the index view
      *
      * @var string
@@ -159,6 +166,7 @@ abstract class Field implements JsonSerializable
             'field' => $this->field,
             'indexVisible' => $this->indexVisible,
             'detailVisible' => $this->detailVisible,
+            'editVisible' => $this->editVisible,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];

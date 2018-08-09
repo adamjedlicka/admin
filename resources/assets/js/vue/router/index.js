@@ -18,6 +18,10 @@ export default new VueRouter({
                 {
                     path: 'resources/:resource/:id',
                     component: require('~/views/ResourceDetailView'),
+                },
+                {
+                    path: 'resources/:resource/:id/edit',
+                    component: require('~/views/ResourceEditView'),
                 }
             ]
         },
