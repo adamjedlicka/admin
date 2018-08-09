@@ -173,7 +173,12 @@ abstract class Field implements JsonSerializable
         ];
     }
 
-    public function __toString()
+    /**
+     * Field getter
+     *
+     * @return string
+     */
+    public function getField() : string
     {
         return $this->field;
     }

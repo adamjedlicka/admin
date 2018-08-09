@@ -3,8 +3,8 @@
 namespace AdamJedlicka\Admin;
 
 use JsonSerializable;
-use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Model implements JsonSerializable
@@ -31,7 +31,7 @@ class Model implements JsonSerializable
 
         foreach ($this->resource->fields() as $field) {
             $resolved = $field->resolve($this->model);
-            $fields[(string)$field] = $resolved;
+            $fields[$field->getField()] = $resolved;
         }
 
         return $fields;
