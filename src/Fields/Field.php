@@ -155,8 +155,18 @@ abstract class Field implements JsonSerializable
     public function resolve(Model $model)
     {
         return $this->callable
-            ? call_user_func($this->callable, $model)
-            : $model->getAttribute($this->field);
+            ? $this->resolveCallable($model)
+            : $this->resolveAttribute($model);
+    }
+
+    protected function resolveCallable(Model $model)
+    {
+        return call_user_func($this->callable, $model);
+    }
+
+    protected function resolveAttribute(Model $model)
+    {
+        return $model->getAttribute($this->field);
     }
 
     public function jsonSerialize()
