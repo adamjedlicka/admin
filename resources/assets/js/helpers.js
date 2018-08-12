@@ -1,4 +1,4 @@
-window.locale = function() {
+window.locale = function () {
     return document.getElementsByTagName("html")[0].getAttribute("lang")
 }
 
@@ -32,4 +32,10 @@ window.clone = function (obj) {
     }
 
     throw new Error("Unable to copy obj! Its type isn't supported.")
+}
+
+window.delay = function (timeout) {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout)
+    })
 }
