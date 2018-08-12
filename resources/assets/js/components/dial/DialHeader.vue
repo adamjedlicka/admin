@@ -1,27 +1,32 @@
 <template>
-    <div id="dial-header" class="flex bg-grey-lighter border-b-2 border-grey">
+    <thead
+        class="bg-grey-lighter rounded-t-lg" >
 
-        <div
-            v-for="(field, i) in fields" :key="i"
-            id="dial-header-field"
-            class="font-bold text-grey-darker p-4"
-            :class="classes(field)"
-            @click="onClick(field)" >
+        <tr
+            class="border-b-2" >
 
-            {{ field.name }}
+            <th v-for="(field, i) in fields" :key="i"
+                class="p-4 font-bold text-lg text-grey-darker text-left truncate"
+                :class="classes(field)"
+                @click="onClick(field)" >
 
-            <span v-if="field.sortable">
-                <i v-if="sort != field.field" class="fas fa-sort"></i>
-                <i v-if="sort == field.field && order == 'asc'" class="fas fa-sort-up"></i>
-                <i v-if="sort == field.field && order == 'desc'" class="fas fa-sort-down"></i>
-            </span>
+                {{ field.name }}
 
-        </div>
+                <span v-if="field.sortable">
+                    <i v-if="sort != field.field" class="fas fa-sort"></i>
+                    <i v-if="sort == field.field && order == 'asc'" class="fas fa-sort-up"></i>
+                    <i v-if="sort == field.field && order == 'desc'" class="fas fa-sort-down"></i>
+                </span>
 
-        <div class="w-24">
-        </div>
+            </th>
 
-    </div>
+            <!-- CRUD buttons -->
+            <th class="">
+            </th>
+
+        </tr>
+
+    </thead>
 </template>
 
 <script>
@@ -63,10 +68,21 @@ export default {
 
         classes(field) {
             return [
-                this.$parent.fieldWidth(field),
+                this.fieldWidth(field),
                 field.sortable ? 'cursor-pointer' : '',
             ]
         },
+
+        fieldWidth(field) {
+            switch (field.indexSize) {
+                case 'small':
+                    return 'w-16'
+                    break
+                default:
+                    return 'w-32'
+                    break
+            }
+        }
     }
 }
 </script>

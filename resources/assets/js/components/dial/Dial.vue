@@ -1,16 +1,23 @@
 <template>
     <div v-if="resource"
-        class="bg-white shadow-md rounded-lg min-w-100 overflow-auto" >
+        class="bg-white shadow-md rounded-lg min-w-100" >
 
-        <DialHeader :resource="resource" :fields="fields"
-            @sort="onSort" />
+        <div class="overflow-x-auto rounded-lg">
+            <table class="w-full">
 
-        <DialBody :resource="resource" :fields="fields"
-            @update="fetchData" />
+                <DialHeader :resource="resource" :fields="fields"
+                    @sort="onSort" />
+
+                <DialBody :resource="resource" :fields="fields"
+                    @update="fetchData" />
+
+            </table>
+        </div>
 
         <DialPagination
-            :current="resource.data.current_page"
-            :last="resource.data.last_page"
+            :currentPage="resource.data.pagination.currentPage"
+            :hasPreviousPage="resource.data.pagination.hasPreviousPage"
+            :hasNextPage="resource.data.pagination.hasNextPage"
             @page="onPageChange" />
 
     </div>
@@ -61,17 +68,6 @@ export default {
         async fetchData() {
             this.resource = await this.$getSync(this.url)
         },
-
-        fieldWidth(field) {
-            switch (field.indexSize) {
-                case 'small':
-                    return 'w-16'
-                    break
-                default:
-                    return 'flex-1'
-                    break
-            }
-        }
     },
 
     components: {

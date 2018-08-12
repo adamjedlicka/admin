@@ -4,8 +4,8 @@ namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
-use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Admin\Fields\Field;
 
 class IndexSerializer implements JsonSerializable
 {
@@ -39,6 +39,11 @@ class IndexSerializer implements JsonSerializable
 
         return [
             'rows' => $items,
+            'pagination' => [
+                'currentPage' => $result->currentPage(),
+                'hasPreviousPage' => $result->previousPageUrl() != null,
+                'hasNextPage' => $result->nextPageUrl() != null,
+            ]
         ];
     }
 

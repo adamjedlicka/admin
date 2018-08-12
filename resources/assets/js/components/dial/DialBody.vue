@@ -1,18 +1,18 @@
 <template>
-    <div class="bg-white">
+    <tbody>
 
-        <div v-for="(row, i) in rows" :key="i"
-            class="flex hover:bg-grey-lighter" >
+        <tr v-for="(row, i) in rows" :key="i"
+            class="hover:bg-grey-lighter" >
 
-            <div v-for="(field, j) in fields" :key="j"
-                class="font-thin text-lg text-grey-darkest p-4"
-                :class="[$parent.fieldWidth(field)]" >
+            <td v-for="(field, j) in fields" :key="j"
+                class="p-4 text-black text-left" >
 
                 <component :is="`${field.type}-index-field`" :value="row.attributes[field.field]" />
 
-            </div>
+            </td>
 
-            <div class="flex justify-end pr-4 w-24">
+            <!-- CRUD buttons -->
+            <td class="text-right truncate pr-2">
                 <router-link :to="detailUrl(row)"
                     class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-eye"></i>
@@ -27,11 +27,11 @@
                     @click="onDelete(row)" >
                     <i class="py-4 px-1 far fa-trash-alt"></i>
                 </span>
-            </div>
+            </td>
 
-        </div>
+        </tr>
 
-    </div>
+    </tbody>
 </template>
 
 <script>
@@ -70,7 +70,7 @@ export default {
                     this.$emit('update')
                 }
             }
-        }
+        },
     }
 }
 </script>

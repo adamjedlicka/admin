@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between bg-blue-lightest border-t border-grey p-4">
+    <div class="flex justify-between bg-blue-lightest border-t border-grey p-4 rounded-b-lg">
 
         <div class="font-bold no-underline select-none"
             :class="classesPrevious"
@@ -19,21 +19,22 @@
 <script>
 export default {
     props: {
-        current: Number,
-        last: Number,
+        currentPage: Number,
+        hasPreviousPage: Boolean,
+        hasNextPage: Boolean,
     },
 
     computed: {
         classesPrevious() {
-            return this.current == 1
-                ? this.classesDisabled
-                : this.classesEnabled
+            return this.hasPreviousPage
+                ? this.classesEnabled
+                : this.classesDisabled
         },
 
         classesNext() {
-            return this.current == this.last
-                ? this.classesDisabled
-                : this.classesEnabled
+            return this.hasNextPage
+                ? this.classesEnabled
+                : this.classesDisabled
         },
 
         classesEnabled() {
@@ -53,15 +54,15 @@ export default {
 
     methods: {
         next() {
-            if (this.current == this.last) return
+            if (!this.hasNextPage) return
 
-            this.$emit('page', this.current + 1)
+            this.$emit('page', this.currentPage + 1)
         },
 
         previous() {
-            if (this.current == 1) return
+            if (!this.hasPreviousPage) return
 
-            this.$emit('page', this.current - 1)
+            this.$emit('page', this.currentPage - 1)
         }
     }
 }
