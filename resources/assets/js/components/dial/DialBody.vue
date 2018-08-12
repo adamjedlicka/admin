@@ -5,14 +5,19 @@
             class="hover:bg-grey-lighter" >
 
             <td v-for="(field, j) in fields" :key="j"
-                class="p-4 text-black text-left" >
+                class="p-4 text-black text-left"
+                :style="fieldWidth(field)" >
 
-                <component :is="`${field.type}-index-field`" :value="row.attributes[field.field]" />
+                 <div class="truncate">
+                    <component
+                        :is="`${field.type}-index-field`"
+                        :value="row.attributes[field.field]" />
+                </div>
 
             </td>
 
             <!-- CRUD buttons -->
-            <td class="text-right truncate pr-2">
+            <td class="text-right pr-2 whitespace-no-wrap">
                 <router-link :to="detailUrl(row)"
                     class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-eye"></i>
@@ -35,7 +40,13 @@
 </template>
 
 <script>
+import FieldWidthMixin from './FieldWidthMixin'
+
 export default {
+    mixins: [
+        FieldWidthMixin
+    ],
+
     props: {
         resource: Object,
         fields: Array,

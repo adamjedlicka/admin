@@ -60,6 +60,7 @@ class IndexSerializer implements JsonSerializable
         return [
             'name' => $this->resource->displayName(),
             'fields' => $this->resource->fields(),
+            'hasDynamicSizeField' => $this->resource->hasDynamicSizeField(),
             'data' => $this->data(),
         ];
     }

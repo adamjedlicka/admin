@@ -2,7 +2,7 @@
     <div v-if="resource"
         class="bg-white shadow-md rounded-lg min-w-100" >
 
-        <div class="overflow-x-auto rounded-lg">
+        <div class="rounded-lg overflow-x-auto">
             <table class="w-full">
 
                 <DialHeader :resource="resource" :fields="fields"

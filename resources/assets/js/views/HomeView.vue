@@ -6,7 +6,7 @@
         <div class="flex bg-grey-light">
             <SideBar id="sidebar" />
 
-            <div class="flex-1 p-4">
+            <div class="flex-1 p-4 overflow-x-hidden">
                 <router-view />
             </div>
 

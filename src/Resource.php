@@ -100,6 +100,21 @@ abstract class Resource
     }
 
     /**
+     * Whether the resource has any dynamic width fields display on index view
+     *
+     * @return bool
+     */
+    public function hasDynamicSizeField() : bool
+    {
+        return collect($this->fields())
+            ->filter(function (Field $field) {
+                return $field->jsonSerialize()['indexVisible']
+                    && $field->isDynamic();
+            })
+            ->count() > 0;
+    }
+
+    /**
      * Returns array of fields and their rules for validation
      *
      * @return array

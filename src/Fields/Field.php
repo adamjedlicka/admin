@@ -170,6 +170,17 @@ abstract class Field implements JsonSerializable
         return $this;
     }
 
+    /**
+     * Set width on the index view to one half
+     *
+     * @return self
+     */
+    public function oneHalf()
+    {
+        $this->indexSize = 'oneHalf';
+        return $this;
+    }
+
     public function resolve(Model $model)
     {
         return $this->callable
@@ -198,8 +209,24 @@ abstract class Field implements JsonSerializable
             'editVisible' => $this->editVisible,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
-            'rules' => $this->rules,
         ];
+    }
+
+    /**
+     * Returns whether the field is dynamic in width on index view
+     *
+     * @return bool
+     */
+    public function isDynamic() : bool
+    {
+        switch ($this->indexSize) {
+            case 'oneHalf':
+                return true;
+
+            default:
+                return false;
+                break;
+        }
     }
 
     /**

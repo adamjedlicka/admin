@@ -2,27 +2,28 @@
     <thead
         class="bg-grey-lighter rounded-t-lg" >
 
-        <tr
-            class="border-b-2" >
+        <tr class="border-b-2" >
 
             <th v-for="(field, i) in fields" :key="i"
-                class="p-4 font-bold text-lg text-grey-darker text-left truncate"
+                class="p-4 font-bold text-lg text-grey-darker text-left"
                 :class="classes(field)"
+                :style="fieldWidth(field)"
                 @click="onClick(field)" >
 
-                {{ field.name }}
+                <div class="truncate">
+                    <span v-if="field.sortable">
+                        <i v-if="sort != field.field" class="fas fa-sort"></i>
+                        <i v-if="sort == field.field && order == 'asc'" class="fas fa-sort-up"></i>
+                        <i v-if="sort == field.field && order == 'desc'" class="fas fa-sort-down"></i>
+                    </span>
 
-                <span v-if="field.sortable">
-                    <i v-if="sort != field.field" class="fas fa-sort"></i>
-                    <i v-if="sort == field.field && order == 'asc'" class="fas fa-sort-up"></i>
-                    <i v-if="sort == field.field && order == 'desc'" class="fas fa-sort-down"></i>
-                </span>
+                    {{ field.name }}
+                </div>
 
             </th>
 
             <!-- CRUD buttons -->
-            <th class="">
-            </th>
+            <th :style="resource.hasDynamicSizeField ? '' : 'width: 100%'"></th>
 
         </tr>
 
@@ -30,7 +31,13 @@
 </template>
 
 <script>
+import FieldWidthMixin from './FieldWidthMixin'
+
 export default {
+    mixins: [
+        FieldWidthMixin
+    ],
+
     props: {
         resource: Object,
         fields: Array,
@@ -68,21 +75,9 @@ export default {
 
         classes(field) {
             return [
-                this.fieldWidth(field),
                 field.sortable ? 'cursor-pointer' : '',
             ]
         },
-
-        fieldWidth(field) {
-            switch (field.indexSize) {
-                case 'small':
-                    return 'w-16'
-                    break
-                default:
-                    return 'w-32'
-                    break
-            }
-        }
     }
 }
 </script>
