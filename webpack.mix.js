@@ -1,17 +1,5 @@
 let mix = require('laravel-mix');
 let tailwindcss = require('tailwindcss');
-let { exec } = require('child_process');
-
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
 
 mix.webpackConfig({
     resolve: {
@@ -36,7 +24,3 @@ if (mix.inProduction()) {
     mix.sourceMaps()
         .disableSuccessNotifications()
 }
-
-mix.then(() => {
-    exec('php artisan vendor:publish --force --provider AdamJedlicka\Admin\ServiceProvider')
-})
