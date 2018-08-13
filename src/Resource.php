@@ -164,4 +164,9 @@ abstract class Resource implements JsonSerializable
             'attributes' => $this->attributes(),
         ];
     }
+
+    public function __get($name)
+    {
+        return $this->model->getAttribute($name);
+    }
 }

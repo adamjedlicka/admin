@@ -38,13 +38,6 @@ abstract class Field implements JsonSerializable
     protected $visibleOn = [];
 
     /**
-     * Size of the field in the index view
-     *
-     * @var string
-     */
-    protected $indexSize = 'normal';
-
-    /**
      * Indicates whether it is possible to sort using this field
      *
      * @var bool
@@ -229,26 +222,18 @@ abstract class Field implements JsonSerializable
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'displayName' => $this->displayName,
-            'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];
     }
 
     /**
-     * Returns whether the field is dynamic in width on index view
+     * Is the field computed?
      *
      * @return bool
      */
-    public function isDynamic() : bool
+    public function isComputed() : bool
     {
-        switch ($this->indexSize) {
-            case 'oneHalf':
-                return true;
-
-            default:
-                return false;
-                break;
-        }
+        return $this->callable !== null;
     }
 
     /**

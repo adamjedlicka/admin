@@ -35,7 +35,6 @@ class EditSerializer implements JsonSerializable
     private function resource()
     {
         $model = $this->resource->query()
-            ->select($this->onlyFieldNamesOn('edit'))
             ->find($this->id);
 
         return new $this->resourceClass($model);

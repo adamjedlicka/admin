@@ -34,7 +34,6 @@ class DetailSerializer implements JsonSerializable
     private function resource()
     {
         $model = $this->resource->query()
-            ->select($this->onlyFieldNamesOn('detail'))
             ->find($this->id);
 
         return new $this->resourceClass($model);
