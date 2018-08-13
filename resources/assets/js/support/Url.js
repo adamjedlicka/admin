@@ -15,7 +15,7 @@ export default class Url {
     }
 
     url() {
-        return this._url
+        return this._prefix + this._url
     }
 
     parameters() {
@@ -38,6 +38,12 @@ export default class Url {
             .join('&')
     }
 
+    prefix(prefix) {
+        this._prefix = prefix
+
+        return this
+    }
+
     _encode(key) {
         if (this[key] instanceof Array) {
             return Object.keys(this[key])
@@ -49,7 +55,7 @@ export default class Url {
     }
 
     _shouldSend(key) {
-        if (key == '_url') return false
+        if (key[0] == '_') return false
 
         if (this[key] instanceof Array) {
             return Object.keys(this[key]).length > 0

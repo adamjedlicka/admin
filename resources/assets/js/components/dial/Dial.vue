@@ -66,7 +66,8 @@ export default {
         },
 
         async fetchData() {
-            this.resource = await this.$getSync(this.url)
+            this.resource = await this.$get(this.url)
+                .syncQueryString()
         },
     },
 

@@ -1,26 +1,14 @@
-import router from '~/vue/router'
+import Request from '~/support/Request'
+import Url from '~/support/Url'
 
-let get = async (url) => {
-    let response = await fetch('/admin' + url)
-    return await response.json()
-}
-
-let getSync = async (url) => {
-    let parameters = router.app.$route.query
-
-    for (let parameter in parameters) {
-        if (url[parameter] !== undefined) continue
-
-        url[parameter] = parameters[parameter]
+let get = (url) => {
+    if (typeof url === 'string') {
+        url = new Url(url)
     }
 
-    router.app.$router.push({
-        path: router.app.$route.path,
-        query: url.parameters(),
-    })
-
-    return await get(url.get())
+    return new Request('GET', url)
 }
+
 
 let post = async (url, data) => {
     let response = await fetch('/admin' + url, {
@@ -65,6 +53,5 @@ export default {
         Vue.prototype.$post = post
         Vue.prototype.$put = put
         Vue.prototype.$delete = del
-        Vue.prototype.$getSync = getSync
     }
 }
