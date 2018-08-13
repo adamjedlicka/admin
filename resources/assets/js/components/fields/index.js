@@ -11,6 +11,8 @@ let components = [
     'Text',
     'DateTime',
     'Date',
+
+    'BelongsTo',
 ]
 
 components.forEach(registerComponent)

@@ -1,5 +1,10 @@
 <template>
-    <input :value="display">
+    <div>
+        <input
+            type="text"
+            :value="display"
+            class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
+    </div>
 </template>
 
 <script>

@@ -33,6 +33,7 @@ class IndexSerializer implements JsonSerializable
 
         $result = $this->query->simplePaginate();
 
+        $items = [];
         foreach ($result->items() as $row) {
             $items[] = new Model($row, $this->resource);
         }

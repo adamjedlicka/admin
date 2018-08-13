@@ -35,7 +35,7 @@ class ResourceController extends Controller
 
         request()->validate($resource->rules());
 
-        $model = $resource->model()::create(request()->all());
+        $model = $resource->model()::forceCreate(request()->all());
 
         return response()->json([
             'status' => 'success',

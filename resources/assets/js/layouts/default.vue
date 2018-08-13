@@ -7,7 +7,7 @@
             <SideBar id="sidebar" />
 
             <div class="flex-1 p-4 overflow-x-hidden">
-                <router-view />
+                <router-view :key="$route.path" />
             </div>
 
         </div>
