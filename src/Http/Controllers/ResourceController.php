@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Serializers\EditSerializer;
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 use AdamJedlicka\Admin\Serializers\CreateSerializer;
@@ -47,6 +48,13 @@ class ResourceController extends Controller
         $resource = $this->getResourceFromName($name);
 
         return new DetailSerializer($resource, $id);
+    }
+
+    public function edit(string $name, $id)
+    {
+        $resource = $this->getResourceFromName($name);
+
+        return new EditSerializer($resource, $id);
     }
 
     public function update(string $name, $id)

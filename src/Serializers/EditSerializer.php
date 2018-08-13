@@ -6,7 +6,7 @@ use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
 
-class DetailSerializer implements JsonSerializable
+class EditSerializer implements JsonSerializable
 {
     use SerializesResources;
 
@@ -29,7 +29,7 @@ class DetailSerializer implements JsonSerializable
     private function model()
     {
         $model = $this->resource->query()
-            ->select($this->onlyFieldNamesOn('detail'))
+            ->select($this->onlyFieldNamesOn('edit'))
             ->find($this->id);
 
         return new Model($model, $this->resource);
@@ -39,7 +39,7 @@ class DetailSerializer implements JsonSerializable
     {
         return [
             'name' => $this->resource->name(),
-            'fields' => $this->onlyFieldsOn('detail'),
+            'fields' => $this->onlyFieldsOn('edit'),
             'model' => $this->model(),
         ];
     }

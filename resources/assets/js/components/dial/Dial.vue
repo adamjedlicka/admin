@@ -5,10 +5,10 @@
         <div class="rounded-lg overflow-x-auto">
             <table class="w-full">
 
-                <DialHeader :resource="resource" :fields="fields"
+                <DialHeader :resource="resource" :fields="resource.fields"
                     @sort="onSort" />
 
-                <DialBody :resource="resource" :fields="fields"
+                <DialBody :resource="resource" :fields="resource.fields"
                     @update="fetchData" />
 
             </table>
@@ -45,12 +45,6 @@ export default {
         this.url = new Url(this.source)
 
         this.fetchData()
-    },
-
-    computed: {
-        fields() {
-            return this.resource.fields.filter(field => field.visibleOn.includes('index'))
-        }
     },
 
     methods: {

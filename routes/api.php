@@ -21,6 +21,9 @@ Route::group([
     Route::get('/resources/{name}/{id}', 'ResourceController@detail')
         ->name('resources.detail');
 
+    Route::get('/resources/{name}/{id}/edit', 'ResourceController@edit')
+        ->name('resources.edit');
+
     Route::put('/resources/{name}/{id}', 'ResourceController@update')
         ->name('resources.update');
 

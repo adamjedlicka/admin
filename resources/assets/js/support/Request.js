@@ -33,22 +33,12 @@ export default class Request {
         return this
     }
 
-    catch(error) {
-        this._error = error
-
-        return this
-    }
-
     async _execute() {
-        try {
-            let response = await fetch(this._url.get(), this.options)
+        let response = await fetch(this._url.get(), this.options)
 
-            let data = await response.json()
+        let data = await response.json()
 
-            this._success(data)
-        } catch (e) {
-            this._error(e)
-        }
+        this._success(data)
     }
 
     get options() {

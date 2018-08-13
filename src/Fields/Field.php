@@ -216,6 +216,10 @@ abstract class Field implements JsonSerializable
 
     protected function resolveAttribute(Model $model)
     {
+        if (array_search($this->field, $model->getHidden()) !== false) {
+            return null;
+        }
+
         return $model->getAttribute($this->field);
     }
 
@@ -225,7 +229,6 @@ abstract class Field implements JsonSerializable
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'field' => $this->field,
-            'visibleOn' => $this->visibleOn,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];

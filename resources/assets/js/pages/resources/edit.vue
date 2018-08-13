@@ -17,7 +17,7 @@
         </div>
 
         <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in fields" :key="i"
+            <div v-for="(field, i) in resource.fields" :key="i"
                 class="py-6 flex"
                 :class="{'border-t': i > 0}" >
 
@@ -54,10 +54,6 @@ export default {
     },
 
     computed: {
-        fields() {
-            return this.resource.fields.filter(field => field.visibleOn.includes('edit'))
-        },
-
         detailUrl() {
             return `/resources/${this.resourceName}/${this.resourceId}`
         }
@@ -72,7 +68,7 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}`)
+            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}/edit`)
         },
 
         async saveChanges() {
