@@ -21,7 +21,8 @@
 
                 <div class="text-lg text-grey-darkest w-5/6">
                     <conponent :is="`${field.type}-detail-field`"
-                        :value="value.resource.attributes[field.name]" />
+                        :value="value.resource.attributes[field.name]"
+                        :meta="metaOfField(field.name)" />
                 </div>
 
             </div>
@@ -56,6 +57,14 @@ export default {
             let id = this.$route.params.id
 
             this.value = await this.$get(`/api/resources/${resourceName}/${id}`)
+        },
+
+        metaOfField(name) {
+            for (let field of this.value.fields) {
+                if (field.name == name) {
+                    return field.meta
+                }
+            }
         }
     }
 }

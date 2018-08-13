@@ -65,6 +65,7 @@ class IndexSerializer implements JsonSerializable
     public function jsonSerialize()
     {
         return [
+            'name' => $this->resource->name(),
             'displayName' => $this->resource->displayName(),
             'fields' => $this->onlyFieldsOn('index'),
             'data' => $this->data(),
