@@ -21,6 +21,7 @@ class BelongsTo extends Field
 
     public function persist(Model $model, $value)
     {
-        $model->setAttribute($this->getName() . '_id', $value['key']);
+        $foreignKey = call_user_func([$model, $this->getName()])->getForeignKey();
+        $model->setAttribute($foreignKey, $value['key']);
     }
 }
