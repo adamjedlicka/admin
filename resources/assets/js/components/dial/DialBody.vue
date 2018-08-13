@@ -1,7 +1,7 @@
 <template>
     <tbody>
 
-        <tr v-for="(row, i) in rows" :key="i"
+        <tr v-for="(resource, i) in resources" :key="i"
             class="hover:bg-grey-lighter" >
 
             <td v-for="(field, j) in fields" :key="j"
@@ -11,25 +11,25 @@
                  <div class="truncate">
                     <component
                         :is="`${field.type}-index-field`"
-                        :value="row.attributes[field.field]" />
+                        :value="resource.attributes[field.name]" />
                 </div>
 
             </td>
 
             <!-- CRUD buttons -->
             <td class="text-right pr-2 whitespace-no-wrap">
-                <router-link :to="detailUrl(row)"
+                <router-link :to="detailUrl(resource)"
                     class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-eye"></i>
                 </router-link>
 
-                <router-link :to="editUrl(row)"
+                <router-link :to="editUrl(resource)"
                     class="text-grey hover:text-black cursor-pointer" >
                     <i class="py-4 px-1 far fa-edit"></i>
                 </router-link>
 
                 <span class="text-grey hover:text-red cursor-pointer"
-                    @click="onDelete(row)" >
+                    @click="onDelete(resource)" >
                     <i class="py-4 px-1 far fa-trash-alt"></i>
                 </span>
             </td>
@@ -48,31 +48,31 @@ export default {
     ],
 
     props: {
-        resource: Object,
+        value: Object,
         fields: Array,
     },
 
     computed: {
-        rows() {
-            return this.resource.data.rows
+        resources() {
+            return this.value.data.resources
         }
     },
 
     methods: {
-        detailUrl(row) {
+        detailUrl(resource) {
             let resourceName = this.$route.params.resource
-            let id = row.attributes.id
+            let id = resource.attributes.id
 
             return `/resources/${resourceName}/${id}`
         },
 
-        editUrl(row) {
-            return this.detailUrl(row) + '/edit'
+        editUrl(resource) {
+            return this.detailUrl(resource) + '/edit'
         },
 
-        async onDelete(row) {
+        async onDelete(resource) {
             let resourceName = this.$route.params.resource
-            let id = row.attributes.id
+            let id = resource.attributes.id
 
             let ok = await modalConfirm('Delete', 'Delete this record?', true)
             if (ok) {

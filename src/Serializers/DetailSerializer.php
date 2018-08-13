@@ -3,7 +3,6 @@
 namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
-use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
 
 class DetailSerializer implements JsonSerializable
@@ -16,6 +15,11 @@ class DetailSerializer implements JsonSerializable
     private $resource;
 
     /**
+     * @var string
+     */
+    private $resourceClass;
+
+    /**
      * @var mixed
      */
     private $id;
@@ -23,24 +27,26 @@ class DetailSerializer implements JsonSerializable
     public function __construct(Resource $resource, $id)
     {
         $this->resource = $resource;
+        $this->resourceClass = get_class($resource);
         $this->id = $id;
     }
 
-    private function model()
+    private function resource()
     {
         $model = $this->resource->query()
             ->select($this->onlyFieldNamesOn('detail'))
             ->find($this->id);
 
-        return new Model($model, $this->resource);
+        return new $this->resourceClass($model);
     }
 
     public function jsonSerialize()
     {
         return [
             'name' => $this->resource->name(),
+            'displayName' => $this->resource->name(),
             'fields' => $this->onlyFieldsOn('detail'),
-            'model' => $this->model(),
+            'resource' => $this->resource(),
         ];
     }
 }

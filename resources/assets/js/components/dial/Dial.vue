@@ -1,23 +1,23 @@
 <template>
-    <div v-if="resource"
+    <div v-if="value"
         class="bg-white shadow-md rounded-lg min-w-100" >
 
-        <div class="rounded-lg overflow-x-auto">
+        <div class="rounded-t-lg overflow-x-auto">
             <table class="w-full">
 
-                <DialHeader :resource="resource" :fields="resource.fields"
+                <DialHeader :value="value" :fields="value.fields"
                     @sort="onSort" />
 
-                <DialBody :resource="resource" :fields="resource.fields"
+                <DialBody :value="value" :fields="value.fields"
                     @update="fetchData" />
 
             </table>
         </div>
 
         <DialPagination
-            :currentPage="resource.data.pagination.currentPage"
-            :hasPreviousPage="resource.data.pagination.hasPreviousPage"
-            :hasNextPage="resource.data.pagination.hasNextPage"
+            :currentPage="value.data.pagination.currentPage"
+            :hasPreviousPage="value.data.pagination.hasPreviousPage"
+            :hasNextPage="value.data.pagination.hasNextPage"
             @page="onPageChange" />
 
     </div>
@@ -36,7 +36,7 @@ export default {
 
     data() {
         return {
-            resource: null,
+            value: null,
             url: null,
         }
     },
@@ -60,7 +60,7 @@ export default {
         },
 
         async fetchData() {
-            this.resource = await this.$get(this.url)
+            this.value = await this.$get(this.url)
                 .syncQueryString()
         },
     },

@@ -1,29 +1,28 @@
 <template>
     <thead
-        class="bg-grey-lighter rounded-t-lg" >
+        class="bg-grey-lighter rounded-lg" >
 
         <tr class="border-b-2" >
 
             <th v-for="(field, i) in fields" :key="i"
                 class="p-4 font-bold text-lg text-grey-darker text-left"
                 :class="classes(field)"
-                :style="fieldWidth(field)"
                 @click="onClick(field)" >
 
                 <div class="truncate">
                     <span v-if="field.sortable">
-                        <i v-if="sort != field.field" class="fas fa-sort"></i>
-                        <i v-if="sort == field.field && order == 'asc'" class="fas fa-sort-up"></i>
-                        <i v-if="sort == field.field && order == 'desc'" class="fas fa-sort-down"></i>
+                        <i v-if="sort != field.name" class="fas fa-sort"></i>
+                        <i v-if="sort == field.name && order == 'asc'" class="fas fa-sort-up"></i>
+                        <i v-if="sort == field.name && order == 'desc'" class="fas fa-sort-down"></i>
                     </span>
 
-                    {{ field.name }}
+                    {{ field.displayName }}
                 </div>
 
             </th>
 
             <!-- CRUD buttons -->
-            <th :style="resource.hasDynamicSizeField ? '' : 'width: 100%'"></th>
+            <th style="width: 100%"></th>
 
         </tr>
 
@@ -31,15 +30,8 @@
 </template>
 
 <script>
-import FieldWidthMixin from './FieldWidthMixin'
-
 export default {
-    mixins: [
-        FieldWidthMixin
-    ],
-
     props: {
-        resource: Object,
         fields: Array,
     },
 

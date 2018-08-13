@@ -1,8 +1,8 @@
 <template>
-    <div v-if="resource" class="p-4">
+    <div v-if="value" class="p-4">
         <div class="flex justify-between pb-4">
             <div class="text-2xl font-bold">
-                {{ resource.name }}
+                {{ value.name }}
             </div>
 
             <router-link :to="editUrl" class="btn btn-blue">
@@ -11,16 +11,17 @@
         </div>
 
         <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in resource.fields" :key="i"
+            <div v-for="(field, i) in value.fields" :key="i"
                 class="py-6 flex"
                 :class="{'border-t': i > 0}" >
 
                 <div class="text-lg text-grey-dark font-bold w-1/6">
-                    {{ field.name }}
+                    {{ field.displayName }}
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-detail-field`" :value="resource.model.attributes[field.field]" />
+                    <conponent :is="`${field.type}-detail-field`"
+                        :value="value.resource.attributes[field.name]" />
                 </div>
 
             </div>
@@ -32,7 +33,7 @@
 export default {
     data() {
         return {
-            resource: null,
+            value: null,
         }
     },
 
@@ -54,7 +55,7 @@ export default {
             let resourceName = this.$route.params.resource
             let id = this.$route.params.id
 
-            this.resource = await this.$get(`/api/resources/${resourceName}/${id}`)
+            this.value = await this.$get(`/api/resources/${resourceName}/${id}`)
         }
     }
 }

@@ -1,8 +1,8 @@
 <template>
-    <div v-if="resource" class="p-4">
+    <div v-if="value" class="p-4">
         <div class="flex justify-between pb-4">
             <div class="text-2xl font-bold">
-                Create new {{ resource.name }}
+                Create new {{ value.displayName }}
             </div>
 
             <div class="flex">
@@ -18,21 +18,20 @@
         </div>
 
         <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in resource.fields" :key="i"
+            <div v-for="(field, i) in value.fields" :key="i"
                 class="py-6 flex"
                 :class="{'border-t': i > 0}" >
 
                 <div class="text-lg text-grey-dark font-bold w-1/6">
-                    {{ field.name }}
+                    {{ field.displayName }}
                 </div>
 
                 <div class="text-lg text-grey-darkest w-5/6">
                     <conponent :is="`${field.type}-edit-field`"
-                        v-model="form[field.field]"
-                        :rules="field.rules" />
+                        v-model="form[field.name]" />
 
                     <div>
-                        <div v-for="(error, j) in errors[field.field]" :key="j">
+                        <div v-for="(error, j) in errors[field.name]" :key="j">
                             <span class="text-sm text-red p-1">{{ error }}</span>
                         </div>
                     </div>
@@ -48,7 +47,7 @@ export default {
     data() {
         return {
             resourceName: null,
-            resource: null,
+            value: null,
             form: {},
             errors: [],
         }
@@ -63,8 +62,7 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
-            this.resource.fields.forEach(field => this.form[field.field] = null)
+            this.value = await this.$get(`/api/resources/${this.resourceName}/create`)
         },
 
         async saveChanges() {

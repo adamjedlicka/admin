@@ -35,7 +35,7 @@ class ResourceController extends Controller
 
         request()->validate($resource->rules());
 
-        $model = $resource->model()::forceCreate(request()->all());
+        $model = $resource->fullyQualifiedModelName()::forceCreate(request()->all());
 
         return response()->json([
             'status' => 'success',
@@ -63,7 +63,7 @@ class ResourceController extends Controller
 
         request()->validate($resource->rules());
 
-        $model = $resource->model()::findOrFail($id);
+        $model = $resource->fullyQualifiedModelName()::findOrFail($id);
         $model->update(request()->all());
 
         return response()->json([
@@ -75,7 +75,7 @@ class ResourceController extends Controller
     {
         $resource = $this->getResourceFromName($name);
 
-        $model = $resource->model()::findOrFail($id);
+        $model = $resource->fullyQualifiedModelName()::findOrFail($id);
 
         $model->delete();
 

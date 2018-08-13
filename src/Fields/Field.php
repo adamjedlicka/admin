@@ -17,11 +17,11 @@ abstract class Field implements JsonSerializable
     protected $displayName;
 
     /**
-     * Name of the field in the database
+     * Name of the field
      *
      * @var string
      */
-    protected $field = null;
+    protected $name = null;
 
     /**
      * Callback for computed field
@@ -60,14 +60,14 @@ abstract class Field implements JsonSerializable
 
     private function __construct(string $displayName, $options = null)
     {
-        $this->name = $displayName;
+        $this->displayName = $displayName;
 
         if (is_null($options)) {
-            $this->field = Str::snake($displayName);
+            $this->name = Str::snake($displayName);
         } else if (is_string($options)) {
-            $this->field = $options;
+            $this->name = $options;
         } else if (is_callable($options)) {
-            $this->field = Str::snake($displayName);
+            $this->name = Str::snake($displayName);
             $this->callable = $options;
             $this->editVisible = false;
         }
@@ -216,11 +216,11 @@ abstract class Field implements JsonSerializable
 
     protected function resolveAttribute(Model $model)
     {
-        if (array_search($this->field, $model->getHidden()) !== false) {
+        if (array_search($this->name, $model->getHidden()) !== false) {
             return null;
         }
 
-        return $model->getAttribute($this->field);
+        return $model->getAttribute($this->name);
     }
 
     public function jsonSerialize()
@@ -228,7 +228,7 @@ abstract class Field implements JsonSerializable
         return [
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
-            'field' => $this->field,
+            'displayName' => $this->displayName,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];
@@ -262,13 +262,13 @@ abstract class Field implements JsonSerializable
     }
 
     /**
-     * Field getter
+     * Name getter
      *
      * @return string
      */
-    public function getField() : string
+    public function getName() : string
     {
-        return $this->field;
+        return $this->name;
     }
 
     /**

@@ -17,6 +17,11 @@ class IndexSerializer implements JsonSerializable
     private $resource;
 
     /**
+     * @var string
+     */
+    private $resourceClass;
+
+    /**
      * @var \Illuminate\Database\Eloquent\Builder
      */
     private $query;
@@ -24,6 +29,7 @@ class IndexSerializer implements JsonSerializable
     public function __construct(Resource $resource)
     {
         $this->resource = $resource;
+        $this->resourceClass = get_class($resource);
         $this->query = $this->resource->query();
     }
 
@@ -33,13 +39,13 @@ class IndexSerializer implements JsonSerializable
 
         $result = $this->query->simplePaginate();
 
-        $items = [];
-        foreach ($result->items() as $row) {
-            $items[] = new Model($row, $this->resource);
+        $resources = [];
+        foreach ($result->items() as $resource) {
+            $resources[] = new $this->resourceClass($resource);
         }
 
         return [
-            'rows' => $items,
+            'resources' => $resources,
             'pagination' => [
                 'currentPage' => $result->currentPage(),
                 'hasPreviousPage' => $result->previousPageUrl() != null,
@@ -59,9 +65,8 @@ class IndexSerializer implements JsonSerializable
     public function jsonSerialize()
     {
         return [
-            'name' => $this->resource->displayName(),
+            'displayName' => $this->resource->displayName(),
             'fields' => $this->onlyFieldsOn('index'),
-            'hasDynamicSizeField' => $this->resource->hasDynamicSizeField(),
             'data' => $this->data(),
         ];
     }

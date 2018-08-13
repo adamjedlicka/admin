@@ -2,14 +2,25 @@
 
 namespace AdamJedlicka\Admin;
 
+use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-abstract class Resource
+abstract class Resource implements JsonSerializable
 {
+    /**
+     * @var \Illuminate\Database\Eloquent\Model|null
+     */
+    protected $model;
+
+    public function __construct(? Model $model = null)
+    {
+        $this->model = $model;
+    }
+
     /**
      * Definition of fields
      *
@@ -60,11 +71,11 @@ abstract class Resource
     }
 
     /**
-     * Returns class of the coresponding model
+     * Returns fully qualified class name of the coresponding model
      *
      * @return string
      */
-    public function model() : string
+    public function fullyQualifiedModelName() : string
     {
         return $this->modelNamespace() . '\\' . $this->modelName();
     }
@@ -76,7 +87,7 @@ abstract class Resource
      */
     public function query() : Builder
     {
-        return $this->model()::query();
+        return $this->fullyQualifiedModelName()::query();
     }
 
     /**
@@ -126,10 +137,31 @@ abstract class Resource
         foreach ($this->fields() as $field) {
             $fieldRules = $field->getRules();
             if (count($fieldRules) > 0) {
-                $rules[$field->getField()] = $fieldRules;
+                $rules[$field->getName()] = $fieldRules;
             }
         }
 
         return $rules;
+    }
+
+    /**
+     * Returns collection of all attributes
+     *
+     * @return array
+     */
+    public function attributes() : array
+    {
+        return collect($this->fields())
+            ->reduce(function ($collection, Field $field) {
+                $collection[$field->getName()] = $field->resolve($this->model);
+                return $collection;
+            });
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'attributes' => $this->attributes(),
+        ];
     }
 }

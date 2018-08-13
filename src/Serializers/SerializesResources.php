@@ -10,7 +10,7 @@ trait SerializesResources
     {
         foreach ($this->resource->computedFields() as $field) {
             $result = call_user_func($field->getCallable(), $model);
-            $model->setAttribute($field->getField(), $result);
+            $model->setAttribute($field->getName(), $result);
         }
     }
 
@@ -27,7 +27,7 @@ trait SerializesResources
     {
         return $this->onlyFieldsOn($view)
             ->map(function (Field $field) {
-                return $field->getField();
+                return $field->getName();
             })
             ->toArray();
     }
