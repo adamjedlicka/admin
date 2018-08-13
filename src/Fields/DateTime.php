@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DateTime extends Field
 {
-    protected $indexVisible = true;
+    protected $visibleOn = ['index', 'detail', 'edit'];
 
     protected function resolveAttribute(Model $model)
     {

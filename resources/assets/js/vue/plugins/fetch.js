@@ -10,41 +10,38 @@ let get = (url) => {
 }
 
 
-let post = async (url, data) => {
-    let response = await fetch('/admin' + url, {
-        method: 'POST',
+let post = (url, data) => {
+    if (typeof url === 'string') {
+        url = new Url(url)
+    }
+
+    return new Request('POST', url, {
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
     })
-
-    return await response.json()
 }
 
-let put = async (url, data) => {
-    let response = await fetch('/admin' + url, {
-        method: 'PUT',
+let put = (url, data) => {
+    if (typeof url === 'string') {
+        url = new Url(url)
+    }
+
+    return new Request('PUT', url, {
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
     })
-
-    return await response.json()
 }
 
-let del = async (url) => {
-    let response = await fetch('/admin' + url, {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json'
-        },
-    })
+let del = (url) => {
+    if (typeof url === 'string') {
+        url = new Url(url)
+    }
 
-    return await response.json()
+    return new Request('DELETE', url)
 }
 
 export default {

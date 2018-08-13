@@ -49,7 +49,7 @@ export default {
 
     computed: {
         fields() {
-            return this.resource.fields.filter(field => field.indexVisible)
+            return this.resource.fields.filter(field => field.visibleOn.includes('index'))
         }
     },
 

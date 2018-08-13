@@ -4,9 +4,7 @@ namespace AdamJedlicka\Admin\Fields;
 
 class ID extends Field
 {
-    protected $indexVisible = true;
-
-    protected $editVisible = false;
+    protected $visibleOn = ['index', 'detail'];
 
     protected $indexSize = 'small';
 

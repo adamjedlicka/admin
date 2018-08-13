@@ -31,25 +31,11 @@ abstract class Field implements JsonSerializable
     protected $callable = null;
 
     /**
-     * Is this field visible on the index view?
+     *  Indicates on what views field is visible
      *
-     * @var boolean
+     * @var array
      */
-    protected $indexVisible = false;
-
-    /**
-     * Is this field visible on the detail view?
-     *
-     * @var boolean
-     */
-    protected $detailVisible = true;
-
-    /**
-     * Is this field visible on the edit view?
-     *
-     * @var boolean
-     */
-    protected $editVisible = true;
+    protected $visibleOn = [];
 
     /**
      * Size of the field in the index view
@@ -61,14 +47,14 @@ abstract class Field implements JsonSerializable
     /**
      * Indicates whether it is possible to sort using this field
      *
-     * @var boolean
+     * @var bool
      */
     protected $sortable = false;
 
     /**
      * Validation rules
      *
-     * @var boolean
+     * @var bool
      */
     protected $rules = [];
 
@@ -107,7 +93,9 @@ abstract class Field implements JsonSerializable
      */
     public function showOnIndex()
     {
-        $this->indexVisible = true;
+        if (!in_array('index', $this->visibleOn)) {
+            $this->visibleOn[] = 'index';
+        }
         return $this;
     }
 
@@ -118,7 +106,23 @@ abstract class Field implements JsonSerializable
      */
     public function showOnDetail()
     {
-        $this->detailVisible = true;
+        if (!in_array('detail', $this->visibleOn)) {
+            $this->visibleOn[] = 'detail';
+        }
+        return $this;
+    }
+
+
+    /**
+     * Show field on edit view
+     *
+     * @return self
+     */
+    public function showOnEdit()
+    {
+        if (!in_array('edit', $this->visibleOn)) {
+            $this->visibleOn[] = 'edit';
+        }
         return $this;
     }
 
@@ -129,7 +133,9 @@ abstract class Field implements JsonSerializable
      */
     public function hideFromIndex()
     {
-        $this->indexVisible = false;
+        if (($key = array_search('index', $this->visibleOn)) !== false) {
+            array_splice($this->visibleOn, $key, 1);
+        }
         return $this;
     }
 
@@ -140,7 +146,22 @@ abstract class Field implements JsonSerializable
      */
     public function hideFromDetail()
     {
-        $this->detailVisible = false;
+        if (($key = array_search('detail', $this->visibleOn)) !== false) {
+            array_splice($this->visibleOn, $key, 1);
+        }
+        return $this;
+    }
+
+    /**
+     * Hide field from edit view
+     *
+     * @return self
+     */
+    public function hideFromEdit()
+    {
+        if (($key = array_search('edit', $this->visibleOn)) !== false) {
+            array_splice($this->visibleOn, $key, 1);
+        }
         return $this;
     }
 
@@ -204,9 +225,7 @@ abstract class Field implements JsonSerializable
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'field' => $this->field,
-            'indexVisible' => $this->indexVisible,
-            'detailVisible' => $this->detailVisible,
-            'editVisible' => $this->editVisible,
+            'visibleOn' => $this->visibleOn,
             'indexSize' => $this->indexSize,
             'sortable' => $this->sortable,
         ];
@@ -227,6 +246,16 @@ abstract class Field implements JsonSerializable
                 return false;
                 break;
         }
+    }
+
+    /**
+     * Indicates whether the field is visible on the given view
+     *
+     * @return bool
+     */
+    public function isVisibleOn(string $view) : bool
+    {
+        return array_search($view, $this->visibleOn) !== false;
     }
 
     /**

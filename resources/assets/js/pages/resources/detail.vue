@@ -44,7 +44,7 @@ export default {
 
     computed: {
         fields() {
-            return this.resource.fields.filter(field => field.detailVisible)
+            return this.resource.fields.filter(field => field.visibleOn.includes('detail'))
         },
 
         indexUrl() {

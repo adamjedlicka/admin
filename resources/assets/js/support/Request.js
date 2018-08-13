@@ -41,13 +41,7 @@ export default class Request {
 
     async _execute() {
         try {
-            let response = await fetch(this._url.get(), {
-                method: this._method,
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            })
+            let response = await fetch(this._url.get(), this.options)
 
             let data = await response.json()
 
@@ -57,4 +51,26 @@ export default class Request {
         }
     }
 
+    get options() {
+        let options = {
+            method: this._method,
+            headers: {
+                'Accept': 'application/json',
+            }
+        }
+
+        return this._mergeOptions(options, this._options)
+    }
+
+    _mergeOptions(to, from) {
+        for (let attr in from) {
+            if (typeof from[attr] === 'object') {
+                to[attr] = this._mergeOptions(to[attr], from[attr])
+            } else {
+                to[attr] = from[attr]
+            }
+        }
+
+        return to
+    }
 }

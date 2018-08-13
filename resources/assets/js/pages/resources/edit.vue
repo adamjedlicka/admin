@@ -29,6 +29,12 @@
                     <conponent :is="`${field.type}-edit-field`"
                         v-model="resource.model.attributes[field.field]"
                         :rules="field.rules" />
+
+                    <div>
+                        <div v-for="(error, j) in errors[field.field]" :key="j">
+                            <span class="text-sm text-red p-1">{{ error }}</span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -43,12 +49,13 @@ export default {
             resourceName: null,
             resourceId: null,
             resource: null,
+            errors: [],
         }
     },
 
     computed: {
         fields() {
-            return this.resource.fields.filter(field => field.editVisible)
+            return this.resource.fields.filter(field => field.visibleOn.includes('edit'))
         },
 
         detailUrl() {
@@ -76,6 +83,8 @@ export default {
 
             if (response.status == 'success') {
                 this.$router.push(`/resources/${this.resourceName}/${this.resourceId}`)
+            } else if (response.errors) {
+                this.errors = response.errors
             }
         },
     }

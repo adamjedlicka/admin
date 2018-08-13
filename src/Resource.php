@@ -108,7 +108,7 @@ abstract class Resource
     {
         return collect($this->fields())
             ->filter(function (Field $field) {
-                return $field->jsonSerialize()['indexVisible']
+                return $field->isVisibleOn('index')
                     && $field->isDynamic();
             })
             ->count() > 0;
