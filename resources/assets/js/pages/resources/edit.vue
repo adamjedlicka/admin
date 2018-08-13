@@ -6,7 +6,8 @@
             </div>
 
             <div class="flex">
-                <router-link :to="detailUrl" class="btn mr-2">
+                <router-link :to="`/resources/${this.resourceName}/${this.resourceId}`"
+                    class="btn mr-2" >
                     Cancel
                 </router-link>
 
@@ -50,12 +51,6 @@ export default {
             resourceId: null,
             resource: null,
             errors: [],
-        }
-    },
-
-    computed: {
-        detailUrl() {
-            return `/resources/${this.resourceName}/${this.resourceId}`
         }
     },
 

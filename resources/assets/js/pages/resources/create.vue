@@ -6,7 +6,8 @@
             </div>
 
             <div class="flex">
-                <router-link :to="indexUrl" class="btn mr-2">
+                <router-link :to="`/resources/${this.resourceName}`"
+                     class="btn mr-2" >
                     Cancel
                 </router-link>
 
@@ -50,12 +51,6 @@ export default {
             resource: null,
             form: {},
             errors: [],
-        }
-    },
-
-    computed: {
-        indexUrl() {
-            return `/resources/${this.resourceName}`
         }
     },
 

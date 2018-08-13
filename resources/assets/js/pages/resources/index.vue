@@ -5,7 +5,8 @@
                 Index
             </div>
 
-            <router-link :to="createUrl" class="btn btn-blue">
+            <router-link :to="`/resources/${this.resourceName}/create`"
+                class="btn btn-blue">
                 Create
             </router-link>
         </div>
@@ -21,12 +22,6 @@ export default {
     data() {
         return {
             resourceName: null,
-        }
-    },
-
-    computed: {
-        createUrl() {
-            return `/resources/${this.resourceName}/create`
         }
     },
 
