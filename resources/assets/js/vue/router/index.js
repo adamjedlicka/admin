@@ -9,19 +9,19 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            component: require('~/views/HomeView'),
+            component: require('~/layouts/default'),
             children: [
                 {
                     path: 'resources/:resource',
-                    component: require('~/views/ResourceIndexView'),
+                    component: require('~/pages/resources/index'),
                 },
                 {
                     path: 'resources/:resource/:id',
-                    component: require('~/views/ResourceDetailView'),
+                    component: require('~/pages/resources/detail'),
                 },
                 {
                     path: 'resources/:resource/:id/edit',
-                    component: require('~/views/ResourceEditView'),
+                    component: require('~/pages/resources/edit'),
                 }
             ]
         },

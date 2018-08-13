@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Url from '~/util/Url'
+import Url from '~/support/Url'
 
 export default {
     data() {

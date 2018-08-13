@@ -27,7 +27,7 @@
 import DialPagination from './DialPagination'
 import DialHeader from './DialHeader'
 import DialBody from './DialBody'
-import Url from '~/util/Url'
+import Url from '~/support/Url'
 
 export default {
     props: {
