@@ -28,7 +28,8 @@
 
                 <div class="text-lg text-grey-darkest w-5/6">
                     <conponent :is="`${field.type}-edit-field`"
-                        v-model="value.resource.attributes[field.name]" />
+                        v-model="value.resource.attributes[field.name]"
+                        :meta="metaOfField(field.name)" />
 
                     <div>
                         <div v-for="(error, j) in errors[field.name]" :key="j">
@@ -77,6 +78,14 @@ export default {
                 this.errors = response.errors
             }
         },
+
+        metaOfField(name) {
+            for (let field of this.value.fields) {
+                if (field.name == name) {
+                    return field.meta
+                }
+            }
+        }
     }
 }
 </script>

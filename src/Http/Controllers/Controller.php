@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use Illuminate\Support\Str;
+use AdamJedlicka\Admin\Resource;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -14,11 +15,6 @@ class Controller extends BaseController
      */
     public function getResourceFromName(string $name)
     {
-        $fileName = Str::studly($name) . '.php';
-        $path = app_path(config('admin.directory') . '/Resources');
-
-        $class = get_class_from_file($path . '/' . $fileName);
-
-        return new $class;
+        return get_resource_from_name($name);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 function get_metadata_from_file($filename)
 {
     $contents = file_get_contents($filename);
@@ -53,4 +55,14 @@ function get_namespace_from_file($filename)
     $metadata = get_metadata_from_file($filename);
 
     return $metadata['namespace'];
+}
+
+function get_resource_from_name(string $name, ...$args)
+{
+    $fileName = Str::studly($name) . '.php';
+    $path = app_path(config('admin.directory') . '/Resources');
+
+    $class = get_class_from_file($path . '/' . $fileName);
+
+    return new $class(...$args);
 }

@@ -158,15 +158,32 @@ abstract class Resource implements JsonSerializable
             });
     }
 
+    /**
+     * Title of the model to be displayed
+     */
+    public function title()
+    {
+        return $this->getKey();
+    }
+
     public function jsonSerialize()
     {
         return [
             'attributes' => $this->attributes(),
+            'key' => $this->getKey(),
+            'title' => $this->title(),
         ];
     }
 
     public function __get($name)
     {
-        return $this->model->getAttribute($name);
+        return $this->model->__get($name);
+    }
+
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->model, $name)) {
+            return call_user_func([$this->model, $name], $arguments);
+        }
     }
 }

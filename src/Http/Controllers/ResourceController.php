@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\Serializers\EditSerializer;
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
@@ -35,7 +36,17 @@ class ResourceController extends Controller
 
         request()->validate($resource->rules());
 
-        $model = $resource->fullyQualifiedModelName()::forceCreate(request()->all());
+        $model = $resource->fullyQualifiedModelName()::make();
+
+        $fields = collect($resource->fields())
+            ->filter(function (Field $field) {
+                return request($field->getName()) != null;
+            })
+            ->each(function (Field $field) use ($model) {
+                $field->persist($model, request($field->getName()));
+            });
+
+        $model->save();
 
         return response()->json([
             'status' => 'success',
@@ -64,7 +75,16 @@ class ResourceController extends Controller
         request()->validate($resource->rules());
 
         $model = $resource->fullyQualifiedModelName()::findOrFail($id);
-        $model->update(request()->all());
+
+        $fields = collect($resource->fields())
+            ->filter(function (Field $field) {
+                return request($field->getName()) != null;
+            })
+            ->each(function (Field $field) use ($model) {
+                $field->persist($model, request($field->getName()));
+            });
+
+        $model->save();
 
         return response()->json([
             'status' => 'success',

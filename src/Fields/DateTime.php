@@ -10,6 +10,8 @@ class DateTime extends Field
 
     protected function resolveAttribute(Model $model)
     {
-        return $model->getAttribute($this->field)->toDateTimeString();
+        $date = $model->getAttribute($this->name);
+
+        return $date ? $date->toDateTimeString() : null;
     }
 }

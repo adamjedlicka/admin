@@ -80,6 +80,16 @@ abstract class Field implements JsonSerializable
     }
 
     /**
+     * Meta attributes for the field
+     *
+     * @return mixed
+     */
+    protected function meta()
+    {
+        return null;
+    }
+
+    /**
      * Show field on index view
      *
      * @return self
@@ -216,6 +226,11 @@ abstract class Field implements JsonSerializable
         return $model->getAttribute($this->name);
     }
 
+    public function persist(Model $model, $value)
+    {
+        $model->setAttribute($this->getName(), $value);
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -223,6 +238,7 @@ abstract class Field implements JsonSerializable
             'name' => $this->name,
             'displayName' => $this->displayName,
             'sortable' => $this->sortable,
+            'meta' => $this->meta(),
         ];
     }
 
