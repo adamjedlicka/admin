@@ -12,8 +12,11 @@ Route::group([
     Route::get('/resources/{name}', 'ResourceController@index')
         ->name('resources.index');
 
-    Route::post('/resources/{name}', 'ResourceController@create')
+    Route::get('/resources/{name}/create', 'ResourceController@create')
         ->name('resources.create');
+
+    Route::post('/resources/{name}', 'ResourceController@store')
+        ->name('resources.store');
 
     Route::get('/resources/{name}/{id}', 'ResourceController@detail')
         ->name('resources.detail');

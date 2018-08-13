@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
+use AdamJedlicka\Admin\Serializers\CreateSerializer;
 use AdamJedlicka\Admin\Serializers\DetailSerializer;
 
 class ResourceController extends Controller
@@ -22,7 +23,23 @@ class ResourceController extends Controller
 
     public function create(string $name)
     {
-        // TODO
+        $resource = $this->getResourceFromName($name);
+
+        return new CreateSerializer($resource);
+    }
+
+    public function store(string $name)
+    {
+        $resource = $this->getResourceFromName($name);
+
+        request()->validate($resource->rules());
+
+        $model = $resource->model()::create(request()->all());
+
+        return response()->json([
+            'status' => 'success',
+            'id' => $model->id,
+        ]);
     }
 
     public function detail(string $name, $id)

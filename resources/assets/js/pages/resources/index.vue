@@ -1,7 +1,13 @@
 <template>
     <div v-if="resourceName" class="p-4" >
-        <div class="text-2xl font-bold pb-4">
-            Index
+        <div class="flex justify-between pb-4">
+            <div class="text-2xl font-bold">
+                Index
+            </div>
+
+            <router-link :to="createUrl" class="btn btn-blue">
+                Create
+            </router-link>
         </div>
 
         <Dial ref="dial" :source="`/api/resources/${resourceName}`" />
@@ -15,6 +21,12 @@ export default {
     data() {
         return {
             resourceName: null,
+        }
+    },
+
+    computed: {
+        createUrl() {
+            return `/resources/${this.resourceName}/create`
         }
     },
 

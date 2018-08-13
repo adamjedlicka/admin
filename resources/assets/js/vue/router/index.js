@@ -16,6 +16,10 @@ export default new VueRouter({
                     component: require('~/pages/resources/index'),
                 },
                 {
+                    path: 'resources/:resource/create',
+                    component: require('~/pages/resources/create'),
+                },
+                {
                     path: 'resources/:resource/:id',
                     component: require('~/pages/resources/detail'),
                 },
