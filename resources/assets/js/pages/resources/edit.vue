@@ -1,45 +1,32 @@
 <template>
-    <div v-if="value" class="p-4">
-        <div class="flex justify-between pb-4">
-            <div class="text-2xl font-bold">
-                {{ value.displayName }}
-            </div>
+    <div v-if="resource">
 
-            <div class="flex">
-                <router-link :to="`/resources/${this.resourceName}/${this.resourceId}`"
-                    class="btn mr-2" >
-                    Cancel
-                </router-link>
+        <Panel
+            :displayName="resource.title"
+            :fields="resource.fields"
+            action="edit"
+            @input="onInput" >
 
-                <span @click.prevent="saveChanges" class="btn btn-green">
+            <div slot="buttons">
+                <span class="btn btn-green" @click="saveChanges">
                     Save
                 </span>
             </div>
-        </div>
 
-        <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in value.fields" :key="i"
-                class="py-6 flex"
-                :class="{'border-t': i > 0}" >
+        </Panel>
 
-                <div class="text-lg text-grey-dark font-bold w-1/6">
-                    {{ field.displayName }}
-                </div>
+        <Panel v-for="(panel, i) in resource.panels" :key="i"
+            :displayName="panel.displayName"
+            :fields="panel.fields"
+            action="edit"
+            @input="onInput" >
 
-                <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-edit-field`"
-                        v-model="value.resource.attributes[field.name]"
-                        :meta="metaOfField(field.name)" />
-
-                    <div>
-                        <div v-for="(error, j) in errors[field.name]" :key="j">
-                            <span class="text-sm text-red p-1">{{ error }}</span>
-                        </div>
-                    </div>
-                </div>
-
+            <div slot="title">
+                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
             </div>
-        </div>
+
+        </Panel>
+
     </div>
 </template>
 
@@ -47,29 +34,34 @@
 export default {
     data() {
         return {
-            resourceName: null,
-            resourceId: null,
-            value: null,
+            resource: null,
             errors: [],
         }
     },
 
-    mounted() {
-        this.resourceName = this.$route.params.resource
-        this.resourceId = this.$route.params.id
+    computed: {
+        resourceName() {
+            return this.$route.params.resource
+        },
 
+        resourceId() {
+            return this.$route.params.id
+        }
+    },
+
+    mounted() {
         this.fetchData()
     },
 
     methods: {
         async fetchData() {
-            this.value = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}/edit`)
+            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}/edit`)
         },
 
         async saveChanges() {
             let response = await this.$put(
                 `/api/resources/${this.resourceName}/${this.resourceId}`,
-                this.value.resource.attributes
+                this.resource.model
             )
 
             if (response.status == 'success') {
@@ -79,12 +71,8 @@ export default {
             }
         },
 
-        metaOfField(name) {
-            for (let field of this.value.fields) {
-                if (field.name == name) {
-                    return field.meta
-                }
-            }
+        onInput(name, value) {
+            this.resource.model[name] = value
         }
     }
 }

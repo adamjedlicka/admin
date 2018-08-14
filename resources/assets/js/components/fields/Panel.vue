@@ -1,16 +1,21 @@
 <template>
     <div class="p-4">
-        <slot name="title">
-            <h1 class="h1 pb-4">{{ displayName }}</h1>
-        </slot>
+        <div class="flex justify-between">
+            <slot name="title">
+                <h1 class="h1 pb-4">{{ displayName }}</h1>
+            </slot>
+
+            <slot name="buttons">
+            </slot>
+        </div>
 
         <div class="panel">
 
             <Field v-for="(field, i) in fields" :key="i"
                 :field="field"
                 :action="action"
-                :value="resource.attributes[field.name]"
-                :meta="meta(field.name)" />
+                :meta="meta(field.name)"
+                @input="onInput" />
 
         </div>
     </div>
@@ -20,7 +25,6 @@
 export default {
     props: {
         displayName: String,
-        resource: Object,
         fields: Array,
         action: String,
     },
@@ -32,6 +36,10 @@ export default {
                     return field.meta
                 }
             }
+        },
+
+        onInput(...args) {
+            this.$emit('input', ...args)
         }
     }
 }

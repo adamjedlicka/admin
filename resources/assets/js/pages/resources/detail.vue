@@ -1,38 +1,27 @@
 <template>
-    <div v-if="value">
+    <div v-if="resource">
 
         <Panel
-            :displayName="value.resource.title"
-            :fields="value.fields"
-            :resource="value.resource"
+            :displayName="resource.title"
+            :fields="resource.fields"
             action="detail" >
 
-            <div slot="title" class="flex">
-                <h1 class="h1 pb-4">
-                    <router-link :to="indexUrl"
-                        class="no-underline text-blue hover:text-blue-dark" >
-                        Index
-                    </router-link>
-
-                    <span class="text-lg">
-                        /
-                    </span>
-
-                    <span>
-                        {{ value.resource.title }}
-                    </span>
-                </h1>
+            <div slot="buttons">
+                <router-link :to="editUrl" class="btn btn-blue">
+                    Edit
+                </router-link>
             </div>
 
         </Panel>
 
-        <Panel v-for="(panel, i) in value.panels" :key="i"
+        <Panel v-for="(panel, i) in resource.panels" :key="i"
             :displayName="panel.displayName"
             :fields="panel.fields"
-            :resource="value.resource"
             action="detail" >
 
-            <h2 class="h2 pb-4" slot="title">{{ panel.displayName }}</h2>
+            <div slot="title">
+                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
+            </div>
 
         </Panel>
 
@@ -43,7 +32,7 @@
 export default {
     data() {
         return {
-            value: null,
+            resource: null
         }
     },
 
@@ -71,7 +60,7 @@ export default {
             let resourceName = this.$route.params.resource
             let id = this.$route.params.id
 
-            this.value = await this.$get(`/api/resources/${resourceName}/${id}`)
+            this.resource = await this.$get(`/api/resources/${resourceName}/${id}`)
         }
     }
 }

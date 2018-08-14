@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Fields\Field;
+use AdamJedlicka\Admin\ResourceSerializer;
 use AdamJedlicka\Admin\Serializers\EditSerializer;
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
@@ -34,11 +35,11 @@ class ResourceController extends Controller
     {
         $resource = $this->getResourceFromName($name);
 
-        request()->validate($resource->rules());
+        request()->validate($resource->getRules());
 
         $model = $resource->fullyQualifiedModelName()::make();
 
-        $fields = collect($resource->fields())
+        $fields = collect($resource->getFields(true))
             ->filter(function (Field $field) {
                 return request($field->getName()) != null;
             })
@@ -57,26 +58,28 @@ class ResourceController extends Controller
     public function detail(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
+        $resource->setModelFromKey($id);
 
-        return new DetailSerializer($resource, $id);
+        return new ResourceSerializer($resource);
     }
 
     public function edit(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
+        $resource->setModelFromKey($id);
 
-        return new EditSerializer($resource, $id);
+        return new ResourceSerializer($resource);
     }
 
     public function update(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
 
-        request()->validate($resource->rules());
+        request()->validate($resource->getRules());
 
         $model = $resource->fullyQualifiedModelName()::findOrFail($id);
 
-        $fields = collect($resource->fields())
+        $fields = collect($resource->getFields(true))
             ->filter(function (Field $field) {
                 return request($field->getName()) != null;
             })

@@ -2,9 +2,10 @@
 
 namespace AdamJedlicka\Admin;
 
-use JsonSerializable;
+use AdamJedlicka\Admin\Fields\Field;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Panel implements JsonSerializable
+class Panel implements Arrayable
 {
     /**
      * @var string
@@ -27,7 +28,7 @@ class Panel implements JsonSerializable
         return $this->fields;
     }
 
-    public function jsonSerialize() : array
+    public function toArray()
     {
         return [
             'displayName' => $this->displayName,

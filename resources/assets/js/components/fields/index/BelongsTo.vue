@@ -1,11 +1,11 @@
 <template>
-    <span>{{ value.title }}</span>
+    <span>{{ field.title }}</span>
 </template>
 
 <script>
 export default {
     props: {
-        value: Object,
+        field: Object,
     }
 }
 </script>

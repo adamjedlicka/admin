@@ -2,24 +2,18 @@
 
 namespace AdamJedlicka\Admin;
 
-use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-abstract class Resource implements JsonSerializable
+abstract class Resource
 {
     /**
      * @var \Illuminate\Database\Eloquent\Model|null
      */
     protected $model;
-
-    public function __construct(? Model $model = null)
-    {
-        $this->model = $model;
-    }
 
     /**
      * Definition of fields
@@ -81,6 +75,26 @@ abstract class Resource implements JsonSerializable
     }
 
     /**
+     * Retrieves the model from databse based on primary key
+     *
+     * @param $key Primary key of the model
+     */
+    public function setModelFromKey($key)
+    {
+        $this->model = $this->fullyQualifiedModelName()::findOrFail($key);
+    }
+
+    /**
+     * Returns the underlying model
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function getModel() : Model
+    {
+        return $this->model;
+    }
+
+    /**
      * Creates new query over the coresponding model
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -111,25 +125,6 @@ abstract class Resource implements JsonSerializable
     }
 
     /**
-     * Returns array of fields and their rules for validation
-     *
-     * @return array
-     */
-    public function rules() : array
-    {
-        $rules = [];
-
-        foreach ($this->fields() as $field) {
-            $fieldRules = $field->getRules();
-            if (count($fieldRules) > 0) {
-                $rules[$field->getName()] = $fieldRules;
-            }
-        }
-
-        return $rules;
-    }
-
-    /**
      * Returns collection of all attributes
      *
      * @return array
@@ -151,27 +146,26 @@ abstract class Resource implements JsonSerializable
         return $this->getKey();
     }
 
-    public function jsonSerialize() : array
-    {
-        return [
-            'attributes' => $this->attributes(),
-            'key' => $this->getKey(),
-            'title' => $this->title(),
-        ];
-    }
-
     /**
      * Returns filtered out fields without panels
      *
+     * @param bool $all Indicates whether to return fields inside panels
      * @return \Illuminate\Support\Collection
      */
-    public function getFields() : Collection
+    public function getFields(bool $all = false) : Collection
     {
         return collect($this->fields())
-            ->filter(function ($field) {
-                return !$field instanceof Panel;
+            ->filter(function ($field) use ($all) {
+                return $all ? : !$field instanceof Panel;
             })
-            ->values();
+            ->map(function ($field) {
+                if ($field instanceof Panel) {
+                    return $field->fields();
+                } else {
+                    return $field;
+                }
+            })
+            ->flatten();
     }
 
     /**
@@ -186,6 +180,15 @@ abstract class Resource implements JsonSerializable
                 return $field instanceof Panel;
             })
             ->values();
+    }
+
+    public function getRules() : array
+    {
+        return $this->getFields(true)
+            ->mapWithKeys(function (Field $field) {
+                return [$field->getName() => $field->getRules()];
+            })
+            ->toArray();
     }
 
     public function __get($name)

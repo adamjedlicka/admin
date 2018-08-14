@@ -8,8 +8,8 @@
 
         <div class="w-5/6 text-grey-darkest">
             <component :is="`${field.type}-${action}-field`"
-                :value="value"
-                :meta="meta" />
+                :field="field"
+                @input="onInput" />
         </div>
 
     </div>
@@ -20,8 +20,12 @@ export default {
     props: {
         field: Object,
         action: String,
-        value: null,
-        meta: null,
+    },
+
+    methods: {
+        onInput(...args) {
+            this.$emit('input', ...args)
+        }
     }
 }
 </script>

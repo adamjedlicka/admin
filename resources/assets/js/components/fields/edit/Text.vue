@@ -2,7 +2,7 @@
     <div>
         <input
             type="text"
-            :value="value"
+            :value="field.value"
             @input="onInput"
             class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
     </div>
@@ -11,12 +11,12 @@
 <script>
 export default {
     props: {
-        value: null,
+        field: Object,
     },
 
     methods: {
         onInput(e) {
-            this.$emit('input', e.target.value)
+            this.$emit('input', this.field.name, e.target.value)
         }
     }
 }

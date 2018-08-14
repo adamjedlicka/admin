@@ -19,8 +19,7 @@
 <script>
 export default {
     props: {
-        value: null,
-        meta: null,
+        field: Object,
     },
 
     data() {
@@ -33,7 +32,7 @@ export default {
         for (let i in this.meta.data.resources) {
             let resource = this.meta.data.resources[i]
 
-            if (resource.key == this.value.key) {
+            if (resource.key == this.field.key) {
                 this.selected = i
             }
         }

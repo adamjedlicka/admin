@@ -8,8 +8,7 @@
 <script>
 export default {
     props: {
-        value: Object,
-        meta: Object,
+        field: Object,
     },
 
     computed: {

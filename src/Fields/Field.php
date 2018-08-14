@@ -2,12 +2,12 @@
 
 namespace AdamJedlicka\Admin\Fields;
 
-use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Arrayable;
 
-abstract class Field implements JsonSerializable
+abstract class Field implements Arrayable
 {
     /**
      * Display name of the field
@@ -62,7 +62,8 @@ abstract class Field implements JsonSerializable
         } else if (is_callable($options)) {
             $this->name = Str::snake($displayName);
             $this->callable = $options;
-            $this->editVisible = false;
+
+            $this->hideFromEdit();
         }
     }
 
@@ -231,7 +232,7 @@ abstract class Field implements JsonSerializable
         $model->setAttribute($this->getName(), $value);
     }
 
-    public function jsonSerialize()
+    public function toArray()
     {
         return [
             'type' => (new \ReflectionClass($this))->getShortName(),
