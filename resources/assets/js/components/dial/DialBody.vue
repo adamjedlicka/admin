@@ -4,14 +4,13 @@
         <tr v-for="(resource, i) in resources" :key="i"
             class="hover:bg-grey-lighter" >
 
-            <td v-for="(field, j) in fields" :key="j"
-                class="p-4 text-black text-left"
-                :style="fieldWidth(field)" >
+            <td v-for="(field, j) in resource.fields" :key="j"
+                class="p-4 text-black text-left" >
 
                  <div class="truncate">
                     <component
                         :is="`${field.type}-index-field`"
-                        :value="resource.attributes[field.name]" />
+                        :field="field" />
                 </div>
 
             </td>
@@ -40,28 +39,15 @@
 </template>
 
 <script>
-import FieldWidthMixin from './FieldWidthMixin'
-
 export default {
-    mixins: [
-        FieldWidthMixin
-    ],
-
     props: {
-        value: Object,
-        fields: Array,
-    },
-
-    computed: {
-        resources() {
-            return this.value.data.resources
-        }
+        resources: Array,
     },
 
     methods: {
         detailUrl(resource) {
             let resourceName = this.$route.params.resource
-            let id = resource.attributes.id
+            let id = resource.key
 
             return `/resources/${resourceName}/${id}`
         },
@@ -72,7 +58,7 @@ export default {
 
         async onDelete(resource) {
             let resourceName = this.$route.params.resource
-            let id = resource.attributes.id
+            let id = resource.key
 
             let ok = await modalConfirm('Delete', 'Delete this record?', true)
             if (ok) {

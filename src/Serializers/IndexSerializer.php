@@ -6,6 +6,7 @@ use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
 use AdamJedlicka\Admin\Fields\Field;
+use AdamJedlicka\Admin\ResourceSerializer;
 
 class IndexSerializer implements JsonSerializable
 {
@@ -40,8 +41,11 @@ class IndexSerializer implements JsonSerializable
         $result = $this->query->simplePaginate();
 
         $resources = [];
-        foreach ($result->items() as $resource) {
-            $resources[] = new $this->resourceClass($resource);
+        foreach ($result->items() as $item) {
+            $resource = new $this->resourceClass();
+            $resource->setModel($item);
+
+            $resources[] = new ResourceSerializer($resource);
         }
 
         return [

@@ -51,6 +51,7 @@ class ResourceSerializer implements JsonSerializable
             'name' => $this->resource->name(),
             'title' => $this->resource->title(),
             'model' => $this->resource->getModel(),
+            'key' => $this->resource->getModel()->getKey(),
             'fields' => $this->filledFields(),
             'panels' => $this->filledPanels(),
         ];
