@@ -13,8 +13,9 @@
 
             <Field v-for="(field, i) in fields" :key="i"
                 :field="field"
+                :errors="errorsOf(field.name)"
                 :action="action"
-                :meta="meta(field.name)"
+                :meta="metaOf(field.name)"
                 @input="onInput" />
 
         </div>
@@ -26,11 +27,16 @@ export default {
     props: {
         displayName: String,
         fields: Array,
+        errors: Object,
         action: String,
     },
 
     methods: {
-        meta(name) {
+        errorsOf(name) {
+            return this.errors ? this.errors[name] : []
+        },
+
+        metaOf(name) {
             for (let field of this.fields) {
                 if (field.name == name) {
                     return field.meta

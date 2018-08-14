@@ -4,6 +4,7 @@
         <Panel
             :displayName="resource.title"
             :fields="resource.fields"
+            :errors="errors"
             action="edit"
             @input="onInput" >
 
@@ -18,6 +19,7 @@
         <Panel v-for="(panel, i) in resource.panels" :key="i"
             :displayName="panel.displayName"
             :fields="panel.fields"
+            :errors="errors"
             action="edit"
             @input="onInput" >
 
@@ -36,7 +38,7 @@ export default {
         return {
             resource: null,
             model: {},
-            errors: [],
+            errors: {},
         }
     },
 

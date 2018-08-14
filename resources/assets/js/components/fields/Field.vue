@@ -10,6 +10,13 @@
             <component :is="`${field.type}-${action}-field`"
                 :field="field"
                 @input="onInput" />
+
+            <div>
+                <p v-for="(error, i) in errors" :key="i"
+                    class="text-sm text-red pt-2" >
+                    {{ error }}
+                </p>
+            </div>
         </div>
 
     </div>
@@ -19,6 +26,7 @@
 export default {
     props: {
         field: Object,
+        errors: Array,
         action: String,
     },
 
