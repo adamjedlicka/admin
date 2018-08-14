@@ -1,11 +1,20 @@
 <template>
-    <span>{{ field.title }}</span>
+    <router-link :to="urlDetail"
+        class="link font-bold">
+        {{ field.value.title }}
+    </router-link>
 </template>
 
 <script>
 export default {
     props: {
         field: Object,
+    },
+
+    computed: {
+        urlDetail() {
+            return `/resources/${this.field.name}/${this.field.value.key}`
+        }
     }
 }
 </script>

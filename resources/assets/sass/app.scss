@@ -77,3 +77,11 @@
 .h2 {
     @apply text-xl text-grey-darkest font-bold;
 }
+
+.link {
+    @apply no-underline text-blue;
+
+    &:hover {
+        @apply text-blue-light;
+    }
+}

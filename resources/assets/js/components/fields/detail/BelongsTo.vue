@@ -1,6 +1,6 @@
 <template>
     <router-link :to="url"
-        class="no-underline text-blue font-bold hover:text-blue-light" >
+        class="link font-bold" >
         {{ field.value.title }}
     </router-link>
 </template>
