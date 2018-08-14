@@ -1,0 +1,27 @@
+<template>
+    <div v-if="field.visibleOn.includes(action)"
+        class="flex p-4">
+
+        <div class="text-md text-grey-dark font-bold w-1/6">
+            {{ field.displayName }}
+        </div>
+
+        <div class="w-5/6 text-grey-darkest">
+            <component :is="`${field.type}-${action}-field`"
+                :value="value"
+                :meta="meta" />
+        </div>
+
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        field: Object,
+        action: String,
+        value: null,
+        meta: null,
+    }
+}
+</script>

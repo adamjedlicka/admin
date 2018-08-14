@@ -1,32 +1,41 @@
 <template>
-    <div v-if="value" class="p-4">
-        <div class="flex justify-between pb-4">
-            <div class="text-2xl font-bold">
-                {{ value.name }}
+    <div v-if="value">
+
+        <Panel
+            :displayName="value.resource.title"
+            :fields="value.fields"
+            :resource="value.resource"
+            action="detail" >
+
+            <div slot="title" class="flex">
+                <h1 class="h1 pb-4">
+                    <router-link :to="indexUrl"
+                        class="no-underline text-blue hover:text-blue-dark" >
+                        Index
+                    </router-link>
+
+                    <span class="text-lg">
+                        /
+                    </span>
+
+                    <span>
+                        {{ value.resource.title }}
+                    </span>
+                </h1>
             </div>
 
-            <router-link :to="editUrl" class="btn btn-blue">
-                Edit
-            </router-link>
-        </div>
+        </Panel>
 
-        <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in value.fields" :key="i"
-                class="py-6 flex"
-                :class="{'border-t': i > 0}" >
+        <Panel v-for="(panel, i) in value.panels" :key="i"
+            :displayName="panel.displayName"
+            :fields="panel.fields"
+            :resource="value.resource"
+            action="detail" >
 
-                <div class="text-lg text-grey-dark font-bold w-1/6">
-                    {{ field.displayName }}
-                </div>
+            <h2 class="h2 pb-4" slot="title">{{ panel.displayName }}</h2>
 
-                <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-detail-field`"
-                        :value="value.resource.attributes[field.name]"
-                        :meta="metaOfField(field.name)" />
-                </div>
+        </Panel>
 
-            </div>
-        </div>
     </div>
 </template>
 
@@ -39,6 +48,12 @@ export default {
     },
 
     computed: {
+        indexUrl() {
+            let resourceName = this.$route.params.resource
+
+            return `/resources/${resourceName}`
+        },
+
         editUrl() {
             let resourceName = this.$route.params.resource
             let id = this.$route.params.id
@@ -57,14 +72,6 @@ export default {
             let id = this.$route.params.id
 
             this.value = await this.$get(`/api/resources/${resourceName}/${id}`)
-        },
-
-        metaOfField(name) {
-            for (let field of this.value.fields) {
-                if (field.name == name) {
-                    return field.meta
-                }
-            }
         }
     }
 }

@@ -16,3 +16,6 @@ let components = [
 ]
 
 components.forEach(registerComponent)
+
+Vue.component('Panel', require('./Panel'))
+Vue.component('Field', require('./Field'))

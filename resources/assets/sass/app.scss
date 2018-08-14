@@ -38,6 +38,7 @@
  * @import "components/forms";
  */
 @import "components/button";
+@import "components/panel";
 
 /**
  * This injects all of Tailwind's utility classes, generated based on your
@@ -67,4 +68,12 @@
 #app {
     font-family: 'Ubuntu', sans-serif;
     height: 100vh;
+}
+
+.h1 {
+    @apply text-2xl text-grey-darkest font-bold;
+}
+
+.h2 {
+    @apply text-xl text-grey-darkest font-bold;
 }

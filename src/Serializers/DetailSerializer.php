@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
+use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 
 class DetailSerializer implements JsonSerializable
@@ -43,8 +44,7 @@ class DetailSerializer implements JsonSerializable
     {
         return [
             'name' => $this->resource->name(),
-            'displayName' => $this->resource->name(),
-            'fields' => $this->onlyFieldsOn('detail'),
+            'fields' => $this->resource->getFields(),
             'panels' => $this->resource->getPanels(),
             'resource' => $this->resource(),
         ];

@@ -237,6 +237,7 @@ abstract class Field implements JsonSerializable
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'displayName' => $this->displayName,
+            'visibleOn' => $this->visibleOn,
             'sortable' => $this->sortable,
             'meta' => $this->meta(),
         ];

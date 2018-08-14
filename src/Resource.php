@@ -168,14 +168,9 @@ abstract class Resource implements JsonSerializable
     public function getFields() : Collection
     {
         return collect($this->fields())
-            ->map(function ($field) {
-                if ($field instanceof Panel) {
-                    return $field->fields();
-                } else {
-                    return $field;
-                }
+            ->filter(function ($field) {
+                return !$field instanceof Panel;
             })
-            ->flatten()
             ->values();
     }
 
