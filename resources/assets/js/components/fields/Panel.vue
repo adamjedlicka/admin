@@ -25,7 +25,7 @@
 <script>
 export default {
     props: {
-        displayName: String,
+        displayName: null,
         fields: Array,
         errors: Object,
         action: String,

@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Database\Eloquent\Model;
+use AdamJedlicka\Admin\ResourceSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 
 class BelongsTo extends Field
@@ -11,12 +12,25 @@ class BelongsTo extends Field
 
     protected function meta()
     {
-        return new IndexSerializer(get_resource_from_name($this->name));
+        $resource = get_resource_from_name($this->name);
+        $models = $resource->query()->get();
+
+        return $models->map(function ($model) {
+            $resource = get_resource_from_name($this->name);
+            $resource->setModel($model);
+
+            return (new ResourceSerializer($resource))
+                ->only('title', 'key');
+        });
     }
 
     protected function resolveAttribute(Model $model)
     {
-        return get_resource_from_name($this->name, $model->getAttribute($this->name));
+        $resource = get_resource_from_name($this->name);
+        $resource->setModel($model->getAttribute($this->name));
+
+        return (new ResourceSerializer($resource))
+            ->only('title', 'key');
     }
 
     public function persist(Model $model, $value)

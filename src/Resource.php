@@ -147,7 +147,7 @@ abstract class Resource
      */
     public function title()
     {
-        return $this->getKey();
+        return $this->name() . ' ' . $this->getKey();
     }
 
     /**

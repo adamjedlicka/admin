@@ -6,13 +6,19 @@ use JsonSerializable;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
+use Illuminate\Contracts\Support\Arrayable;
 
-class ResourceSerializer implements JsonSerializable
+class ResourceSerializer implements Arrayable, JsonSerializable
 {
     /**
      * @var \AdamJedlicka\Admin\Resource
      */
     protected $resource;
+
+    /**
+     * @var array
+     */
+    protected $only = [];
 
     public function __construct(Resource $resource)
     {
@@ -45,7 +51,19 @@ class ResourceSerializer implements JsonSerializable
             });
     }
 
-    public function jsonSerialize() : array
+    /**
+     * Limits what is send to frontend
+     *
+     * @return self
+     */
+    public function only(...$only) : self
+    {
+        $this->only = $only;
+
+        return $this;
+    }
+
+    public function toArray()
     {
         return [
             'name' => $this->resource->name(),
@@ -55,5 +73,12 @@ class ResourceSerializer implements JsonSerializable
             'fields' => $this->filledFields(),
             'panels' => $this->filledPanels(),
         ];
+    }
+
+    public function jsonSerialize()
+    {
+        return count($this->only) == 0
+            ? $this->toArray()
+            : collect($this->toArray())->only($this->only);
     }
 }

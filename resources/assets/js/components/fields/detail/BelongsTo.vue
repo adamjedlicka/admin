@@ -1,7 +1,7 @@
 <template>
     <router-link :to="url"
         class="no-underline text-blue font-bold hover:text-blue-light" >
-        {{ value.title }}
+        {{ field.value.title }}
     </router-link>
 </template>
 
@@ -13,8 +13,8 @@ export default {
 
     computed: {
         url() {
-            let resourceName = this.meta.name.toLowerCase()
-            let resourceId = this.value.key
+            let resourceName = this.field.name
+            let resourceId = this.field.value.key
 
             return `/resources/${resourceName}/${resourceId}`
         }
