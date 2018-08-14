@@ -51,7 +51,7 @@ class ResourceController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'id' => $model->id,
+            'key' => $model->getKey(),
         ]);
     }
 

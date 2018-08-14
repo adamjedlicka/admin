@@ -1,45 +1,32 @@
 <template>
-    <div v-if="value" class="p-4">
-        <div class="flex justify-between pb-4">
-            <div class="text-2xl font-bold">
-                Create new {{ value.displayName }}
-            </div>
+    <div v-if="resource">
 
-            <div class="flex">
-                <router-link :to="`/resources/${this.resourceName}`"
-                     class="btn mr-2" >
-                    Cancel
-                </router-link>
+        <Panel
+            :displayName="`New ${resource.name}`"
+            :fields="resource.fields"
+            action="edit"
+            @input="onInput" >
 
-                <span @click.prevent="saveChanges" class="btn btn-green">
+            <div slot="buttons">
+                <span class="btn btn-green" @click="saveChanges">
                     Save
                 </span>
             </div>
-        </div>
 
-        <div class="bg-white shadow-md rounded-lg py-4 px-8">
-            <div v-for="(field, i) in value.fields" :key="i"
-                class="py-6 flex"
-                :class="{'border-t': i > 0}" >
+        </Panel>
 
-                <div class="text-lg text-grey-dark font-bold w-1/6">
-                    {{ field.displayName }}
-                </div>
+        <Panel v-for="(panel, i) in resource.panels" :key="i"
+            :displayName="panel.displayName"
+            :fields="panel.fields"
+            action="edit"
+            @input="onInput" >
 
-                <div class="text-lg text-grey-darkest w-5/6">
-                    <conponent :is="`${field.type}-edit-field`"
-                        v-model="form[field.name]"
-                        :meta="metaOfField(field.name)" />
-
-                    <div>
-                        <div v-for="(error, j) in errors[field.name]" :key="j">
-                            <span class="text-sm text-red p-1">{{ error }}</span>
-                        </div>
-                    </div>
-                </div>
-
+            <div slot="title">
+                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
             </div>
-        </div>
+
+        </Panel>
+
     </div>
 </template>
 
@@ -47,44 +34,52 @@
 export default {
     data() {
         return {
-            resourceName: null,
-            value: null,
-            form: {},
+            resource: null,
+            model: {},
             errors: [],
         }
     },
 
-    mounted() {
-        this.resourceName = this.$route.params.resource
-        this.resourceId = this.$route.params.id
+    computed: {
+        resourceName() {
+            return this.$route.params.resource
+        },
+    },
 
+    mounted() {
         this.fetchData()
     },
 
     methods: {
         async fetchData() {
-            this.value = await this.$get(`/api/resources/${this.resourceName}/create`)
+            this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
+
+            this.resource.fields
+                .filter(field => field.visibleOn.includes('edit'))
+                .forEach(field => this.model[field.name] = field.value)
+
+            this.resource.panels
+                .forEach(panel => {
+                    panel.fields.forEach(field => this.model[field.name] = field.value)
+                })
+
         },
 
         async saveChanges() {
             let response = await this.$post(
                 `/api/resources/${this.resourceName}`,
-                this.form
+                this.model
             )
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resourceName}/${response.id}`)
+                this.$router.push(`/resources/${this.resourceName}/${response.key}`)
             } else if (response.errors) {
                 this.errors = response.errors
             }
         },
 
-        metaOfField(name) {
-            for (let field of this.value.fields) {
-                if (field.name == name) {
-                    return field.meta
-                }
-            }
+        onInput(name, value) {
+            this.model[name] = value
         }
     }
 }

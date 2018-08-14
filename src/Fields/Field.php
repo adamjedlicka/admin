@@ -2,12 +2,13 @@
 
 namespace AdamJedlicka\Admin\Fields;
 
+use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
-abstract class Field implements Arrayable
+abstract class Field implements Arrayable, JsonSerializable
 {
     /**
      * Display name of the field
@@ -242,6 +243,11 @@ abstract class Field implements Arrayable
             'sortable' => $this->sortable,
             'meta' => $this->meta(),
         ];
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 
     /**

@@ -24,7 +24,8 @@ class CreateSerializer implements JsonSerializable
     {
         return [
             'name' => $this->resource->name(),
-            'fields' => $this->onlyFieldsOn('edit'),
+            'fields' => $this->resource->getFields(),
+            'panels' => $this->resource->getPanels(),
         ];
     }
 }
