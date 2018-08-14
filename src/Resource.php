@@ -75,13 +75,17 @@ abstract class Resource
     }
 
     /**
-     * Retrieves the model from databse based on primary key
+     * Sets model or retrieves it from database based on given primary key
      *
-     * @param $key Primary key of the model
+     * @param mixed $model Model object or primary key
      */
-    public function setModelFromKey($key)
+    public function setModel($model)
     {
-        $this->model = $this->fullyQualifiedModelName()::findOrFail($key);
+        if ($model instanceof Model) {
+            $this->model = $model;
+        } else {
+            $this->model = $this->fullyQualifiedModelName()::findOrFail($model);
+        }
     }
 
     /**

@@ -35,6 +35,7 @@ export default {
     data() {
         return {
             resource: null,
+            model: {},
             errors: [],
         }
     },
@@ -56,12 +57,22 @@ export default {
     methods: {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceId}/edit`)
+
+            this.resource.fields
+                .filter(field => field.visibleOn.includes('edit'))
+                .forEach(field => this.model[field.name] = field.value)
+
+            this.resource.panels
+                .forEach(panel => {
+                    panel.fields.forEach(field => this.model[field.name] = field.value)
+                })
+
         },
 
         async saveChanges() {
             let response = await this.$put(
                 `/api/resources/${this.resourceName}/${this.resourceId}`,
-                this.resource.model
+                this.model
             )
 
             if (response.status == 'success') {
@@ -72,7 +83,7 @@ export default {
         },
 
         onInput(name, value) {
-            this.resource.model[name] = value
+            this.model[name] = value
         }
     }
 }

@@ -58,7 +58,7 @@ class ResourceController extends Controller
     public function detail(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
-        $resource->setModelFromKey($id);
+        $resource->setModel($id);
 
         return new ResourceSerializer($resource);
     }
@@ -66,7 +66,7 @@ class ResourceController extends Controller
     public function edit(string $name, $id)
     {
         $resource = $this->getResourceFromName($name);
-        $resource->setModelFromKey($id);
+        $resource->setModel($id);
 
         return new ResourceSerializer($resource);
     }
