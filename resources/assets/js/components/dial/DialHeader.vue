@@ -46,15 +46,15 @@ export default {
         onClick(field) {
             if (!field.sortable) return
 
-            if (field.field == this.sort) {
-                this.sort = field.field
+            if (field.name == this.sort) {
+                this.sort = field.name
                 this.order = {
                     null: 'asc',
                     asc: 'desc',
                     desc: null,
                 }[this.order]
             } else {
-                this.sort = field.field
+                this.sort = field.name
                 this.order = 'asc'
             }
 
