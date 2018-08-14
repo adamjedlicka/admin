@@ -16,7 +16,7 @@ trait SerializesResources
 
     protected function onlyFieldsOn(string $view)
     {
-        return collect($this->resource->fields())
+        return collect($this->resource->getFields())
             ->filter(function (Field $field) use ($view) {
                 return $field->isVisibleOn($view);
             })

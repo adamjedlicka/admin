@@ -45,6 +45,7 @@ class DetailSerializer implements JsonSerializable
             'name' => $this->resource->name(),
             'displayName' => $this->resource->name(),
             'fields' => $this->onlyFieldsOn('detail'),
+            'panels' => $this->resource->getPanels(),
             'resource' => $this->resource(),
         ];
     }

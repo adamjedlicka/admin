@@ -111,21 +111,6 @@ abstract class Resource implements JsonSerializable
     }
 
     /**
-     * Whether the resource has any dynamic width fields display on index view
-     *
-     * @return bool
-     */
-    public function hasDynamicSizeField() : bool
-    {
-        return collect($this->fields())
-            ->filter(function (Field $field) {
-                return $field->isVisibleOn('index')
-                    && $field->isDynamic();
-            })
-            ->count() > 0;
-    }
-
-    /**
      * Returns array of fields and their rules for validation
      *
      * @return array
@@ -151,7 +136,7 @@ abstract class Resource implements JsonSerializable
      */
     public function attributes() : array
     {
-        return collect($this->fields())
+        return collect($this->getFields())
             ->reduce(function ($collection, Field $field) {
                 $collection[$field->getName()] = $field->resolve($this->model);
                 return $collection;
@@ -166,13 +151,46 @@ abstract class Resource implements JsonSerializable
         return $this->getKey();
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize() : array
     {
         return [
             'attributes' => $this->attributes(),
             'key' => $this->getKey(),
             'title' => $this->title(),
         ];
+    }
+
+    /**
+     * Returns filtered out fields without panels
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getFields() : Collection
+    {
+        return collect($this->fields())
+            ->map(function ($field) {
+                if ($field instanceof Panel) {
+                    return $field->fields();
+                } else {
+                    return $field;
+                }
+            })
+            ->flatten()
+            ->values();
+    }
+
+    /**
+     * Returns only panels of current resource
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getPanels() : Collection
+    {
+        return collect($this->fields())
+            ->filter(function ($field) {
+                return $field instanceof Panel;
+            })
+            ->values();
     }
 
     public function __get($name)
