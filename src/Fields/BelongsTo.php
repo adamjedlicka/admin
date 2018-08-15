@@ -31,6 +31,7 @@ class BelongsTo extends Field
         return [
             'title' => $belongsToResource->title(),
             'key' => $belongsToResource->key(),
+            'name' => Str::lower($belongsToResource->name()),
         ];
     }
 

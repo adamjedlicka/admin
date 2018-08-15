@@ -13,7 +13,7 @@ export default {
 
     computed: {
         url() {
-            let resourceName = this.field.name
+            let resourceName = this.field.meta.name
             let resourceId = this.field.value
 
             return `/resources/${resourceName}/${resourceId}`

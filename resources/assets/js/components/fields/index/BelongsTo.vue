@@ -13,7 +13,7 @@ export default {
 
     computed: {
         urlDetail() {
-            return `/resources/${this.field.name}/${this.field.value}`
+            return `/resources/${this.field.meta.name}/${this.field.value}`
         }
     }
 }
