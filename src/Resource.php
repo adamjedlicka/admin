@@ -20,7 +20,17 @@ abstract class Resource
      *
      * @return array
      */
-    abstract public function fields() : array;
+    abstract public function fields();
+
+    /**
+     * Title of the model to be displayed
+     *
+     * @return string
+     */
+    public function title()
+    {
+        return $this->name() . ' ' . $this->getKey();
+    }
 
     /**
      * Name of the resource
@@ -140,14 +150,6 @@ abstract class Resource
                 $collection[$field->getName()] = $field->resolve($this->model);
                 return $collection;
             });
-    }
-
-    /**
-     * Title of the model to be displayed
-     */
-    public function title()
-    {
-        return $this->name() . ' ' . $this->getKey();
     }
 
     /**
