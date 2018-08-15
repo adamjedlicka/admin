@@ -12,6 +12,7 @@
 
         </div>
 
+        <Toasts />
         <ConfirmModal />
 
     </div>
