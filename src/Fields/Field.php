@@ -90,9 +90,10 @@ abstract class Field implements Arrayable, JsonSerializable
     /**
      * Meta attributes for the field
      *
+     * @param Model $model
      * @return mixed
      */
-    protected function meta(Resource $resource)
+    protected function meta(Model $model)
     {
         return null;
     }
@@ -254,7 +255,7 @@ abstract class Field implements Arrayable, JsonSerializable
         ];
 
         if ($this->resource) {
-            $arr['meta'] = $this->meta($this->resource);
+            $arr['meta'] = $this->meta($this->resource->getModel());
             $arr['value'] = $this->retrieve($this->resource->getModel());
         }
 
