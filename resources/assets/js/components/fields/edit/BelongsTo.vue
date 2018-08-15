@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <select @input="onInput" :value="field.value ? field.value.key : null"
+        <select @input="onInput" :value="field.value"
             class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
 
             <option :value="null"></option>
@@ -24,9 +24,7 @@ export default {
 
     methods: {
         onInput(e) {
-            this.$emit('input', this.field.name, {
-                key: e.target.value
-            })
+            this.$emit('input', this.field.name, e.target.value)
         }
     }
 }

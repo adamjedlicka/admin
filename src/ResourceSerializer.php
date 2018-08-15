@@ -29,7 +29,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     {
         return $fields->map(function (Field $field) {
             return array_merge($field->toArray(), [
-                'value' => $field->resolve($this->resource->getModel()),
+                'value' => $field->retrieve($this->resource->getModel()),
             ]);
         });
     }

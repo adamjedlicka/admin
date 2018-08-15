@@ -1,7 +1,7 @@
 <template>
     <router-link :to="url"
         class="link font-bold" >
-        {{ field.value.title }}
+        {{ field.value }}
     </router-link>
 </template>
 
@@ -14,7 +14,7 @@ export default {
     computed: {
         url() {
             let resourceName = this.field.name
-            let resourceId = this.field.value.key
+            let resourceId = this.field.value
 
             return `/resources/${resourceName}/${resourceId}`
         }

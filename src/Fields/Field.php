@@ -57,11 +57,11 @@ abstract class Field implements Arrayable, JsonSerializable
         $this->displayName = $displayName;
 
         if (is_null($options)) {
-            $this->name = Str::snake($displayName);
+            $this->name = $this->resolveName($displayName);
         } else if (is_string($options)) {
             $this->name = $options;
         } else if (is_callable($options)) {
-            $this->name = Str::snake($displayName);
+            $this->name = $this->resolveName($displayName);
             $this->callable = $options;
 
             $this->hideFromEdit();
@@ -197,30 +197,17 @@ abstract class Field implements Arrayable, JsonSerializable
     }
 
     /**
-     * Set width on the index view to one half
+     * Retrieves the value
      *
-     * @return self
+     * @param Model $model Coresponding model
+     * @return mixed
      */
-    public function oneHalf()
+    public function retrieve(Model $model)
     {
-        $this->indexSize = 'oneHalf';
-        return $this;
-    }
+        if ($this->callable) {
+            return call_user_func($this->callable, $model);
+        }
 
-    public function resolve(Model $model)
-    {
-        return $this->callable
-            ? $this->resolveCallable($model)
-            : $this->resolveAttribute($model);
-    }
-
-    protected function resolveCallable(Model $model)
-    {
-        return call_user_func($this->callable, $model);
-    }
-
-    protected function resolveAttribute(Model $model)
-    {
         if (array_search($this->name, $model->getHidden()) !== false) {
             return null;
         }
@@ -228,9 +215,26 @@ abstract class Field implements Arrayable, JsonSerializable
         return $model->getAttribute($this->name);
     }
 
+    /**
+     * Persists the value to model
+     *
+     * @param Model $model Coresponding model
+     * @param mixed $value Value to be persisted
+     */
     public function persist(Model $model, $value)
     {
         $model->setAttribute($this->getName(), $value);
+    }
+
+    /**
+     * Resolves the field name from display name
+     *
+     * @param string $displayName
+     * @return string
+     */
+    protected function resolveName(string $displayName) : string
+    {
+        return Str::snake($displayName);
     }
 
     public function toArray()
