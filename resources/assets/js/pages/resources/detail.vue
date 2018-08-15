@@ -20,7 +20,7 @@
             action="detail" >
 
             <div slot="title">
-                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
+                <h2 class="h2">{{ panel.displayName }}</h2>
             </div>
 
         </Panel>

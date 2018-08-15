@@ -24,13 +24,13 @@
                     <div class="p-2 flex justify-end border-t">
                         <div class="btn btn-blue"
                             @click="onCancel" >
-                            Cancel
+                            No
                         </div>
 
                         <div class="btn ml-2"
                             :class="{'btn-green' : !danger, 'btn-red' : danger}"
                             @click="onOk" >
-                            Ok
+                            Yes
                         </div>
                     </div>
 

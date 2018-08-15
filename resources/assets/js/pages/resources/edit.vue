@@ -8,7 +8,11 @@
             action="edit"
             @input="onInput" >
 
-            <div slot="buttons">
+            <div slot="buttons" class="buttons">
+                <router-link :to="detailUrl" class="btn">
+                    Cancel
+                </router-link>
+
                 <span class="btn btn-green" @click="saveChanges">
                     Save
                 </span>
@@ -24,7 +28,7 @@
             @input="onInput" >
 
             <div slot="title">
-                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
+                <h2 class="h2">{{ panel.displayName }}</h2>
             </div>
 
         </Panel>
@@ -49,6 +53,10 @@ export default {
 
         resourceId() {
             return this.$route.params.id
+        },
+
+        detailUrl() {
+            return `/resources/${this.resourceName}/${this.resourceId}`
         }
     },
 

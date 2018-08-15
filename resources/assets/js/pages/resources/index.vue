@@ -1,14 +1,16 @@
 <template>
     <div v-if="resourceName" class="p-4" >
         <div class="flex justify-between pb-4">
-            <div class="text-2xl font-bold">
+            <h1 class="h1">
                 Index
-            </div>
+            </h1>
 
-            <router-link :to="`/resources/${this.resourceName}/create`"
-                class="btn btn-blue">
-                Create
-            </router-link>
+            <div>
+                <router-link :to="`/resources/${this.resourceName}/create`"
+                    class="btn btn-blue">
+                    Create
+                </router-link>
+            </div>
         </div>
 
         <Dial ref="dial" :source="`/api/resources/${resourceName}`" />
