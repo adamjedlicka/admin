@@ -6,8 +6,9 @@
 
             <option :value="null"></option>
 
-            <option v-for="(resource, i) in field.meta" :key="i"
-                :value="resource.key" >
+            <option v-for="(resource, i) in resources" :key="i"
+                :value="resource.key"
+                :selected="resource.key == field.value" >
                 {{ resource.title }}
             </option>
 
@@ -22,10 +23,26 @@ export default {
         field: Object,
     },
 
+    data() {
+        return {
+            resources: [],
+        }
+    },
+
     methods: {
         onInput(e) {
             this.$emit('input', this.field.name, e.target.value)
         }
+    },
+
+    async mounted() {
+        this.resources = [{
+            key: this.field.meta.key,
+            title: this.field.meta.title,
+        }]
+
+        let response = await this.$get(this.field.meta.source)
+        this.resources = response.data.resources
     }
 }
 </script>

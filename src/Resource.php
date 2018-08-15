@@ -109,6 +109,16 @@ abstract class Resource
     }
 
     /**
+     * Returns the model primary key
+     *
+     * @return mixed
+     */
+    public function key()
+    {
+        return $this->model->getKey();
+    }
+
+    /**
      * Creates new query over the coresponding model
      *
      * @return \Illuminate\Database\Eloquent\Builder

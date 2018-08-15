@@ -4,12 +4,18 @@ namespace AdamJedlicka\Admin\Fields;
 
 use JsonSerializable;
 use Illuminate\Support\Str;
+use AdamJedlicka\Admin\Resource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
 abstract class Field implements Arrayable, JsonSerializable
 {
+    /**
+     * @var \AdamJedlicka\Admin\Resource
+     */
+    protected $resource;
+
     /**
      * Display name of the field
      *
@@ -86,7 +92,7 @@ abstract class Field implements Arrayable, JsonSerializable
      *
      * @return mixed
      */
-    protected function meta()
+    protected function meta(Resource $resource)
     {
         return null;
     }
@@ -239,19 +245,30 @@ abstract class Field implements Arrayable, JsonSerializable
 
     public function toArray()
     {
-        return [
+        $arr = [
             'type' => (new \ReflectionClass($this))->getShortName(),
             'name' => $this->name,
             'displayName' => $this->displayName,
             'visibleOn' => $this->visibleOn,
             'sortable' => $this->sortable,
-            'meta' => $this->meta(),
         ];
+
+        if ($this->resource) {
+            $arr['meta'] = $this->meta($this->resource);
+            $arr['value'] = $this->retrieve($this->resource->getModel());
+        }
+
+        return $arr;
     }
 
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    public function setResource(Resource $resource)
+    {
+        $this->resource = $resource;
     }
 
     /**

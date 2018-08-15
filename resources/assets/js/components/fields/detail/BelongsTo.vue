@@ -1,7 +1,7 @@
 <template>
     <router-link :to="url"
         class="link font-bold" >
-        {{ field.value }}
+        {{ field.meta.title }}
     </router-link>
 </template>
 

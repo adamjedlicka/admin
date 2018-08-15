@@ -1,6 +1,10 @@
 <?php
 
+namespace AdamJedlicka\Admin\Support;
+
 use Illuminate\Support\Str;
+use AdamJedlicka\Admin\Resource;
+use Illuminate\Database\Eloquent\Model;
 
 function get_metadata_from_file($filename)
 {
@@ -57,12 +61,22 @@ function get_namespace_from_file($filename)
     return $metadata['namespace'];
 }
 
-function get_resource_from_name(string $name, ...$args)
+function get_resource_from_name(string $name) : Resource
 {
     $fileName = Str::studly($name) . '.php';
     $path = app_path(config('admin.directory') . '/Resources');
 
     $class = get_class_from_file($path . '/' . $fileName);
 
-    return new $class(...$args);
+    return new $class;
+}
+
+function get_resource_from_model(Model $model) : Resource
+{
+    $name = (new \ReflectionClass($model))->getShortName();
+
+    $resource = get_resource_from_name($name);
+    $resource->setModel($model);
+
+    return $resource;
 }

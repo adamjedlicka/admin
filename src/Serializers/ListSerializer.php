@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
+use function AdamJedlicka\Admin\Support\get_class_from_file;
 
 class ListSerializer implements JsonSerializable
 {

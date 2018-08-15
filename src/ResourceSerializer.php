@@ -27,10 +27,8 @@ class ResourceSerializer implements Arrayable, JsonSerializable
 
     protected function fillFields(Collection $fields) : Collection
     {
-        return $fields->map(function (Field $field) {
-            return array_merge($field->toArray(), [
-                'value' => $field->retrieve($this->resource->getModel()),
-            ]);
+        return $fields->each(function (Field $field) {
+            $field->setResource($this->resource);
         });
     }
 
@@ -44,7 +42,6 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return $this->resource->getPanels()
             ->map(function (Panel $panel) {
                 $arr = $panel->toArray();
-
                 $arr['fields'] = $this->fillFields(collect($arr['fields']));
 
                 return $arr;
