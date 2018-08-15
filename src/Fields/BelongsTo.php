@@ -3,9 +3,8 @@
 namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
+use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\ResourceSerializer;
-use AdamJedlicka\Admin\Serializers\IndexSerializer;
 use function AdamJedlicka\Admin\Support\get_resource_from_model;
 
 class BelongsTo extends Field
@@ -23,9 +22,11 @@ class BelongsTo extends Field
         $model->setAttribute($foreignKey, $value);
     }
 
-    protected function meta(Model $model)
+    protected function meta(Resource $resource)
     {
-        $belongsToModel = $model->{$this->getName()};
+        if (!$resource->getModel()) return;
+
+        $belongsToModel = $resource->getModel()->{$this->getName()};
         $belongsToResource = get_resource_from_model($belongsToModel);
 
         return [

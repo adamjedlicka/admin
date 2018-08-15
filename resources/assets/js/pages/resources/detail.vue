@@ -3,7 +3,7 @@
 
         <Panel
             :displayName="resource.title"
-            :fields="resource.fields"
+            :fields="fields"
             action="detail" >
 
             <div slot="buttons">
@@ -24,6 +24,18 @@
             </div>
 
         </Panel>
+
+        <div v-for="field in fieldPanels" :key="field.name"
+            class="p-4" >
+            <div slot="title">
+                <h2 class="h2 pb-4">{{ field.displayName }}</h2>
+            </div>
+
+            <div class="panel">
+                <component :is="`${field.type}-detail-field`"
+                    :field="field" />
+            </div>
+        </div>
 
     </div>
 </template>
@@ -49,6 +61,14 @@ export default {
 
             return `/resources/${resourceName}/${id}/edit`
         },
+
+        fields() {
+            return this.resource.fields.filter(field => !field.isPanel)
+        },
+
+        fieldPanels() {
+            return this.resource.fields.filter(field => field.isPanel)
+        }
     },
 
     mounted() {

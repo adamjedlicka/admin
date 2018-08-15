@@ -101,9 +101,9 @@ abstract class Resource
     /**
      * Returns the underlying model
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return \Illuminate\Database\Eloquent\Model|null
      */
-    public function getModel() : Model
+    public function getModel() : ? Model
     {
         return $this->model;
     }
@@ -181,7 +181,10 @@ abstract class Resource
                     return $field;
                 }
             })
-            ->flatten();
+            ->flatten()
+            ->each(function (Field $field) {
+                $field->setResource($this);
+            });
     }
 
     /**

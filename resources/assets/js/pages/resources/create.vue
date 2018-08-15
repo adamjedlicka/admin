@@ -3,7 +3,7 @@
 
         <Panel
             :displayName="`New ${resource.name}`"
-            :fields="resource.fields"
+            :fields="fields"
             :errors="errors"
             action="edit"
             @input="onInput" >
@@ -29,6 +29,21 @@
 
         </Panel>
 
+        <div v-for="field in fieldPanels" :key="field.name"
+            class="p-4" >
+            <div slot="title">
+                <h2 class="h2 pb-4">{{ field.displayName }}</h2>
+            </div>
+
+            <div class="panel">
+                <component :is="`${field.type}-edit-field`"
+                    :field="field"
+                    :model="model"
+                    :errors="errors"
+                    @input="onInput" />
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -46,6 +61,14 @@ export default {
         resourceName() {
             return this.$route.params.resource
         },
+
+        fields() {
+            return this.resource.fields.filter(field => !field.isPanel)
+        },
+
+        fieldPanels() {
+            return this.resource.fields.filter(field => field.isPanel)
+        }
     },
 
     mounted() {

@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\ResourceSerializer;
@@ -38,17 +39,21 @@ class ResourceController extends Controller
 
         request()->validate($resource->getRules());
 
-        $model = $resource->fullyQualifiedModelName()::make();
+        $model = DB::transaction(function () use ($resource) {
+            $model = $resource->fullyQualifiedModelName()::make();
 
-        $fields = collect($resource->getFields(true))
-            ->filter(function (Field $field) {
-                return $field->isVisibleOn('edit');
-            })
-            ->each(function (Field $field) use ($model) {
-                $field->persist($model, request($field->getName()));
-            });
+            $fields = collect($resource->getFields(true))
+                ->filter(function (Field $field) {
+                    return $field->isVisibleOn('edit');
+                })
+                ->each(function (Field $field) use ($model) {
+                    $field->persist($model, request($field->getName()));
+                });
 
-        $model->save();
+            $model->saveOrFail();
+
+            return $model;
+        });
 
         return response()->json([
             'status' => 'success',

@@ -52,13 +52,18 @@ abstract class Field implements Arrayable, JsonSerializable
     protected $sortable = false;
 
     /**
+     * Indicates whether the field is on its own separate panel
+     */
+    protected $isPanel = false;
+
+    /**
      * Validation rules
      *
      * @var bool
      */
     protected $rules = [];
 
-    private function __construct(string $displayName, $options = null)
+    protected function __construct(string $displayName, $options = null)
     {
         $this->displayName = $displayName;
 
@@ -90,10 +95,10 @@ abstract class Field implements Arrayable, JsonSerializable
     /**
      * Meta attributes for the field
      *
-     * @param Model $model
+     * @param \AdamJedlicka\Admin\Resource $resource
      * @return mixed
      */
-    protected function meta(Model $model)
+    protected function meta(Resource $resource)
     {
         return null;
     }
@@ -252,12 +257,17 @@ abstract class Field implements Arrayable, JsonSerializable
             'displayName' => $this->displayName,
             'visibleOn' => $this->visibleOn,
             'sortable' => $this->sortable,
+            'isPanel' => $this->isPanel,
         ];
 
         if ($this->resource) {
-            $arr['meta'] = $this->meta($this->resource->getModel());
-            $arr['value'] = $this->retrieve($this->resource->getModel());
+            $arr['meta'] = $this->meta($this->resource);
+
+            if ($this->resource->getModel()) {
+                $arr['value'] = $this->retrieve($this->resource->getModel());
+            }
         }
+
 
         return $arr;
     }
