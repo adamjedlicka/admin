@@ -1,5 +1,7 @@
 import router from '~/vue/router'
 
+let interceptors = []
+
 export default class Request {
 
     constructor(method, url, options = {}) {
@@ -33,10 +35,16 @@ export default class Request {
         return this
     }
 
+    static intercept(callback) {
+        interceptors.push(callback)
+    }
+
     async _execute() {
         let response = await fetch(this._url.get(), this.options)
 
         let data = await response.json()
+
+        interceptors.forEach(it => it(response, data))
 
         this._success(data)
     }

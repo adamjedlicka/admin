@@ -44,6 +44,12 @@ let del = (url) => {
     return new Request('DELETE', url)
 }
 
+Request.intercept((response, data) => {
+    if (response.status == 500) {
+        toast(data.message).error()
+    }
+})
+
 export default {
     install(Vue) {
         Vue.prototype.$get = get
