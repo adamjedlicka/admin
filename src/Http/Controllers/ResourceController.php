@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\ResourceSerializer;
 use AdamJedlicka\Admin\Serializers\EditSerializer;
@@ -41,7 +42,7 @@ class ResourceController extends Controller
 
         $fields = collect($resource->getFields(true))
             ->filter(function (Field $field) {
-                return request($field->getName()) != null;
+                return $field->isVisibleOn('edit');
             })
             ->each(function (Field $field) use ($model) {
                 $field->persist($model, request($field->getName()));
@@ -81,7 +82,7 @@ class ResourceController extends Controller
 
         $fields = collect($resource->getFields(true))
             ->filter(function (Field $field) {
-                return request($field->getName()) != null;
+                return $field->isVisibleOn('edit');
             })
             ->each(function (Field $field) use ($model) {
                 $field->persist($model, request($field->getName()));
