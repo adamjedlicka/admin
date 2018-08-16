@@ -7,7 +7,7 @@ let registerComponent = (component) => {
 }
 
 let components = [
-    'ID',
+    'Id',
     'Text',
 
     'BelongsTo',

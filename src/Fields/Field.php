@@ -88,8 +88,7 @@ abstract class Field implements Arrayable, JsonSerializable
      */
     public static function make(string $displayName, $options = null)
     {
-        $self = new static($displayName, $options);
-        return $self;
+        return new static($displayName, $options);
     }
 
     /**
