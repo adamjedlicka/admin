@@ -22,6 +22,8 @@ class HasOne extends Field
 
     public function persist(Model $model, $value)
     {
+        if (!$value) return;
+
         $model->saved(function ($model) use ($value) {
             $key = $model->{$this->name}()->getRelated()->getKeyName();
 
@@ -34,18 +36,17 @@ class HasOne extends Field
     {
         if ($resource->getModel()) {
             $model = $resource->getModel();
-            $hasOneModel = $model->{$this->name};
         } else {
             $modeName = $resource->fullyQualifiedModelName();
             $model = new $modeName;
-            $hasOneModel = $model->{$this->name}()->getRelated();
         }
 
+        $hasOneModel = $model->{$this->name} ?? $model->{$this->name}()->getRelated();
         $hasOneResource = get_resource_from_model($hasOneModel);
 
         return [
             'fields' => $hasOneResource->getFields(),
-            'title' => $hasOneResource->title(),
+            'title' => $hasOneResource->getTitle(),
         ];
     }
 

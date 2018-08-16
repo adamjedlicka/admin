@@ -201,6 +201,11 @@ abstract class Resource
             ->values();
     }
 
+    /**
+     * Returns computed array of all rules
+     *
+     * @return array
+     */
     public function getRules() : array
     {
         return $this->getFields(true)
@@ -208,6 +213,18 @@ abstract class Resource
                 return [$field->getName() => $field->getRules()];
             })
             ->toArray();
+    }
+
+    /**
+     * Returns resource title or empty string whether resopurce has model
+     *
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->model && $this->model->exists
+            ? $this->title()
+            : '';
     }
 
     public function __get($name)
