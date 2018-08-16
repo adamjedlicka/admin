@@ -37,8 +37,19 @@ class HasOne extends Field
     {
         $hasOneResource = $this->hasOneResource($resource);
 
+        $modeName = $resource->fullyQualifiedModelName();
+        $model = new $modeName;
+
+        $foreignKey = call_user_func([$model, $this->name])->getForeignKeyName();
+
         return [
-            'fields' => $hasOneResource->getFields(),
+            'fields' => collect($hasOneResource->getFields())
+                ->filter(function (Field $field) use ($foreignKey) {
+                    if (!$field instanceof BelongsTo) return $field;
+
+                    return $foreignKey != $field->getForeignKey();
+                })
+                ->values(),
         ];
     }
 
@@ -58,9 +69,16 @@ class HasOne extends Field
 
     public function getRules() : array
     {
+        $fields = $this->metaInfo($this->resource)['fields']
+            ->map(function (Field $field) {
+                return $field->getName();
+            });
+
         $hasOneResource = $this->hasOneResource($this->resource);
 
-        return $hasOneResource->getRules();
+        return collect($hasOneResource->getRules())
+            ->only($fields)
+            ->toArray();
     }
 
     protected function hasOneResource(Resource $resource) : Resource

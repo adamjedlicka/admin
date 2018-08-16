@@ -52,4 +52,11 @@ class BelongsTo extends Field
     {
         return Str::camel($displayName);
     }
+
+    public function getForeignKey()
+    {
+        $modelName = $this->resource->fullyQualifiedModelName();
+        $model = new $modelName;
+        return call_user_func([$model, $this->name])->getForeignKey();
+    }
 }

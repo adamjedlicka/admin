@@ -274,7 +274,7 @@ abstract class Field implements Arrayable, JsonSerializable
             ]
         ];
 
-        if ($this->resource->getModel()) {
+        if ($this->resource->getModel() && $this->resource->getModel()->exists) {
             $arr['value'] = $this->retrieve($this->resource->getModel());
             $arr['meta']['value'] = $this->metaValue($this->resource, $this->resource->getModel());
         }
