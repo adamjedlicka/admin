@@ -10,6 +10,10 @@ use AdamJedlicka\Admin\Facades\ResourceService;
 use function AdamJedlicka\Admin\Support\get_resource_from_name;
 use function AdamJedlicka\Admin\Support\get_resource_from_model;
 
+/**
+ * TODO : One big not good. DO SOMETHING ABOUT IT!
+ * Maybe something like constructor for fields so we can commonly used stuff like relationships.
+ */
 class HasOne extends Field
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
@@ -44,6 +48,7 @@ class HasOne extends Field
 
         return [
             'fields' => collect($hasOneResource->getFields())
+                // Filter out BelongsTo pointing to this HasOne to prevent cycles
                 ->filter(function (Field $field) use ($foreignKey) {
                     if (!$field instanceof BelongsTo) return $field;
 
@@ -77,6 +82,7 @@ class HasOne extends Field
         $hasOneResource = $this->hasOneResource($this->resource);
 
         return collect($hasOneResource->getRules())
+            // Filter out rules of filtered fields
             ->only($fields)
             ->toArray();
     }
