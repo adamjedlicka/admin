@@ -1,44 +1,16 @@
 <template>
     <tbody>
 
-        <tr v-for="(resource, i) in resources" :key="i"
-            class="hover:bg-grey-lighter" >
-
-            <td v-for="(field, j) in resource.fields" :key="j"
-                class="p-4 text-black text-left" >
-
-                 <div class="truncate">
-                    <component
-                        :is="`${field.type}-index-field`"
-                        :field="field" />
-                </div>
-
-            </td>
-
-            <!-- CRUD buttons -->
-            <td class="text-right pr-2 whitespace-no-wrap">
-                <router-link :to="detailUrl(resource)"
-                    class="text-grey hover:text-black cursor-pointer" >
-                    <i class="py-4 px-1 far fa-eye"></i>
-                </router-link>
-
-                <router-link :to="editUrl(resource)"
-                    class="text-grey hover:text-black cursor-pointer" >
-                    <i class="py-4 px-1 far fa-edit"></i>
-                </router-link>
-
-                <span class="text-grey hover:text-red cursor-pointer"
-                    @click="onDelete(resource)" >
-                    <i class="py-4 px-1 far fa-trash-alt"></i>
-                </span>
-            </td>
-
-        </tr>
+        <DialBodyRow v-for="(resource, i) in resources" :key="i"
+            class="hover:bg-grey-lighter"
+            :resource="resource" />
 
     </tbody>
 </template>
 
 <script>
+import DialBodyRow from './DialBodyRow'
+
 export default {
     props: {
         resources: Array,
@@ -68,6 +40,10 @@ export default {
                 }
             }
         },
+    },
+
+    components: {
+        DialBodyRow,
     }
 }
 </script>

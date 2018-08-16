@@ -165,15 +165,11 @@ abstract class Resource
     /**
      * Returns filtered out fields without panels
      *
-     * @param bool $all Indicates whether to return fields inside panels
      * @return \Illuminate\Support\Collection
      */
-    public function getFields(bool $all = false) : Collection
+    public function getFields() : Collection
     {
         return collect($this->fields())
-            ->filter(function ($field) use ($all) {
-                return $all ? : !$field instanceof Panel;
-            })
             ->map(function ($field) {
                 if ($field instanceof Panel) {
                     return $field->fields();
