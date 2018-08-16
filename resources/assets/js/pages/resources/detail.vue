@@ -14,28 +14,9 @@
 
         </Panel>
 
-        <Panel v-for="(panel, i) in resource.panels" :key="i"
-            :displayName="panel.displayName"
-            :fields="panel.fields"
-            action="detail" >
-
-            <div slot="title">
-                <h2 class="h2">{{ panel.displayName }}</h2>
-            </div>
-
-        </Panel>
-
-        <div v-for="field in fieldPanels" :key="field.name"
-            class="p-4" >
-            <div slot="title">
-                <h2 class="h2 pb-4">{{ field.displayName }}</h2>
-            </div>
-
-            <div class="panel">
-                <component :is="`${field.type}-detail-field`"
-                    :field="field" />
-            </div>
-        </div>
+        <component v-for="field in panels" :key="field.name"
+            :is="`${field.type}-detail-field`"
+            :field="field" />
 
     </div>
 </template>
@@ -66,9 +47,9 @@ export default {
             return this.resource.fields.filter(field => !field.isPanel)
         },
 
-        fieldPanels() {
+        panels() {
             return this.resource.fields.filter(field => field.isPanel)
-        }
+        },
     },
 
     mounted() {

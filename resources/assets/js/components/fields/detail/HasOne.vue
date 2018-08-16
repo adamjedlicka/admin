@@ -1,10 +1,20 @@
 <template>
-    <div>
+    <div class="p-4">
 
-        <Field v-for="(field, i) in field.meta.fields" :key="i"
-            :field="field"
-            action="detail"
-            :meta="metaOf(field.name)" />
+        <div class="flex justify-between pb-4">
+            <div>
+                <h2 class="h2">{{ field.displayName }}</h2>
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <Field v-for="(field, i) in field.meta.info.fields" :key="i"
+                :field="field"
+                action="detail" />
+
+        </div>
 
     </div>
 </template>
@@ -14,21 +24,5 @@ export default {
     props: {
         field: Object,
     },
-
-    data() {
-        return {
-            model: {},
-        }
-    },
-
-    methods: {
-        metaOf(name) {
-            for (let field of this.field.meta.fields) {
-                if (field.name == name) {
-                    return field.meta
-                }
-            }
-        }
-    }
 }
 </script>
