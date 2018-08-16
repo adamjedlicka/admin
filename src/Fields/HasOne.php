@@ -39,6 +39,14 @@ class HasOne extends Field
 
         return [
             'fields' => $hasOneResource->getFields(),
+        ];
+    }
+
+    protected function metaValue(Resource $resource, Model $model)
+    {
+        $hasOneResource = $this->hasOneResource($resource);
+
+        return [
             'title' => $hasOneResource->getTitle(),
         ];
     }
