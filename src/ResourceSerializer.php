@@ -20,32 +20,26 @@ class ResourceSerializer implements Arrayable, JsonSerializable
      */
     protected $only = [];
 
+    /**
+     * @var string|null
+     */
+    protected $view = null;
+
     public function __construct(Resource $resource)
     {
         $this->resource = $resource;
     }
 
-    protected function fillFields(Collection $fields) : Collection
+    protected function fields() : Collection
     {
-        return $fields->each(function (Field $field) {
-            $field->setResource($this->resource);
-        });
-    }
-
-    protected function filledFields() : Collection
-    {
-        return $this->fillFields($this->resource->getFields());
-    }
-
-    protected function filledPanels()
-    {
-        return $this->resource->getPanels()
-            ->map(function (Panel $panel) {
-                $arr = $panel->toArray();
-                $arr['fields'] = $this->fillFields(collect($arr['fields']));
-
-                return $arr;
-            });
+        return collect($this->resource->fields())
+            ->filter(function (Field $field) {
+                return $this->view == null ? : $field->isVisibleOn($this->view);
+            })
+            ->each(function (Field $field) {
+                $field->setResource($this->resource);
+            })
+            ->values();
     }
 
     /**
@@ -60,15 +54,25 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return $this;
     }
 
+    /**
+     * Filters out fields for specific view
+     *
+     * @return self
+     */
+    public function view(string $view) : self
+    {
+        $this->view = $view;
+
+        return $this;
+    }
+
     public function toArray()
     {
         return [
             'name' => $this->resource->name(),
             'title' => $this->resource->title(),
-            'model' => $this->resource->getModel(),
             'key' => $this->resource->getModel()->getKey(),
-            'fields' => $this->filledFields(),
-            'panels' => $this->filledPanels(),
+            'fields' => $this->fields(),
         ];
     }
 

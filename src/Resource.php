@@ -180,7 +180,8 @@ abstract class Resource
             ->flatten()
             ->each(function (Field $field) {
                 $field->setResource($this);
-            });
+            })
+            ->values();
     }
 
     /**

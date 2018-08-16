@@ -18,16 +18,16 @@ Route::group([
     Route::post('/resources/{name}', 'ResourceController@store')
         ->name('resources.store');
 
-    Route::get('/resources/{name}/{id}', 'ResourceController@detail')
+    Route::get('/resources/{name}/{key}', 'ResourceController@detail')
         ->name('resources.detail');
 
-    Route::get('/resources/{name}/{id}/edit', 'ResourceController@edit')
+    Route::get('/resources/{name}/{key}/edit', 'ResourceController@edit')
         ->name('resources.edit');
 
-    Route::put('/resources/{name}/{id}', 'ResourceController@update')
+    Route::put('/resources/{name}/{key}', 'ResourceController@update')
         ->name('resources.update');
 
-    Route::delete('/resources/{name}/{id}', 'ResourceController@delete')
+    Route::delete('/resources/{name}/{key}', 'ResourceController@delete')
         ->name('resources.delete');
 
 });

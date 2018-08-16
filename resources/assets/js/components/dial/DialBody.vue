@@ -16,32 +16,6 @@ export default {
         resources: Array,
     },
 
-    methods: {
-        detailUrl(resource) {
-            let resourceName = this.$route.params.resource
-            let id = resource.key
-
-            return `/resources/${resourceName}/${id}`
-        },
-
-        editUrl(resource) {
-            return this.detailUrl(resource) + '/edit'
-        },
-
-        async onDelete(resource) {
-            let resourceName = this.$route.params.resource
-            let id = resource.key
-
-            let ok = await modalConfirm('Delete', 'Delete this record?', true)
-            if (ok) {
-                let response = await this.$delete(`/api/resources/${resourceName}/${id}`)
-                if (response.status == 'success') {
-                    this.$emit('update')
-                }
-            }
-        },
-    },
-
     components: {
         DialBodyRow,
     }
