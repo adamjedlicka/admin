@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Providers;
 
 use Illuminate\Support\Facades\Log;
+use AdamJedlicka\Admin\ResourceService;
 use Illuminate\Support\ServiceProvider;
 
 class BaseServiceProvider extends ServiceProvider
@@ -10,6 +11,8 @@ class BaseServiceProvider extends ServiceProvider
     public function register()
     {
         require_once __DIR__ . '/../Support/helpers.php';
+
+        $this->app->bind('resourceService', ResourceService::class);
     }
 
     public function boot()

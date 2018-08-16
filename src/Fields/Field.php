@@ -93,12 +93,24 @@ abstract class Field implements Arrayable, JsonSerializable
     }
 
     /**
-     * Meta attributes for the field
+     * Meta attributes for the field info
      *
      * @param \AdamJedlicka\Admin\Resource $resource
      * @return mixed
      */
-    protected function meta(Resource $resource)
+    protected function metaInfo(Resource $resource)
+    {
+        return null;
+    }
+
+    /**
+     * Meta attributes for the field value
+     *
+     * @param \AdamJedlicka\Admin\Resource $resource
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return mixed
+     */
+    protected function metaValue(Resource $resource, Model $model)
     {
         return null;
     }
@@ -258,14 +270,14 @@ abstract class Field implements Arrayable, JsonSerializable
             'visibleOn' => $this->visibleOn,
             'sortable' => $this->sortable,
             'isPanel' => $this->isPanel,
+            'meta' => [
+                'info' => $this->metaInfo($this->resource),
+            ]
         ];
 
-        if ($this->resource) {
-            $arr['meta'] = $this->meta($this->resource);
-
-            if ($this->resource->getModel()) {
-                $arr['value'] = $this->retrieve($this->resource->getModel());
-            }
+        if ($this->resource->getModel()) {
+            $arr['value'] = $this->retrieve($this->resource->getModel());
+            $arr['meta']['value'] = $this->metaValue($this->resource, $this->resource->getModel());
         }
 
 

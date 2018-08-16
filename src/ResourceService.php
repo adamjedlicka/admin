@@ -38,7 +38,7 @@ class ResourceService
     {
         $name = (new \ReflectionClass($model))->getShortName();
 
-        $resource = get_resource_from_name($name);
+        $resource = $this->getResourceFromName($name);
         $resource->setModel($model);
 
         return $resource;
