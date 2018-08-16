@@ -66,7 +66,7 @@ export default {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
 
-            this.resource.fields.forEach(field => this.model[field.name] = field.value)
+            this.resource.fields.forEach(field => this.model[field.name] = field.value || null)
 
         },
 
@@ -84,7 +84,8 @@ export default {
         },
 
         onInput(name, value) {
-            this.model[name] = value
+            this.$set(this.model, name, value)
+            this.$forceUpdate()
         }
     }
 }

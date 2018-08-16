@@ -88,7 +88,8 @@ export default {
         },
 
         onInput(name, value) {
-            this.model[name] = value
+            this.$set(this.model, name, value)
+            this.$forceUpdate()
         }
     }
 }
