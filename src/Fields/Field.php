@@ -31,11 +31,11 @@ abstract class Field implements Arrayable, JsonSerializable
     protected $name = null;
 
     /**
-     * Callback for computed field
+     * Options
      *
-     * @var callable
+     * @var mixed
      */
-    protected $callable = null;
+    protected $options = null;
 
     /**
      *  Indicates on what views field is visible
@@ -71,9 +71,9 @@ abstract class Field implements Arrayable, JsonSerializable
             $this->name = $this->resolveName($displayName);
         } else if (is_string($options)) {
             $this->name = $options;
-        } else if (is_callable($options)) {
+        } else {
             $this->name = $this->resolveName($displayName);
-            $this->callable = $options;
+            $this->options = $options;
 
             $this->hideFromEdit();
         }
@@ -200,7 +200,7 @@ abstract class Field implements Arrayable, JsonSerializable
      */
     public function sortable()
     {
-        if ($this->callable != null) {
+        if ($this->options != null) {
             return $this;
         }
 
@@ -227,8 +227,8 @@ abstract class Field implements Arrayable, JsonSerializable
      */
     public function retrieve(Model $model)
     {
-        if ($this->callable) {
-            return call_user_func($this->callable, $model);
+        if (is_callable($this->options)) {
+            return call_user_func($this->options, $model);
         }
 
         if (array_search($this->name, $model->getHidden()) !== false) {
@@ -300,7 +300,7 @@ abstract class Field implements Arrayable, JsonSerializable
      */
     public function isComputed() : bool
     {
-        return $this->callable !== null;
+        return is_callable($this->options);
     }
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Panel;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
+use AdamJedlicka\Admin\Facades\ResourceService;
 use function AdamJedlicka\Admin\Support\get_resource_from_name;
 use function AdamJedlicka\Admin\Support\get_resource_from_model;
 
@@ -32,17 +33,9 @@ class HasOne extends Field
         });
     }
 
-    protected function meta(Resource $resource)
+    protected function metaInfo(Resource $resource)
     {
-        if ($resource->getModel()) {
-            $model = $resource->getModel();
-        } else {
-            $modeName = $resource->fullyQualifiedModelName();
-            $model = new $modeName;
-        }
-
-        $hasOneModel = $model->{$this->name} ?? $model->{$this->name}()->getRelated();
-        $hasOneResource = get_resource_from_model($hasOneModel);
+        $hasOneResource = $this->hasOneResource($resource);
 
         return [
             'fields' => $hasOneResource->getFields(),
@@ -53,5 +46,25 @@ class HasOne extends Field
     protected function resolveName(string $displayName) : string
     {
         return Str::camel($displayName);
+    }
+
+    public function getRules() : array
+    {
+        $hasOneResource = $this->hasOneResource($this->resource);
+
+        return $hasOneResource->getRules();
+    }
+
+    protected function hasOneResource(Resource $resource) : Resource
+    {
+        if ($resource->getModel()) {
+            $model = $resource->getModel();
+        } else {
+            $modeName = $resource->fullyQualifiedModelName();
+            $model = new $modeName;
+        }
+
+        $hasOneModel = $model->{$this->name} ?? $model->{$this->name}()->getRelated();
+        return ResourceService::getResourceFromModel($hasOneModel);
     }
 }

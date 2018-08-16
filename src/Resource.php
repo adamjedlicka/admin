@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use function AdamJedlicka\Admin\Support\array_depth;
 
 abstract class Resource
 {
@@ -184,6 +185,18 @@ abstract class Resource
         return $this->getFields()
             ->mapWithKeys(function (Field $field) {
                 return [$field->getName() => $field->getRules()];
+            })
+            ->mapWithKeys(function ($rules, $key) {
+                if (array_depth($rules) == 1) {
+                    return [$key => $rules];
+                }
+
+                // Transform array into dot notation
+                foreach ($rules as $ruleKey => $rule) {
+                    $result[$key . '.' . $ruleKey] = $rule;
+                }
+
+                return $result;
             })
             ->toArray();
     }

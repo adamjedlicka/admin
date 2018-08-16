@@ -80,3 +80,20 @@ function get_resource_from_model(Model $model) : Resource
 
     return $resource;
 }
+
+function array_depth(array $array)
+{
+    $axDepth = 1;
+
+    foreach ($array as $value) {
+        if (is_array($value)) {
+            $depth = array_depth($value) + 1;
+
+            if ($depth > $axDepth) {
+                $axDepth = $depth;
+            }
+        }
+    }
+
+    return $axDepth;
+}

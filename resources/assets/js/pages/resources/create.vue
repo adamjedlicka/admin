@@ -20,6 +20,13 @@
 
         </Panel>
 
+        <component v-for="field in panels" :key="field.name"
+            :is="`${field.type}-edit-field`"
+            :field="field"
+            :model="model[field.name]"
+            :errors="errors"
+            @input="onInput" />
+
     </div>
 </template>
 
@@ -39,7 +46,11 @@ export default {
         },
 
         fields() {
-            return this.resource.fields
+            return this.resource.fields.filter(field => !field.isPanel)
+        },
+
+        panels() {
+            return this.resource.fields.filter(field => field.isPanel)
         },
 
         detailUrl() {
@@ -55,7 +66,7 @@ export default {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
 
-            this.fields.forEach(field => this.model[field.name] = field.value)
+            this.resource.fields.forEach(field => this.model[field.name] = field.value)
 
         },
 
