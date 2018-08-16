@@ -3,7 +3,8 @@
 
         <DialBodyRow v-for="(resource, i) in resources" :key="i"
             class="hover:bg-grey-lighter"
-            :resource="resource" />
+            :resource="resource"
+            @update="$emit('update')" />
 
     </tbody>
 </template>

@@ -5,7 +5,6 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
-use AdamJedlicka\Admin\ResourceSerializer;
 use Illuminate\Contracts\Support\Arrayable;
 
 class IndexSerializer implements Arrayable, JsonSerializable

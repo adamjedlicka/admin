@@ -6,12 +6,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\ResourceService;
-use AdamJedlicka\Admin\ResourceSerializer;
-use AdamJedlicka\Admin\Serializers\EditSerializer;
 use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 use AdamJedlicka\Admin\Serializers\CreateSerializer;
-use AdamJedlicka\Admin\Serializers\DetailSerializer;
+use AdamJedlicka\Admin\Serializers\ResourceSerializer;
 
 class ResourceController extends Controller
 {

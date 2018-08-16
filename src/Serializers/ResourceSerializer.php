@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Admin\Serializers;
 
 use JsonSerializable;
 use AdamJedlicka\Admin\Resource;
