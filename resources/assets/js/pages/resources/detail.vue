@@ -57,9 +57,9 @@ export default {
 
         editUrl() {
             let resourceName = this.$route.params.resource
-            let id = this.$route.params.id
+            let key = this.$route.params.key
 
-            return `/resources/${resourceName}/${id}/edit`
+            return `/resources/${resourceName}/${key}/edit`
         },
 
         fields() {
@@ -78,9 +78,9 @@ export default {
     methods: {
         async fetchData() {
             let resourceName = this.$route.params.resource
-            let id = this.$route.params.id
+            let key = this.$route.params.key
 
-            this.resource = await this.$get(`/api/resources/${resourceName}/${id}`)
+            this.resource = await this.$get(`/api/resources/${resourceName}/${key}`)
         }
     }
 }

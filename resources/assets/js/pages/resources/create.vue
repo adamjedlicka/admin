@@ -2,47 +2,23 @@
     <div v-if="resource">
 
         <Panel
-            :displayName="`New ${resource.name}`"
+            :displayName="`Create new ${resource.name}`"
             :fields="fields"
             :errors="errors"
             action="edit"
             @input="onInput" >
 
-            <div slot="buttons">
+            <div slot="buttons" class="buttons">
+                <router-link :to="detailUrl" class="btn">
+                    Cancel
+                </router-link>
+
                 <span class="btn btn-green" @click="saveChanges">
                     Save
                 </span>
             </div>
 
         </Panel>
-
-        <Panel v-for="(panel, i) in resource.panels" :key="i"
-            :displayName="panel.displayName"
-            :fields="panel.fields"
-            :errors="errors"
-            action="edit"
-            @input="onInput" >
-
-            <div slot="title">
-                <h2 class="h2 pb-4">{{ panel.displayName }}</h2>
-            </div>
-
-        </Panel>
-
-        <div v-for="field in fieldPanels" :key="field.name"
-            class="p-4" >
-            <div slot="title">
-                <h2 class="h2 pb-4">{{ field.displayName }}</h2>
-            </div>
-
-            <div class="panel">
-                <component :is="`${field.type}-edit-field`"
-                    :field="field"
-                    :model="model"
-                    :errors="errors"
-                    @input="onInput" />
-            </div>
-        </div>
 
     </div>
 </template>
@@ -63,11 +39,11 @@ export default {
         },
 
         fields() {
-            return this.resource.fields.filter(field => !field.isPanel)
+            return this.resource.fields
         },
 
-        fieldPanels() {
-            return this.resource.fields.filter(field => field.isPanel)
+        detailUrl() {
+            return `/resources/${this.resourceName}`
         }
     },
 
@@ -79,14 +55,7 @@ export default {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
 
-            this.resource.fields
-                .filter(field => field.visibleOn.includes('edit'))
-                .forEach(field => this.model[field.name] = field.value)
-
-            this.resource.panels
-                .forEach(panel => {
-                    panel.fields.forEach(field => this.model[field.name] = field.value)
-                })
+            this.fields.forEach(field => this.model[field.name] = field.value)
 
         },
 

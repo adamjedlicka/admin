@@ -5,11 +5,10 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
+use Illuminate\Contracts\Support\Arrayable;
 
-class CreateSerializer implements JsonSerializable
+class CreateSerializer implements Arrayable, JsonSerializable
 {
-    use SerializesResources;
-
     /**
      * @var \AdamJedlicka\Admin\Resource
      */
@@ -20,12 +19,16 @@ class CreateSerializer implements JsonSerializable
         $this->resource = $resource;
     }
 
-    public function jsonSerialize()
+    public function toArray()
     {
         return [
             'name' => $this->resource->name(),
-            'fields' => $this->resource->getFields(),
-            'panels' => $this->resource->getPanels(),
+            'fields' => $this->resource->getFields('edit'),
         ];
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

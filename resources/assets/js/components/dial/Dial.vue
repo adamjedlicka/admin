@@ -15,9 +15,9 @@
         </div>
 
         <DialPagination
-            :currentPage="index.data.pagination.currentPage"
-            :hasPreviousPage="index.data.pagination.hasPreviousPage"
-            :hasNextPage="index.data.pagination.hasNextPage"
+            :currentPage="index.pagination.currentPage"
+            :hasPreviousPage="index.pagination.hasPreviousPage"
+            :hasNextPage="index.pagination.hasNextPage"
             @page="onPageChange" />
 
     </div>
@@ -47,7 +47,7 @@ export default {
         },
 
         resources() {
-            return this.index.data.resources
+            return this.index.resources
         }
     },
 

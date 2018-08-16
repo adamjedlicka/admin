@@ -50,21 +50,9 @@ class ResourceController extends Controller
 
         request()->validate($resource->getRules());
 
-        $model = DB::transaction(function () use ($resource) {
-            $model = $resource->fullyQualifiedModelName()::make();
+        $model = $resource->fullyQualifiedModelName()::make();
 
-            $fields = collect($resource->getFields(true))
-                ->filter(function (Field $field) {
-                    return $field->isVisibleOn('edit');
-                })
-                ->each(function (Field $field) use ($model) {
-                    $field->persist($model, request($field->getName()));
-                });
-
-            $model->saveOrFail();
-
-            return $model;
-        });
+        $model = $this->service->persistModel($resource, $model);
 
         return response()->json([
             'status' => 'success',

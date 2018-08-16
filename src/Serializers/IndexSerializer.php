@@ -5,13 +5,11 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
-use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\ResourceSerializer;
+use Illuminate\Contracts\Support\Arrayable;
 
-class IndexSerializer implements JsonSerializable
+class IndexSerializer implements Arrayable, JsonSerializable
 {
-    use SerializesResources;
-
     /**
      * @var \AdamJedlicka\Admin\Resource
      */
@@ -42,10 +40,11 @@ class IndexSerializer implements JsonSerializable
 
         $resources = [];
         foreach ($result->items() as $item) {
-            $resource = new $this->resourceClass();
+            $resource = new $this->resourceClass;
             $resource->setModel($item);
 
-            $resources[] = new ResourceSerializer($resource);
+            $resources[] = (new ResourceSerializer($resource))
+                ->view('index');
         }
 
         return [
@@ -66,13 +65,21 @@ class IndexSerializer implements JsonSerializable
         );
     }
 
-    public function jsonSerialize()
+    public function toArray()
     {
+        $data = $this->data();
+
         return [
             'name' => $this->resource->name(),
             'displayName' => $this->resource->displayName(),
-            'fields' => $this->onlyFieldsOn('index'),
-            'data' => $this->data(),
+            'fields' => $this->resource->getFields('index'),
+            'resources' => $data['resources'],
+            'pagination' => $data['pagination'],
         ];
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

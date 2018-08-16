@@ -20,11 +20,11 @@ export default new VueRouter({
                     component: require('~/pages/resources/create'),
                 },
                 {
-                    path: 'resources/:resource/:id',
+                    path: 'resources/:resource/:key',
                     component: require('~/pages/resources/detail'),
                 },
                 {
-                    path: 'resources/:resource/:id/edit',
+                    path: 'resources/:resource/:key/edit',
                     component: require('~/pages/resources/edit'),
                 }
             ]

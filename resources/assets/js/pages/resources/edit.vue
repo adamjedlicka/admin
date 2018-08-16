@@ -38,8 +38,8 @@ export default {
             return this.$route.params.resource
         },
 
-        resourceKy() {
-            return this.$route.params.id
+        resourceKey() {
+            return this.$route.params.key
         },
 
         fields() {
@@ -47,7 +47,7 @@ export default {
         },
 
         detailUrl() {
-            return `/resources/${this.resourceName}/${this.resourceKy}`
+            return `/resources/${this.resourceName}/${this.resourceKey}`
         }
     },
 
@@ -57,7 +57,7 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceKy}/edit`)
+            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceKey}/edit`)
 
             this.fields.forEach(field => this.model[field.name] = field.value)
 
@@ -65,12 +65,12 @@ export default {
 
         async saveChanges() {
             let response = await this.$put(
-                `/api/resources/${this.resourceName}/${this.resourceKy}`,
+                `/api/resources/${this.resourceName}/${this.resourceKey}`,
                 this.model
             )
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resourceName}/${this.resourceKy}`)
+                this.$router.push(`/resources/${this.resourceName}/${this.resourceKey}`)
             } else if (response.errors) {
                 this.errors = response.errors
             }

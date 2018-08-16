@@ -149,25 +149,12 @@ abstract class Resource
     }
 
     /**
-     * Returns collection of all attributes
-     *
-     * @return array
-     */
-    public function attributes() : array
-    {
-        return collect($this->getFields())
-            ->reduce(function ($collection, Field $field) {
-                $collection[$field->getName()] = $field->resolve($this->model);
-                return $collection;
-            });
-    }
-
-    /**
      * Returns filtered out fields without panels
      *
+     * @param string|null $view
      * @return \Illuminate\Support\Collection
      */
-    public function getFields() : Collection
+    public function getFields(? string $view = null) : Collection
     {
         return collect($this->fields())
             ->map(function ($field) {
@@ -178,22 +165,11 @@ abstract class Resource
                 }
             })
             ->flatten()
+            ->filter(function (Field $field) use ($view) {
+                return $view == null ? : $field->isVisibleOn($view);
+            })
             ->each(function (Field $field) {
                 $field->setResource($this);
-            })
-            ->values();
-    }
-
-    /**
-     * Returns only panels of current resource
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getPanels() : Collection
-    {
-        return collect($this->fields())
-            ->filter(function ($field) {
-                return $field instanceof Panel;
             })
             ->values();
     }
@@ -205,7 +181,7 @@ abstract class Resource
      */
     public function getRules() : array
     {
-        return $this->getFields(true)
+        return $this->getFields()
             ->mapWithKeys(function (Field $field) {
                 return [$field->getName() => $field->getRules()];
             })
