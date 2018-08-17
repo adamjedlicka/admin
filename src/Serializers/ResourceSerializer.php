@@ -6,6 +6,7 @@ use JsonSerializable;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
 class ResourceSerializer implements Arrayable, JsonSerializable
@@ -25,21 +26,10 @@ class ResourceSerializer implements Arrayable, JsonSerializable
      */
     protected $view = null;
 
-    public function __construct(Resource $resource)
+    public function __construct(Resource $resource, Model $model)
     {
-        $this->resource = $resource;
-    }
-
-    protected function fields() : Collection
-    {
-        return collect($this->resource->fields())
-            ->filter(function (Field $field) {
-                return $this->view == null ? : $field->isVisibleOn($this->view);
-            })
-            ->each(function (Field $field) {
-                $field->setResource($this->resource);
-            })
-            ->values();
+        $this->resource = clone $resource;
+        $this->resource->model = $model;
     }
 
     /**
@@ -71,8 +61,8 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return [
             'name' => $this->resource->name(),
             'title' => $this->resource->title(),
-            'key' => $this->resource->getModel()->getKey(),
-            'fields' => $this->fields(),
+            'key' => $this->resource->model->getKey(),
+            'fields' => $this->resource->getFields($this->view),
         ];
     }
 

@@ -2,19 +2,27 @@
 
 namespace AdamJedlicka\Admin\Fields;
 
-use JsonSerializable;
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
-abstract class Field implements Arrayable, JsonSerializable
+abstract class Field implements Arrayable
 {
     /**
-     * @var \AdamJedlicka\Admin\Resource
+     * Type of the field
+     *
+     * @var string
      */
-    protected $resource;
+    protected $type;
+
+    /**
+     * Name of the field
+     *
+     * @var string
+     */
+    protected $name;
 
     /**
      * Display name of the field
@@ -24,13 +32,6 @@ abstract class Field implements Arrayable, JsonSerializable
     protected $displayName;
 
     /**
-     * Name of the field
-     *
-     * @var string
-     */
-    protected $name = null;
-
-    /**
      * Options
      *
      * @var mixed
@@ -38,23 +39,25 @@ abstract class Field implements Arrayable, JsonSerializable
     protected $options = null;
 
     /**
-     *  Indicates on what views field is visible
+     * Array of views where the field is visible
      *
      * @var array
      */
     protected $visibleOn = [];
 
     /**
-     * Indicates whether it is possible to sort using this field
+     * Is the field sortable?
      *
      * @var bool
      */
     protected $sortable = false;
 
     /**
-     * Indicates whether the field is on its own separate panel
+     * Is the field its own panel?
+     *
+     * @var bool
      */
-    protected $isPanel = false;
+    protected $panel = false;
 
     /**
      * Validation rules
@@ -63,8 +66,29 @@ abstract class Field implements Arrayable, JsonSerializable
      */
     protected $rules = [];
 
+    /**
+     * Meta attributes
+     *
+     * @var array
+     */
+    protected $meta = [];
+
+    /**
+     * Value of the field
+     *
+     * @var mixed
+     */
+    protected $value = null;
+
+    /**
+     * Constructor. Use static Field::make method instead.
+     *
+     * @param string $displayName
+     * @param mixed $options
+     */
     protected function __construct(string $displayName, $options = null)
     {
+        $this->type = (new \ReflectionClass($this))->getShortName();
         $this->displayName = $displayName;
 
         if (is_null($options)) {
@@ -82,13 +106,49 @@ abstract class Field implements Arrayable, JsonSerializable
     /**
      * Named constructor for fluent syntax
      *
-     * @param string $displayName Display name of the field
-     * @param string|null $field Name fo the field in database
+     * @param string $displayName
+     * @param mixed $options
      * @return self
      */
-    public static function make(string $displayName, $options = null)
+    public static function make(string $displayName, $options = null) : self
     {
         return new static($displayName, $options);
+    }
+
+    /**
+     * Computes value and metadata of the field
+     *
+     * @param \AdamJedlicka\Admin\Resource $resource
+     * @return self
+     */
+    public function compute(Resource $resource) : self
+    {
+        $modeName = $resource->fullyQualifiedModelName();
+        $model = $resource->model ?? new $modeName;
+
+        $this->prepare($resource, $model);
+
+        if ($info = $this->metaInfo($resource)) {
+            $this->meta['info'] = $info;
+        }
+
+        if ($resource->model) {
+            $this->value = $this->retrieve($resource->model);
+
+            if ($value = $this->metaValue($resource, $resource->model)) {
+                $this->meta['value'] = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Prepare the field for computations
+     */
+    protected function prepare(Resource $resource, Model $model)
+    {
+        //
     }
 
     /**
@@ -260,57 +320,24 @@ abstract class Field implements Arrayable, JsonSerializable
         return Str::snake($displayName);
     }
 
-    public function toArray()
+    /**
+     * Type getter
+     *
+     * @return string
+     */
+    public function getType() : string
     {
-        $arr = [
-            'type' => (new \ReflectionClass($this))->getShortName(),
-            'name' => $this->name,
-            'displayName' => $this->displayName,
-            'visibleOn' => $this->visibleOn,
-            'sortable' => $this->sortable,
-            'isPanel' => $this->isPanel,
-            'meta' => [
-                'info' => $this->metaInfo($this->resource),
-            ]
-        ];
-
-        if ($this->resource->getModel() && $this->resource->getModel()->exists) {
-            $arr['value'] = $this->retrieve($this->resource->getModel());
-            $arr['meta']['value'] = $this->metaValue($this->resource, $this->resource->getModel());
-        }
-
-
-        return $arr;
-    }
-
-    public function jsonSerialize()
-    {
-        return $this->toArray();
-    }
-
-    public function setResource(Resource $resource)
-    {
-        $this->resource = $resource;
+        return $this->type;
     }
 
     /**
-     * Is the field computed?
+     * DisplayName getter
      *
-     * @return bool
+     * @return string
      */
-    public function isComputed() : bool
+    public function getDisplayName() : string
     {
-        return is_callable($this->options);
-    }
-
-    /**
-     * Indicates whether the field is visible on the given view
-     *
-     * @return bool
-     */
-    public function isVisibleOn(string $view) : bool
-    {
-        return array_search($view, $this->visibleOn) !== false;
+        return $this->displayName;
     }
 
     /**
@@ -331,5 +358,81 @@ abstract class Field implements Arrayable, JsonSerializable
     public function getRules() : array
     {
         return $this->rules;
+    }
+
+    /**
+     * Meta getter
+     *
+     * @return mixed
+     */
+    public function getMeta() : array
+    {
+        return $this->meta;
+    }
+
+    /**
+     * Value getter
+     *
+     * @return mixed
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Is the field computed?
+     *
+     * @return bool
+     */
+    public function isComputed() : bool
+    {
+        return is_callable($this->options);
+    }
+
+    /**
+     * Is the field visible on given field?
+     *
+     * @param string $view
+     * @return bool
+     */
+    public function isVisibleOn(string $view) : bool
+    {
+        return array_search($view, $this->visibleOn) !== false;
+    }
+
+    /**
+     * Is the field sortable?
+     *
+     * @return bool
+     */
+    public function isSortable() : bool
+    {
+        return $this->sortable;
+    }
+
+    /**
+     * Is the field its own panel?
+     *
+     * @return bool
+     */
+    public function isPanel() : bool
+    {
+        return $this->panel;
+    }
+
+    public function toArray()
+    {
+        return [
+            'type' => $this->getType(),
+            'name' => $this->getName(),
+            'displayName' => $this->getDisplayName(),
+            'isSortable' => $this->isSortable(),
+            'isPanel' => $this->isPanel(),
+
+            // Computed properties
+            'meta' => $this->getMeta(),
+            'value' => $this->getValue(),
+        ];
     }
 }

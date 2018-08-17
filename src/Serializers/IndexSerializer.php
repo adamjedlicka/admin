@@ -27,7 +27,6 @@ class IndexSerializer implements Arrayable, JsonSerializable
     public function __construct(Resource $resource)
     {
         $this->resource = $resource;
-        $this->resourceClass = get_class($resource);
         $this->query = $this->resource->query();
     }
 
@@ -37,17 +36,13 @@ class IndexSerializer implements Arrayable, JsonSerializable
 
         $result = $this->query->simplePaginate();
 
-        $resources = [];
-        foreach ($result->items() as $item) {
-            $resource = new $this->resourceClass;
-            $resource->setModel($item);
-
-            $resources[] = (new ResourceSerializer($resource))
+        foreach ($result->items() as $model) {
+            $resources[] = (new ResourceSerializer($this->resource, $model))
                 ->view('index');
         }
 
         return [
-            'resources' => $resources,
+            'resources' => $resources ?? [],
             'pagination' => [
                 'currentPage' => $result->currentPage(),
                 'hasPreviousPage' => $result->previousPageUrl() != null,

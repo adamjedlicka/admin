@@ -11,6 +11,30 @@ class BelongsTo extends Field
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
 
+    /**
+     * @var \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    protected $relationship;
+
+    /**
+     * @var \AdamJedlicka\Admin\Resource
+     */
+    protected $relatedResource;
+
+    /**
+     * @var string
+     */
+    protected $foreignKey;
+
+    protected function prepare(Resource $resource, Model $model)
+    {
+        $this->relationship = $model->{$this->name}();
+        $this->foreignKey = $this->relationship->getForeignKey();
+        $this->relatedResource = ResourceService::getResourceFromModel(
+            $model->{$this->name} ?? $this->relationship->getRelated()
+        );
+    }
+
     public function retrieve(Model $model)
     {
         return $model->getAttribute($this->name)->getKey();
@@ -18,18 +42,12 @@ class BelongsTo extends Field
 
     public function persist(Model $model, $value)
     {
-        $foreignKey = call_user_func([$model, $this->getName()])->getForeignKey();
-        $model->setAttribute($foreignKey, $value);
+        $model->setAttribute($this->foreignKey, $value);
     }
 
     protected function metaInfo(Resource $resource)
     {
-        $modelName = $resource->fullyQualifiedModelName();
-        $model = new $modelName;
-        $belongsToModel = call_user_func([$model, $this->name])->getRelated();
-        $belongsToResource = ResourceService::getResourceFromModel($belongsToModel);
-
-        $name = Str::lower($belongsToResource->name());
+        $name = Str::lower($this->relatedResource->name());
 
         return [
             'name' => $name,
@@ -39,12 +57,9 @@ class BelongsTo extends Field
 
     protected function metaValue(Resource $resource, Model $model)
     {
-        $belongsToModel = $model->{$this->getName()};
-        $belongsToResource = ResourceService::getResourceFromModel($belongsToModel);
-
         return [
-            'title' => $belongsToResource->title(),
-            'key' => $belongsToResource->key(),
+            'title' => $this->relatedResource->title(),
+            'key' => $this->relatedResource->key(),
         ];
     }
 
@@ -55,8 +70,6 @@ class BelongsTo extends Field
 
     public function getForeignKey()
     {
-        $modelName = $this->resource->fullyQualifiedModelName();
-        $model = new $modelName;
-        return call_user_func([$model, $this->name])->getForeignKey();
+        return $this->foreignKey;
     }
 }

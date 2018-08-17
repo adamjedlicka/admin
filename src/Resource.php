@@ -12,9 +12,11 @@ use function AdamJedlicka\Admin\Support\array_depth;
 abstract class Resource
 {
     /**
+     * Coresponding model
+     *
      * @var \Illuminate\Database\Eloquent\Model|null
      */
-    protected $model;
+    public $model = null;
 
     /**
      * Definition of fields
@@ -86,30 +88,6 @@ abstract class Resource
     }
 
     /**
-     * Sets model or retrieves it from database based on given primary key
-     *
-     * @param mixed $model Model object or primary key
-     */
-    public function setModel($model)
-    {
-        if ($model instanceof Model) {
-            $this->model = $model;
-        } else {
-            $this->model = $this->fullyQualifiedModelName()::findOrFail($model);
-        }
-    }
-
-    /**
-     * Returns the underlying model
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function getModel() : ? Model
-    {
-        return $this->model;
-    }
-
-    /**
      * Returns the model primary key
      *
      * @return mixed
@@ -170,7 +148,7 @@ abstract class Resource
                 return $view == null ? : $field->isVisibleOn($view);
             })
             ->each(function (Field $field) {
-                $field->setResource($this);
+                $field->compute($this);
             })
             ->values();
     }
