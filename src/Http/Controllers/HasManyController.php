@@ -2,17 +2,27 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use AdamJedlicka\Admin\Facades\ResourceService;
+use AdamJedlicka\Admin\ResourceService;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 
 class HasManyController extends Controller
 {
+    /**
+     * @var \AdamJedlicka\Admin\ResourceService
+     */
+    public $service;
+
+    public function __construct(ResourceService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index(string $name, $key, string $relationship)
     {
-        $resource = ResourceService::getResourceFromName($name);
+        $resource = $this->service->getResourceFromName($name);
         $model = $resource->fullyQualifiedModelName()::findOrFail($key);
         $query = $model->{$relationship}();
-        $relatedResource = ResourceService::getResourceFromModel(
+        $relatedResource = $this->service->getResourceFromModel(
             $query->getRelated()
         );
 
