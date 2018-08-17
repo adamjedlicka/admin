@@ -12,6 +12,7 @@ let components = [
 
     'BelongsTo',
     'HasOne',
+    'HasMany',
 ]
 
 components.forEach(registerComponent)

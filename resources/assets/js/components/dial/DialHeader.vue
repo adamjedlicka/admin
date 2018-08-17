@@ -10,7 +10,7 @@
                 @click="onClick(field)" >
 
                 <div class="truncate">
-                    <span v-if="field.sortable">
+                    <span v-if="field.isSortable">
                         <i v-if="sort != field.name" class="fas fa-sort"></i>
                         <i v-if="sort == field.name && order == 'asc'" class="fas fa-sort-up"></i>
                         <i v-if="sort == field.name && order == 'desc'" class="fas fa-sort-down"></i>
@@ -44,7 +44,7 @@ export default {
 
     methods: {
         onClick(field) {
-            if (!field.sortable) return
+            if (!field.isSortable) return
 
             if (field.name == this.sort) {
                 this.sort = field.name
@@ -67,7 +67,7 @@ export default {
 
         classes(field) {
             return [
-                field.sortable ? 'cursor-pointer' : '',
+                field.isSortable ? 'cursor-pointer' : '',
             ]
         },
     }

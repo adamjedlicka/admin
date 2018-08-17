@@ -48,7 +48,7 @@ export default {
 
     methods: {
         detailUrl(resource) {
-            let resourceName = this.$route.params.resource
+            let resourceName = resource.name.toLowerCase()
             let id = resource.key
 
             return `/resources/${resourceName}/${id}`
@@ -59,7 +59,7 @@ export default {
         },
 
         async onDelete(resource) {
-            let resourceName = this.$route.params.resource
+            let resourceName = resource.name.toLowerCase()
             let id = resource.key
 
             let ok = await modalConfirm('Delete', 'Delete this record?', true)

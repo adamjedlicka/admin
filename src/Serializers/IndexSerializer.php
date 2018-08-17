@@ -5,6 +5,7 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
 class IndexSerializer implements Arrayable, JsonSerializable
@@ -24,10 +25,10 @@ class IndexSerializer implements Arrayable, JsonSerializable
      */
     private $query;
 
-    public function __construct(Resource $resource)
+    public function __construct(Resource $resource, $query = null)
     {
         $this->resource = $resource;
-        $this->query = $this->resource->query();
+        $this->query = $query ?? $this->resource->query();
     }
 
     private function data()

@@ -6,6 +6,10 @@ Route::group([
     'prefix' => config('admin.prefix') . '/api',
 ], function () {
 
+    /**
+     * ResourceController
+     */
+
     Route::get('/resources', 'ResourceController@list')
         ->name('resources.list');
 
@@ -29,5 +33,11 @@ Route::group([
 
     Route::delete('/resources/{name}/{key}', 'ResourceController@delete')
         ->name('resources.delete');
+
+    /**
+     * HasManyController
+     */
+    Route::get('/resources/{name}/{key}/hasMany/{relationship}', 'HasManyController@index')
+        ->name('resources.hasMany');
 
 });
