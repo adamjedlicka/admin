@@ -46,7 +46,8 @@ class HasOne extends Field
 
     public function retrieve(Model $model)
     {
-        return $model->getAttribute($this->name);
+        return optional($model->getAttribute($this->name))
+            ->only($this->fieldNames());
     }
 
     public function persist(Model $model, $value)
@@ -63,7 +64,7 @@ class HasOne extends Field
     protected function metaInfo(Resource $resource)
     {
         return [
-            'fields' => collect($this->relatedResource->getFields())
+            'fields' => $this->relatedResource->getFields()
                 ->filter(function (Field $field) {
                     if (!$field instanceof BelongsTo) return $field;
 
@@ -77,12 +78,32 @@ class HasOne extends Field
     {
         return [
             'title' => $this->relatedResource->getTitle(),
-            'res' => $this->relatedResource->model,
         ];
     }
 
     protected function resolveName(string $displayName) : string
     {
         return Str::camel($displayName);
+    }
+
+    public function getRules() : array
+    {
+        return collect($this->relatedResource->getRules())
+            ->only($this->fieldNames())
+            ->toArray();
+    }
+
+    protected function fieldNames() : array
+    {
+        return $this->relatedResource->getFields()
+            ->filter(function (Field $field) {
+                if (!$field instanceof BelongsTo) return true;
+
+                return $this->foreignKey != $field->getForeignKey();
+            })
+            ->map(function (Field $field) {
+                return $field->getName();
+            })
+            ->toArray();
     }
 }

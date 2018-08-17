@@ -52,6 +52,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     public function view(string $view) : self
     {
         $this->view = $view;
+        $this->resource->view = $view;
 
         return $this;
     }

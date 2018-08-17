@@ -427,6 +427,7 @@ abstract class Field implements Arrayable
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
+            'visibleOn' => $this->visibleOn,
             'isSortable' => $this->isSortable(),
             'isPanel' => $this->isPanel(),
 

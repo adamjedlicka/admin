@@ -45,10 +45,9 @@ class ResourceController extends Controller
     public function store(string $name)
     {
         $resource = $this->service->getResourceFromName($name);
+        $model = $resource->fullyQualifiedModelName()::make();
 
         request()->validate($resource->getRules());
-
-        $model = $resource->fullyQualifiedModelName()::make();
 
         $model = $this->service->persistModel($resource, $model);
 
@@ -61,18 +60,18 @@ class ResourceController extends Controller
     public function detail(string $name, $key)
     {
         $resource = $this->service->getResourceFromName($name);
-        $resource->setModel($key);
+        $model = $resource->fullyQualifiedModelName()::findOrFail($key);
 
-        return (new ResourceSerializer($resource))
+        return (new ResourceSerializer($resource, $model))
             ->view('detail');
     }
 
     public function edit(string $name, $key)
     {
         $resource = $this->service->getResourceFromName($name);
-        $resource->setModel($key);
+        $model = $resource->fullyQualifiedModelName()::findOrFail($key);
 
-        return (new ResourceSerializer($resource))
+        return (new ResourceSerializer($resource, $model))
             ->view('edit');
     }
 
