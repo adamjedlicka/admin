@@ -39,9 +39,10 @@ export default {
 
         createNew() {
             let resource = this.field.meta.info.relatedName.toLowerCase()
+            let field = this.field.meta.info.relatedFieldName
             let key = this.$route.params.key
 
-            return `/resources/${resource}/create`
+            return `/resources/${resource}/create?via.${field}=${key}`
         },
     }
 }

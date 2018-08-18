@@ -23,6 +23,11 @@ class HasMany extends Field
      */
     protected $relatedResource;
 
+    /**
+     * @var \AdamJedlicka\Admin\Fields\BelongsTo
+     */
+    protected $relatedField;
+
     protected function prepare(Resource $resource, Model $model)
     {
         $this->relationship = $model->{$this->name}();
@@ -30,12 +35,22 @@ class HasMany extends Field
         $this->relatedResource = ResourceService::getResourceFromModel(
             $this->relationship->getRelated()
         );
+
+        $this->relatedField = $this->relatedResource->getFields()
+            ->filter(function (Field $field) {
+                return $field instanceof BelongsTo;
+            })
+            ->filter(function (BelongsTo $field) {
+                return $this->relationship->getForeignKeyName() == $field->getForeignKey();
+            })
+            ->first();
     }
 
     protected function metaInfo(Resource $resource)
     {
         return [
             'relatedName' => $this->relatedResource->name(),
+            'relatedFieldName' => $this->relatedField->getName(),
             'fields' => $this->relatedResource->getFields('detail'),
         ];
     }
