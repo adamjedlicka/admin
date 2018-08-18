@@ -12,18 +12,25 @@ use function AdamJedlicka\Admin\Support\array_depth;
 abstract class Resource
 {
     /**
-     * Coresponding model
+     * Fully qualified name of the coresponding model
      *
-     * @var \Illuminate\Database\Eloquent\Model|null
+     * @var string|null
      */
-    public $model = null;
+    protected $model = null;
 
     /**
      * Name of attribute used for title
      *
-     * @var string
+     * @var string|null
      */
     protected $title = null;
+
+    /**
+     * Instance of coresponding model
+     *
+     * @var \Illuminate\Database\Eloquent\Model|null
+     */
+    protected $modelInstance = null;
 
     /**
      * Definition of fields
@@ -55,35 +62,13 @@ abstract class Resource
     }
 
     /**
-     * Display name of the resource. By default plural version of the model name
+     * Plural version of the resource name
      *
      * @return string
      */
-    public function displayName() : string
+    public function pluralName() : string
     {
         return Str::plural($this->name());
-    }
-
-    /**
-     * Returns the name of the model.
-     * By default generated from the name of the current resource.
-     *
-     * @return string
-     */
-    public function modelName() : string
-    {
-        return $this->name();
-    }
-
-    /**
-     * Returns the namespace of the model.
-     * By default generated from the name of the current resource.
-     *
-     * @return string
-     */
-    public function modelNamespace() : string
-    {
-        return config('admin.models.namespace');
     }
 
     /**
@@ -91,9 +76,9 @@ abstract class Resource
      *
      * @return string
      */
-    public function fullyQualifiedModelName() : string
+    public function model() : string
     {
-        return $this->modelNamespace() . '\\' . $this->modelName();
+        return $this->model ?? config('admin.models.namespace') . '\\' . $this->name();
     }
 
     /**
@@ -107,13 +92,13 @@ abstract class Resource
     }
 
     /**
-     * Creates new query over the coresponding model
+     * Default query used to build index data
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query() : Builder
+    public function indexQuery() : Builder
     {
-        return $this->fullyQualifiedModelName()::query();
+        return $this->model()::query();
     }
 
     /**
@@ -215,26 +200,27 @@ abstract class Resource
     }
 
     /**
-     * Returns resource title or empty string whether resopurce has model
+     * Model instance setter
      *
-     * @return mixed
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
-    public function getTitle()
+    public function setModel(Model $model)
     {
-        return $this->model && $this->model->exists
-            ? $this->title()
-            : '';
+        $this->modelInstance = $model;
+    }
+
+    /**
+     * Model instance getter
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function getModel() : ? Model
+    {
+        return $this->modelInstance;
     }
 
     public function __get($name)
     {
-        return $this->model->__get($name);
-    }
-
-    public function __call($name, $arguments)
-    {
-        if (method_exists($this->model, $name)) {
-            return call_user_func([$this->model, $name], $arguments);
-        }
+        return $this->modelInstance->__get($name);
     }
 }

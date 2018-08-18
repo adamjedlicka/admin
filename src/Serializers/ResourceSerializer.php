@@ -29,7 +29,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     public function __construct(Resource $resource, Model $model)
     {
         $this->resource = clone $resource;
-        $this->resource->model = $model;
+        $this->resource->setModel($model);
     }
 
     /**
@@ -62,7 +62,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return [
             'name' => $this->resource->name(),
             'title' => $this->resource->title(),
-            'key' => $this->resource->model->getKey(),
+            'key' => $this->resource->getModel()->getKey(),
             'fields' => $this->resource->getFields($this->view),
         ];
     }

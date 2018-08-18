@@ -130,8 +130,8 @@ abstract class Field implements Arrayable
      */
     public function compute(Resource $resource) : self
     {
-        $modeName = $resource->fullyQualifiedModelName();
-        $model = $resource->model ?? new $modeName;
+        $modeName = $resource->model();
+        $model = $resource->getModel() ?? new $modeName;
 
         $this->prepare($resource, $model);
 
@@ -139,10 +139,10 @@ abstract class Field implements Arrayable
             $this->meta['info'] = $info;
         }
 
-        if ($resource->model) {
-            $this->value = $this->retrieve($resource->model);
+        if ($resource->getModel()) {
+            $this->value = $this->retrieve($resource->getModel());
 
-            if ($value = $this->metaValue($resource, $resource->model)) {
+            if ($value = $this->metaValue($resource, $resource->getModel())) {
                 $this->meta['value'] = $value;
             }
         }

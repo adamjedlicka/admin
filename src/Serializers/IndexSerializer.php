@@ -13,48 +13,52 @@ class IndexSerializer implements Arrayable, JsonSerializable
     /**
      * @var \AdamJedlicka\Admin\Resource
      */
-    private $resource;
-
-    /**
-     * @var string
-     */
-    private $resourceClass;
+    protected $resource;
 
     /**
      * @var \Illuminate\Database\Eloquent\Builder
      */
-    private $query;
+    protected $indexQuery;
 
-    public function __construct(Resource $resource, $query = null)
+    /**
+     * @var array
+     */
+    protected $resources = [];
+
+    /**
+     * @var array
+     */
+    protected $pagination = [];
+
+    public function __construct(Resource $resource, $indexQuery = null)
     {
         $this->resource = $resource;
-        $this->query = $query ?? $this->resource->query();
+        $this->indexQuery = $indexQuery ?? $this->resource->indexQuery();
+
+        $this->compute();
     }
 
-    private function data()
+    private function compute()
     {
         $this->applySort();
 
-        $result = $this->query->simplePaginate();
+        $result = $this->indexQuery->simplePaginate();
+
+        $this->pagination = [
+            'currentPage' => $result->currentPage(),
+            'hasPreviousPage' => $result->previousPageUrl() != null,
+            'hasNextPage' => $result->nextPageUrl() != null,
+        ];
 
         foreach ($result->items() as $model) {
-            $resources[] = (new ResourceSerializer($this->resource, $model))
+            $this->resources[] = (new ResourceSerializer($this->resource, $model))
                 ->view('index');
         }
-
-        return [
-            'resources' => $resources ?? [],
-            'pagination' => [
-                'currentPage' => $result->currentPage(),
-                'hasPreviousPage' => $result->previousPageUrl() != null,
-                'hasNextPage' => $result->nextPageUrl() != null,
-            ]
-        ];
     }
 
     private function applySort()
     {
-        $this->query->orderBy(
+        $this->indexQuery->orderBy(
             request('sortBy', $this->resource->sortBy()),
             request('orderBy', $this->resource->sortOrder())
         );
@@ -62,14 +66,12 @@ class IndexSerializer implements Arrayable, JsonSerializable
 
     public function toArray()
     {
-        $data = $this->data();
-
         return [
             'name' => $this->resource->name(),
-            'displayName' => $this->resource->displayName(),
+            'pluralName' => $this->resource->pluralName(),
             'fields' => $this->resource->getFields('index'),
-            'resources' => $data['resources'],
-            'pagination' => $data['pagination'],
+            'resources' => $this->resources,
+            'pagination' => $this->pagination,
         ];
     }
 

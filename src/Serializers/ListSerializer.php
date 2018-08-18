@@ -17,7 +17,7 @@ class ListSerializer implements JsonSerializable
 
             $resources[] = [
                 'name' => $resource->name(),
-                'displayName' => $resource->displayName(),
+                'pluralName' => $resource->pluralName(),
             ];
         }
 

@@ -18,7 +18,7 @@
                 v-for="(resource, i) in resources" :key="i"
                 class="pl-8 p-2 block hover:bg-grey-dark cursor-pointer text-white no-underline"
                 :to="`/resources/${resource.name.toLowerCase()}`" >
-                {{ resource.displayName }}
+                {{ resource.pluralName }}
             </router-link>
 
         </nav>
