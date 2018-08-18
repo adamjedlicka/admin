@@ -9,6 +9,7 @@
         <div class="w-5/6 text-grey-darkest">
             <component :is="`${field.type}-${action}-field`"
                 :field="field"
+                :model="model"
                 @input="onInput" />
 
             <div>
@@ -26,6 +27,7 @@
 export default {
     props: {
         field: Object,
+        model: null,
         errors: Array,
         action: String,
     },

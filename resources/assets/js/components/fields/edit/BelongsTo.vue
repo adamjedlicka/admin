@@ -1,14 +1,14 @@
 <template>
     <div>
 
-        <select @input="onInput" :value="field.value"
+        <select @input="onInput" :value="model"
             class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
 
             <option :value="null"></option>
 
             <option v-for="(resource, i) in resources" :key="i"
                 :value="resource.key"
-                :selected="resource.key == field.value" >
+                :selected="resource.key == model" >
                 {{ resource.title }}
             </option>
 
@@ -21,6 +21,7 @@
 export default {
     props: {
         field: Object,
+        model: null,
     },
 
     data() {

@@ -193,6 +193,18 @@ abstract class Resource
         return $this->modelInstance;
     }
 
+    /**
+     * Returns keyName of the coresponding model
+     *
+     * @return string
+     */
+    public function getKeyName() : string
+    {
+        $model = $this->model();
+
+        return (new $model)->getKeyName();
+    }
+
     public function __get($name)
     {
         return $this->modelInstance->__get($name);

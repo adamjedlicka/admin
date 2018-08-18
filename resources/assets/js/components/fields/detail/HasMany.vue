@@ -6,6 +6,11 @@
                 <h2 class="h2">{{ field.displayName }}</h2>
             </div>
 
+            <div>
+                <router-link :to="createNew" class="btn btn-blue">
+                    Create
+                </router-link>
+            </div>
         </div>
 
         <div class="panel">
@@ -30,7 +35,14 @@ export default {
             let ofWhat = this.field.name
 
             return `/api/resources/${resource}/${key}/hasMany/${ofWhat}`
-        }
+        },
+
+        createNew() {
+            let resource = this.field.meta.info.relatedName.toLowerCase()
+            let key = this.$route.params.key
+
+            return `/resources/${resource}/create`
+        },
     }
 }
 </script>

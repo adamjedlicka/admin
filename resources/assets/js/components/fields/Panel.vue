@@ -13,6 +13,7 @@
 
             <Field v-for="(field, i) in fields" :key="i"
                 :field="field"
+                :model="model[field.name]"
                 :errors="errorsOf(field.name)"
                 :action="action"
                 :meta="metaOf(field.name)"
@@ -27,6 +28,7 @@ export default {
     props: {
         displayName: null,
         fields: Array,
+        model: null,
         errors: Object,
         action: String,
     },

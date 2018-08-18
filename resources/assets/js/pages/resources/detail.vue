@@ -4,6 +4,7 @@
         <Panel
             :displayName="resource.title"
             :fields="fields"
+            :model="model"
             action="detail" >
 
             <div slot="buttons">
@@ -25,7 +26,8 @@
 export default {
     data() {
         return {
-            resource: null
+            resource: null,
+            model: {},
         }
     },
 
@@ -62,6 +64,8 @@ export default {
             let key = this.$route.params.key
 
             this.resource = await this.$get(`/api/resources/${resourceName}/${key}`)
+
+            this.resource.fields.forEach(field => this.model[field.name] = field.value || null)
         }
     }
 }

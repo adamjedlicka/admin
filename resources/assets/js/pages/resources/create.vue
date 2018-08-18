@@ -4,6 +4,7 @@
         <Panel
             :displayName="`Create new ${resource.name}`"
             :fields="fields"
+            :model="model"
             :errors="errors"
             action="edit"
             @input="onInput" >
@@ -67,7 +68,6 @@ export default {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
 
             this.resource.fields.forEach(field => this.model[field.name] = field.value || null)
-
         },
 
         async saveChanges() {

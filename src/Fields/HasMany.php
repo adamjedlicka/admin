@@ -35,6 +35,7 @@ class HasMany extends Field
     protected function metaInfo(Resource $resource)
     {
         return [
+            'relatedName' => $this->relatedResource->name(),
             'fields' => $this->relatedResource->getFields('detail'),
         ];
     }
