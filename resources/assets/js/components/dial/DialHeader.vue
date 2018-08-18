@@ -10,13 +10,13 @@
                 @click="onClick(field)" >
 
                 <div class="truncate">
+                    {{ field.displayName }}
+
                     <span v-if="field.isSortable">
-                        <i v-if="sort != field.name" class="fas fa-sort"></i>
+                        <i v-if="sort != field.name" class="fas fa-sort text-grey"></i>
                         <i v-if="sort == field.name && order == 'asc'" class="fas fa-sort-up"></i>
                         <i v-if="sort == field.name && order == 'desc'" class="fas fa-sort-down"></i>
                     </span>
-
-                    {{ field.displayName }}
                 </div>
 
             </th>
