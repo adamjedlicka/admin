@@ -71,7 +71,6 @@ export default {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceKey}/edit`)
 
             this.resource.fields.forEach(field => this.model[field.name] = field.value)
-
         },
 
         async saveChanges() {
@@ -88,8 +87,7 @@ export default {
         },
 
         onInput(name, value) {
-            this.$set(this.model, name, value)
-            this.$forceUpdate()
+            this.model[name] = value
         }
     }
 }

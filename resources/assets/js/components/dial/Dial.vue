@@ -72,6 +72,8 @@ export default {
         async fetchData() {
             this.index = await this.$get(this.url)
                 .syncQueryString()
+
+            this.$emit('update', this.index)
         },
     },
 
