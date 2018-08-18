@@ -6,7 +6,7 @@ Route::group([
     'prefix' => config('admin.prefix'),
 ], function () {
 
-    Route::get('/{any?}', 'AdminController@index')
+    Route::get('/{any?}', 'SpaController')
         ->where('any', '.*')
         ->name('admin.index');
 
