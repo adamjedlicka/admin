@@ -12,20 +12,6 @@ use function AdamJedlicka\Admin\Support\array_depth;
 abstract class Resource
 {
     /**
-     * Fully qualified name of the coresponding model
-     *
-     * @var string|null
-     */
-    protected $model = null;
-
-    /**
-     * Name of attribute used for title
-     *
-     * @var string|null
-     */
-    protected $title = null;
-
-    /**
      * Instance of coresponding model
      *
      * @var \Illuminate\Database\Eloquent\Model|null
@@ -46,9 +32,7 @@ abstract class Resource
      */
     public function title()
     {
-        return $this->title
-            ? $this->{$this->title}
-            : $this->name() . ' ' . $this->getKey();
+        return $this->name() . ' ' . $this->getModel()->getKey();
     }
 
     /**
@@ -78,7 +62,7 @@ abstract class Resource
      */
     public function model() : string
     {
-        return $this->model ?? config('admin.models.namespace') . '\\' . $this->name();
+        return config('admin.models.namespace') . '\\' . $this->name();
     }
 
     /**
