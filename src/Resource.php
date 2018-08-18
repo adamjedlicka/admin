@@ -19,6 +19,13 @@ abstract class Resource
     public $model = null;
 
     /**
+     * Name of attribute used for title
+     *
+     * @var string
+     */
+    protected $title = null;
+
+    /**
      * Definition of fields
      *
      * @return array
@@ -32,7 +39,9 @@ abstract class Resource
      */
     public function title()
     {
-        return $this->name() . ' ' . $this->getKey();
+        return $this->title
+            ? $this->{$this->title}
+            : $this->name() . ' ' . $this->getKey();
     }
 
     /**
