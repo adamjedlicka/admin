@@ -47,7 +47,7 @@ class ResourceController extends Controller
         $resource = $this->service->getResourceFromName($name);
         $model = $resource->fullyQualifiedModelName()::make();
 
-        request()->validate($resource->getRules());
+        request()->validate($resource->getCreationRules());
 
         $model = $this->service->persistModel($resource, $model);
 
@@ -79,7 +79,7 @@ class ResourceController extends Controller
     {
         $resource = $this->service->getResourceFromName($name);
 
-        request()->validate($resource->getRules());
+        request()->validate($resource->getUpdateRules());
 
         $model = $resource->fullyQualifiedModelName()::findOrFail($key);
 

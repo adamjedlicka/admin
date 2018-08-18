@@ -154,15 +154,41 @@ abstract class Resource
     }
 
     /**
-     * Returns computed array of all rules
+     * Returns computed array of all creation rules
      *
      * @return array
      */
-    public function getRules() : array
+    public function getCreationRules() : array
     {
         return $this->getFields()
             ->mapWithKeys(function (Field $field) {
-                return [$field->getName() => $field->getRules()];
+                return [$field->getName() => $field->getCreationRules()];
+            })
+            ->mapWithKeys(function ($rules, $key) {
+                if (array_depth($rules) == 1) {
+                    return [$key => $rules];
+                }
+
+                // Transform array into dot notation
+                foreach ($rules as $ruleKey => $rule) {
+                    $result[$key . '.' . $ruleKey] = $rule;
+                }
+
+                return $result;
+            })
+            ->toArray();
+    }
+
+    /**
+     * Returns computed array of all update rules
+     *
+     * @return array
+     */
+    public function getUpdateRules() : array
+    {
+        return $this->getFields()
+            ->mapWithKeys(function (Field $field) {
+                return [$field->getName() => $field->getUpdateRules()];
             })
             ->mapWithKeys(function ($rules, $key) {
                 if (array_depth($rules) == 1) {

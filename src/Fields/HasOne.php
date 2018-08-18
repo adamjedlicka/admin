@@ -86,9 +86,16 @@ class HasOne extends Field
         return Str::camel($displayName);
     }
 
-    public function getRules() : array
+    public function getCreationRules() : array
     {
-        return collect($this->relatedResource->getRules())
+        return collect($this->relatedResource->getCreationRules())
+            ->only($this->fieldNames())
+            ->toArray();
+    }
+
+    public function getUpdateRules() : array
+    {
+        return collect($this->relatedResource->getUpdateRules())
             ->only($this->fieldNames())
             ->toArray();
     }

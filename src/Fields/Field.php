@@ -60,11 +60,18 @@ abstract class Field implements Arrayable
     protected $panel = false;
 
     /**
-     * Validation rules
+     * Validation rules for model creation
      *
-     * @var bool
+     * @var array
      */
-    protected $rules = [];
+    protected $creationRules = [];
+
+    /**
+     * Validation rules for model update
+     *
+     * @var array
+     */
+    protected $updateRules = [];
 
     /**
      * Meta attributes
@@ -179,11 +186,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function showOnIndex()
+    public function showOnIndex() : self
     {
         if (!in_array('index', $this->visibleOn)) {
             $this->visibleOn[] = 'index';
         }
+
         return $this;
     }
 
@@ -192,11 +200,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function showOnDetail()
+    public function showOnDetail() : self
     {
         if (!in_array('detail', $this->visibleOn)) {
             $this->visibleOn[] = 'detail';
         }
+
         return $this;
     }
 
@@ -206,11 +215,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function showOnEdit()
+    public function showOnEdit() : self
     {
         if (!in_array('edit', $this->visibleOn)) {
             $this->visibleOn[] = 'edit';
         }
+
         return $this;
     }
 
@@ -219,11 +229,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function hideFromIndex()
+    public function hideFromIndex() : self
     {
         if (($key = array_search('index', $this->visibleOn)) !== false) {
             array_splice($this->visibleOn, $key, 1);
         }
+
         return $this;
     }
 
@@ -232,11 +243,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function hideFromDetail()
+    public function hideFromDetail() : self
     {
         if (($key = array_search('detail', $this->visibleOn)) !== false) {
             array_splice($this->visibleOn, $key, 1);
         }
+
         return $this;
     }
 
@@ -245,11 +257,12 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function hideFromEdit()
+    public function hideFromEdit() : self
     {
         if (($key = array_search('edit', $this->visibleOn)) !== false) {
             array_splice($this->visibleOn, $key, 1);
         }
+
         return $this;
     }
 
@@ -258,13 +271,14 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function sortable()
+    public function sortable() : self
     {
         if ($this->options != null) {
             return $this;
         }
 
         $this->sortable = true;
+
         return $this;
     }
 
@@ -273,9 +287,35 @@ abstract class Field implements Arrayable
      *
      * @return self
      */
-    public function rules(...$rules)
+    public function rules(...$rules) : self
     {
-        $this->rules = $rules;
+        $this->creationRules = $rules;
+        $this->updateRules = $rules;
+
+        return $this;
+    }
+
+    /**
+     * Set validation rules for model creation
+     *
+     * @return self
+     */
+    public function creationRules(...$rules) : self
+    {
+        $this->creationRules = $rules;
+
+        return $this;
+    }
+
+    /**
+     * Set validation rules for model update
+     *
+     * @return self
+     */
+    public function updateRules(...$rules) : self
+    {
+        $this->updateRules = $rules;
+
         return $this;
     }
 
@@ -351,13 +391,23 @@ abstract class Field implements Arrayable
     }
 
     /**
-     * Rules getter
+     * Creation rules getter
      *
      * @return array
      */
-    public function getRules() : array
+    public function getCreationRules() : array
     {
-        return $this->rules;
+        return $this->creationRules;
+    }
+
+    /**
+     * Update rules getter
+     *
+     * @return array
+     */
+    public function getUpdateRules() : array
+    {
+        return $this->updateRules;
     }
 
     /**
