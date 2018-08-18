@@ -20,7 +20,7 @@ class HasManyController extends Controller
     public function index(string $name, $key, string $relationship)
     {
         $resource = $this->service->getResourceFromName($name);
-        $model = $resource->fullyQualifiedModelName()::findOrFail($key);
+        $model = $resource->model()::findOrFail($key);
         $query = $model->{$relationship}();
         $relatedResource = $this->service->getResourceFromModel(
             $query->getRelated()

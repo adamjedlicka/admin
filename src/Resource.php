@@ -82,16 +82,6 @@ abstract class Resource
     }
 
     /**
-     * Returns the model primary key
-     *
-     * @return mixed
-     */
-    public function key()
-    {
-        return $this->model->getKey();
-    }
-
-    /**
      * Default query used to build index data
      *
      * @return \Illuminate\Database\Eloquent\Builder

@@ -59,7 +59,7 @@ class BelongsTo extends Field
     {
         return [
             'title' => $this->relatedResource->title(),
-            'key' => $this->relatedResource->key(),
+            'key' => $this->relatedResource->getModel()->getKey(),
         ];
     }
 

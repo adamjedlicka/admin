@@ -39,7 +39,7 @@ class ResourceService
         $name = (new \ReflectionClass($model))->getShortName();
 
         $resource = $this->getResourceFromName($name);
-        if ($model->exists) $resource->model = $model;
+        if ($model->exists) $resource->setModel($model);
 
         return $resource;
     }
