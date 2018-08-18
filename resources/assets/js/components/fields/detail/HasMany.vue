@@ -10,7 +10,7 @@
 
         <div class="panel">
 
-            <Dial :source="source" />
+            <Dial :source="source" :prefix="field.name" />
 
         </div>
 

@@ -10,18 +10,34 @@ export default class Request {
         this._options = options
     }
 
-    syncQueryString() {
+    /**
+     * @param {string} prefix
+     */
+    syncQueryString(prefix = '') {
+        if (prefix != '') {
+            prefix += '.'
+        }
+
         let parameters = router.app.$route.query
 
         for (let parameter in parameters) {
-            if (this._url[parameter] !== undefined) continue
+            if (!parameter.startsWith(prefix)) continue
 
-            this._url[parameter] = parameters[parameter]
+            let woPrefix = parameter.substring(prefix.length)
+
+            if (this._url[woPrefix] !== undefined) continue
+
+            this._url[woPrefix] = parameters[parameter]
+        }
+
+        let query = {}
+        for (let parameter in this._url.parameters()) {
+            query[prefix + parameter] = this._url[parameter]
         }
 
         router.app.$router.push({
             path: router.app.$route.path,
-            query: this._url.parameters(),
+            query: query,
         })
 
         return this

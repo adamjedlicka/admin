@@ -32,14 +32,34 @@
 <script>
 export default {
     props: {
+        prefix: String,
         fields: Array,
     },
 
     data() {
         return {
-            sort: this.$route.query.sortBy,
-            order: this.$route.query.orderBy,
+            sort: null,
+            order: null,
         }
+    },
+
+    computed: {
+        prefixedSortBy() {
+            return this.prefix
+                ? `${this.prefix}.sortBy`
+                : 'sortBy'
+        },
+
+        prefixedOrderBy() {
+            return this.prefix
+                ? `${this.prefix}.orderBy`
+                : 'orderBy'
+        },
+    },
+
+    mounted() {
+        this.sort = this.$route.query[this.prefixedSortBy]
+        this.order = this.$route.query[this.prefixedOrderBy]
     },
 
     methods: {

@@ -5,10 +5,13 @@
         <div class="rounded-t-lg overflow-x-auto">
             <table class="w-full">
 
-                <DialHeader :fields="fields"
+                <DialHeader
+                    :prefix="prefix"
+                    :fields="fields"
                     @sort="onSort" />
 
-                <DialBody :resources="resources"
+                <DialBody
+                    :resources="resources"
                     @update="fetchData" />
 
             </table>
@@ -31,6 +34,7 @@ import Url from '~/support/Url'
 
 export default {
     props: {
+        prefix: String,
         source: String,
     },
 
@@ -71,7 +75,7 @@ export default {
 
         async fetchData() {
             this.index = await this.$get(this.url)
-                .syncQueryString()
+                .syncQueryString(this.prefix)
 
             this.$emit('update', this.index)
         },
