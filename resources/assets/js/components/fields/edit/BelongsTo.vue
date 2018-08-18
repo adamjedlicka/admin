@@ -2,7 +2,8 @@
     <div>
 
         <select @input="onInput" :value="model"
-            class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
+            class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline"
+            :disabled="disabled" >
 
             <option :value="null"></option>
 
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import Url from '~/support/Url'
+
 export default {
     props: {
         field: Object,
@@ -27,6 +30,12 @@ export default {
     data() {
         return {
             resources: [],
+        }
+    },
+
+    computed: {
+        disabled() {
+            return !!new Url().object('via')[this.field.name]
         }
     },
 

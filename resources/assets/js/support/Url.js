@@ -1,7 +1,7 @@
 export default class Url {
 
     constructor(url) {
-        this._url = url
+        this._url = url || this._initUrl()
     }
 
     get() {
@@ -38,10 +38,36 @@ export default class Url {
             .join('&')
     }
 
+    object(name) {
+        let object = {}
+
+        for (let parameter in this.parameters()) {
+            if (!parameter.startsWith(name)) continue
+
+            let accessor = parameter.split('.')
+            object[accessor[1]] = this[parameter]
+        }
+
+        return object
+    }
+
     prefix(prefix) {
         this._prefix = prefix
 
         return this
+    }
+
+    _initUrl() {
+        let loc = window.location
+
+        loc.search.substr(1)
+            .split('&')
+            .forEach(param => {
+                param = param.split('=')
+                this[param[0]] = decodeURIComponent(param[1])
+            })
+
+        return loc.pathname
     }
 
     _encode(key) {

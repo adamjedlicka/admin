@@ -10,7 +10,7 @@
             @input="onInput" >
 
             <div slot="buttons" class="buttons">
-                <router-link :to="detailUrl" class="btn">
+                <router-link :to="backUrl" class="btn">
                     Cancel
                 </router-link>
 
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import Url from '~/support/Url'
+
 export default {
     data() {
         return {
@@ -54,8 +56,9 @@ export default {
             return this.resource.fields.filter(field => field.isPanel)
         },
 
-        detailUrl() {
-            return `/resources/${this.resourceName}`
+        backUrl() {
+            return this.$route.query.previous
+                || `/resources/${this.resourceName}`
         }
     },
 
@@ -67,7 +70,18 @@ export default {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
 
-            this.resource.fields.forEach(field => this.model[field.name] = field.value || null)
+            this.initModel()
+        },
+
+        initModel() {
+            this.resource.fields.forEach(field => {
+                this.model[field.name] = field.value || null
+            })
+
+            let model = new Url().object('via')
+            for (let name in model) {
+                this.model[name] = model[name]
+            }
         },
 
         async saveChanges() {
@@ -77,7 +91,10 @@ export default {
             )
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resourceName}/${response.key}`)
+                this.$router.push(
+                    this.$route.query.previous
+                    || `/resources/${this.resourceName}/${response.key}`
+                )
             } else if (response.errors) {
                 this.errors = response.errors
             }

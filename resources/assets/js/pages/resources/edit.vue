@@ -4,6 +4,7 @@
         <Panel
             :displayName="resource.title"
             :fields="fields"
+            :model="model"
             :errors="errors"
             action="edit"
             @input="onInput" >

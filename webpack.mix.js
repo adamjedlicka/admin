@@ -2,6 +2,7 @@ let mix = require('laravel-mix');
 let tailwindcss = require('tailwindcss');
 
 mix.webpackConfig({
+    devtool: 'source-map',
     resolve: {
         alias: {
             '~': path.resolve(__dirname, "resources/assets/js")
