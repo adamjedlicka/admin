@@ -26,6 +26,7 @@ class HasManyController extends Controller
             $query->getRelated()
         );
 
-        return new IndexSerializer($relatedResource, $query);
+        return (new IndexSerializer($relatedResource, $query))
+            ->exceptFields('user');
     }
 }

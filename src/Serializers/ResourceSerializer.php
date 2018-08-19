@@ -26,6 +26,11 @@ class ResourceSerializer implements Arrayable, JsonSerializable
      */
     protected $view = null;
 
+    /**
+     * @var array
+     */
+    protected $exceptFields = [];
+
     public function __construct(Resource $resource, Model $model)
     {
         $this->resource = clone $resource;
@@ -45,6 +50,18 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     }
 
     /**
+     * Removes certain fields from exporting
+     *
+     * @param mixed $exceptFields
+     */
+    public function exceptFields(...$exceptFields) : self
+    {
+        $this->exceptFields = $exceptFields;
+
+        return $this;
+    }
+
+    /**
      * Filters out fields for specific view
      *
      * @return self
@@ -57,13 +74,22 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return $this;
     }
 
+    protected function fields()
+    {
+        return $this->resource->getFields($this->view)
+            ->filter(function (Field $field) {
+                return !in_array($field->getName(), $this->exceptFields);
+            })
+            ->values();
+    }
+
     public function toArray()
     {
         return [
             'name' => $this->resource->name(),
             'title' => $this->resource->title(),
             'key' => $this->resource->getModel()->getKey(),
-            'fields' => $this->resource->getFields($this->view),
+            'fields' => $this->fields(),
         ];
     }
 

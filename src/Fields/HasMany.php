@@ -51,7 +51,6 @@ class HasMany extends Field
         return [
             'relatedName' => $this->relatedResource->name(),
             'relatedFieldName' => $this->relatedField->getName(),
-            'fields' => $this->relatedResource->getFields('detail'),
         ];
     }
 
