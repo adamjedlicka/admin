@@ -75,12 +75,12 @@ export default {
 
         initModel() {
             this.resource.fields.forEach(field => {
-                this.model[field.name] = field.value || null
+                this.$set(this.model, field.name, field.value || null)
             })
 
             let model = new Url().object('via')
             for (let name in model) {
-                this.model[name] = model[name]
+                this.$set(this.model, name, model[name])
             }
         },
 
@@ -102,7 +102,6 @@ export default {
 
         onInput(name, value) {
             this.$set(this.model, name, value)
-            this.$forceUpdate()
         }
     }
 }

@@ -77,7 +77,7 @@ class HasOne extends Field
     protected function metaValue(Resource $resource, Model $model)
     {
         return [
-            'title' => $this->relatedResource->getTitle(),
+            'title' => $model->{$this->getName()} ? $this->relatedResource->title() : '',
         ];
     }
 

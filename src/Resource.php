@@ -207,6 +207,8 @@ abstract class Resource
 
     public function __get($name)
     {
+        if (!$this->modelInstance) return null;
+
         return $this->modelInstance->__get($name);
     }
 }
