@@ -34,6 +34,8 @@
 }
 
 .buttons {
+    @apply flex;
+
     :not(:first-child) {
         @apply ml-2;
     }

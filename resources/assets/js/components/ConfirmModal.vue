@@ -1,50 +1,25 @@
 <template>
-    <div v-if="visible">
-        <div class="fixed pin bg-black opacity-75 z-50">
-        </div>
+    <Modal ref="modal" :title="title" :body="body">
+        <template slot="footer">
+            <div class="flex justify-end">
+                <div class="buttons">
+                    <a class="btn btn-blue" @click="onCancel">
+                        Cancel
+                    </a>
 
-        <div class="fixed pin z-50">
-            <div class="flex justify-center items-center h-screen">
-                <div class="container bg-white rounded-lg shadow-lg max-w-sm">
-
-                    <div class="p-4 text-xl text-grey-darker font-bold flex justify-between border-b">
-                        <span>
-                            {{ title }}
-                        </span>
-                        <span class="cursor-pointer"
-                            @click="onCancel" >
-                            <i class="fas fa-times"></i>
-                        </span>
-                    </div>
-
-                    <div class="p-4 text-grey-darkest">
-                        {{ body }}
-                    </div>
-
-                    <div class="p-2 flex justify-end border-t">
-                        <div class="btn btn-blue"
-                            @click="onCancel" >
-                            No
-                        </div>
-
-                        <div class="btn ml-2"
-                            :class="{'btn-green' : !danger, 'btn-red' : danger}"
-                            @click="onOk" >
-                            Yes
-                        </div>
-                    </div>
-
+                    <a class="btn" :class="danger ? 'btn-red' : 'btn-green'" @click="onConfirm">
+                        Confirm
+                    </a>
                 </div>
             </div>
-        </div>
-    </div>
+        </template>
+    </Modal>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            visible: false,
             resolve: null,
             danger: null,
 
@@ -55,23 +30,24 @@ export default {
 
     mounted() {
         window.modalConfirm = (title, body, danger = false) => {
-            this.visible = true
             this.title = title
             this.body = body
             this.danger = danger
+
+            this.$refs.modal.show()
 
             return new Promise(resolve => this.resolve = resolve)
         }
     },
 
     methods: {
-        onOk() {
-            this.visible = false
+        onConfirm() {
+            this.$refs.modal.hide()
             this.resolve(true)
         },
 
         onCancel() {
-            this.visible = false
+            this.$refs.modal.hide()
             this.resolve(false)
         },
     }
