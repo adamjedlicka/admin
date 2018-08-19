@@ -21,6 +21,8 @@
 
         </div>
 
+        <AttachModal ref="attachModal" />
+
     </div>
 </template>
 
@@ -42,7 +44,7 @@ export default {
 
     methods: {
         attach() {
-
+            this.$refs.attachModal.show()
         }
     }
 }

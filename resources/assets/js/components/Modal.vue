@@ -5,7 +5,8 @@
 
         <div class="fixed pin z-50">
             <div class="flex justify-center items-center h-screen">
-                <div class="container bg-white rounded-lg shadow-lg max-w-sm">
+                <div class="container bg-white rounded-lg shadow-lg"
+                    :class="[maxWidth]">
 
                     <div class="p-4 text-xl text-grey-darker font-bold flex justify-between border-b">
                         <span slot="header">
@@ -39,11 +40,23 @@ export default {
     props: {
         title: String,
         body: String,
+        size: String,
     },
 
     data() {
         return {
             visible: false,
+        }
+    },
+
+    computed: {
+        maxWidth() {
+            switch (this.size) {
+                case 'large':
+                    return ''
+                default:
+                    return 'max-w-sm'
+            }
         }
     },
 
