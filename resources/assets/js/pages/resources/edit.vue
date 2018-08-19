@@ -10,7 +10,7 @@
             @input="onInput" >
 
             <div slot="buttons" class="buttons">
-                <router-link :to="detailUrl" class="btn">
+                <router-link :to="cancelUrl" class="btn">
                     Cancel
                 </router-link>
 
@@ -58,8 +58,9 @@ export default {
             return this.resource.fields.filter(field => field.isPanel)
         },
 
-        detailUrl() {
-            return `/resources/${this.resourceName}/${this.resourceKey}`
+        cancelUrl() {
+            return this.$route.query.previous
+                || `/resources/${this.resourceName}/${this.resourceKey}`
         }
     },
 
@@ -81,7 +82,8 @@ export default {
             )
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resourceName}/${this.resourceKey}`)
+                this.$router.push(this.$route.query.previous
+                    || `/resources/${this.resourceName}/${this.resourceKey}`)
             } else if (response.errors) {
                 this.errors = response.errors
             }

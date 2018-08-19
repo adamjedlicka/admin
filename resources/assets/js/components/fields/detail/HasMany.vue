@@ -15,7 +15,10 @@
 
         <div class="panel">
 
-            <Dial :source="source" :prefix="field.name" />
+            <Dial
+                :source="source"
+                :prefix="field.name"
+                :query="query" />
 
         </div>
 
@@ -45,6 +48,13 @@ export default {
 
             return `/resources/${resource}/create?via.${field}=${key}&previous=${previous}`
         },
+
+        query() {
+            return {
+                previous: this.$route.fullPath,
+                [`via.${this.field.meta.info.relatedFieldName}`]: this.$route.params.key,
+            }
+        }
     }
 }
 </script>

@@ -39,3 +39,13 @@ window.delay = function (timeout) {
         setTimeout(resolve, timeout)
     })
 }
+
+window.toQueryString = function (parameters) {
+    let query = []
+
+    for (let parameter in parameters) {
+        query.push(`${parameter}=${parameters[parameter]}`)
+    }
+
+    return query.join('&')
+}

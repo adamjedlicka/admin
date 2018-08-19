@@ -12,6 +12,7 @@
 
                 <DialBody
                     :resources="resources"
+                    :query="query"
                     @update="fetchData" />
 
             </table>
@@ -36,6 +37,7 @@ export default {
     props: {
         prefix: String,
         source: String,
+        query: Object,
     },
 
     data() {

@@ -37,7 +37,8 @@
 <script>
 export default {
     props: {
-        resource: Object
+        resource: Object,
+        query: Object,
     },
 
     computed: {
@@ -55,7 +56,7 @@ export default {
         },
 
         editUrl(resource) {
-            return this.detailUrl(resource) + '/edit'
+            return this.detailUrl(resource) + '/edit?' + toQueryString(this.query)
         },
 
         async onDelete(resource) {
