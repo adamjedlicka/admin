@@ -58,4 +58,9 @@ class HasMany extends Field
     {
         return Str::camel($displayName);
     }
+
+    public function getRelatedField() : Field
+    {
+        return $this->relatedField;
+    }
 }

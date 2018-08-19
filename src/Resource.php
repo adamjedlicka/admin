@@ -122,6 +122,21 @@ abstract class Resource
     }
 
     /**
+     * Returns single field of specified name
+     *
+     * @param string $name
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function getField(string $name) : Field
+    {
+        return $this->getFields()
+            ->filter(function (Field $field) use ($name) {
+                return $field->getName() == $name;
+            })
+            ->first();
+    }
+
+    /**
      * Returns computed array of all creation rules
      *
      * @return array
