@@ -11,6 +11,7 @@ let components = [
     'Text',
 
     'BelongsTo',
+    'BelongsToMany',
     'HasOne',
     'HasMany',
 ]

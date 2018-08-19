@@ -27,6 +27,6 @@ class HasManyController extends Controller
         );
 
         return (new IndexSerializer($relatedResource, $query))
-            ->exceptFields('user');
+            ->exceptFields('user'); // TODO : Cant be fixed
     }
 }

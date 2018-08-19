@@ -9,7 +9,6 @@ Route::group([
     /**
      * ResourceController
      */
-
     Route::get('/resources', 'ResourceController@list')
         ->name('resources.list');
 
@@ -39,5 +38,11 @@ Route::group([
      */
     Route::get('/resources/{name}/{key}/hasMany/{relationship}', 'HasManyController@index')
         ->name('resources.hasMany');
+
+    /**
+     * BelongsToManyController
+     */
+    Route::get('/resources/{name}/{key}/belongsToMany/{relationship}', 'BelongsToManyController@index')
+        ->name('resources.belongsToMany');
 
 });
