@@ -2,16 +2,22 @@
 
 Route::group([
     'namespace' => 'AdamJedlicka\Admin\Http\Controllers',
-    'middleware' => 'api',
+    'middleware' => [
+        \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Auth\Middleware\Authenticate::class,
+    ],
     'prefix' => config('admin.prefix') . '/api',
 ], function () {
 
     /**
+     * AdminController
+     */
+    Route::get('/resources', 'AdminController@resources')
+        ->name('admin.resources');
+
+    /**
      * ResourceController
      */
-    Route::get('/resources', 'ResourceController@list')
-        ->name('resources.list');
-
     Route::get('/resources/{name}', 'ResourceController@index')
         ->name('resources.index');
 

@@ -3,18 +3,12 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Facades\ResourceService;
-use AdamJedlicka\Admin\Serializers\ListSerializer;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 use AdamJedlicka\Admin\Serializers\CreateSerializer;
 use AdamJedlicka\Admin\Serializers\ResourceSerializer;
 
 class ResourceController extends Controller
 {
-    public function list()
-    {
-        return new ListSerializer();
-    }
-
     public function index(string $name)
     {
         $resource = ResourceService::getResourceFromName($name);
@@ -74,6 +68,7 @@ class ResourceController extends Controller
 
         return response()->json([
             'status' => 'success',
+            'key' => $model->getKey(),
         ]);
     }
 

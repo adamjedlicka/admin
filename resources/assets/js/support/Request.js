@@ -68,6 +68,7 @@ export default class Request {
     get options() {
         let options = {
             method: this._method,
+            // credentials: 'include',
             headers: {
                 'Accept': 'application/json',
             }
