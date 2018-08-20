@@ -7,7 +7,6 @@ Route::group([
 ], function () {
 
     Route::get('/{any?}', 'SpaController')
-        ->where('any', '.*')
-        ->name('admin.index');
+        ->where('any', '.*');
 
 });
