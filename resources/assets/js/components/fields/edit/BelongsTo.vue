@@ -46,14 +46,14 @@ export default {
     },
 
     async mounted() {
-        if (this.field.meta.value) {
+        if (this.field.value) {
             this.resources = [{
-                key: this.field.meta.value.key,
-                title: this.field.meta.value.title,
+                key: this.field.value.key,
+                title: this.field.value.title,
             }]
         }
 
-        let response = await this.$get(this.field.meta.info.source)
+        let response = await this.$get(this.field.meta.source)
         this.resources = response.resources
     }
 }

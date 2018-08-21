@@ -71,8 +71,7 @@ export default {
     methods: {
         async fetchData() {
             this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceKey}/edit`)
-
-            this.resource.fields.forEach(field => this.$set(this.model, field.name, field.value))
+            this.model = this.resource.model
         },
 
         async saveChanges() {

@@ -2,7 +2,7 @@
     <div>
         <input
             type="text"
-            :value="field.value"
+            :value="model"
             @input="onInput"
             class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
     </div>
@@ -12,6 +12,7 @@
 export default {
     props: {
         field: Object,
+        model: null,
     },
 
     methods: {
