@@ -35,12 +35,17 @@ class HasOne extends Field
      */
     protected $foreignKey;
 
-    protected function prepare(Resource $resource, Model $model)
+    public function boot(Resource $resource)
     {
+        $modelName = $resource->model();
+        $model = new $modelName;
+
         $this->relationship = $model->{$this->name}();
+
         $this->foreignKey = $this->relationship->getForeignKeyName();
+
         $this->relatedResource = ResourceService::getResourceFromModel(
-            $model->{$this->name} ?? $this->relationship->getRelated()
+            $this->relationship->getRelated()
         );
     }
 
@@ -61,7 +66,7 @@ class HasOne extends Field
         });
     }
 
-    protected function metaInfo(Resource $resource)
+    public function meta(Resource $resource)
     {
         return [
             'fields' => $this->relatedResource->getFields()
@@ -74,10 +79,14 @@ class HasOne extends Field
         ];
     }
 
-    protected function metaValue(Resource $resource, Model $model)
+    public function value(Resource $resource, Model $model)
     {
+        $relatedModel = $model->{$this->getName()};
+        $relatedResource = ResourceService::getResourceFromModel($model->{$this->getName()});
+
         return [
-            'title' => $model->{$this->getName()} ? $this->relatedResource->title() : '',
+            'title' => $relatedResource->title(),
+            'key' => $relatedModel->title(),
         ];
     }
 

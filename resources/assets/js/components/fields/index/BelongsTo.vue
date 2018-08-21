@@ -1,7 +1,7 @@
 <template>
     <router-link :to="urlDetail"
         class="link font-bold">
-        {{ field.meta.value.title }}
+        {{ field.value.title }}
     </router-link>
 </template>
 
@@ -13,7 +13,7 @@ export default {
 
     computed: {
         urlDetail() {
-            return `/resources/${this.field.meta.info.name}/${this.field.value}`
+            return `/resources/${this.field.meta.name}/${this.field.value.key}`
         }
     }
 }

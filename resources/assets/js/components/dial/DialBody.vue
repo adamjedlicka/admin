@@ -4,7 +4,6 @@
         <DialBodyRow v-for="(resource, i) in resources" :key="i"
             class="hover:bg-grey-lighter"
             :resource="resource"
-            :query="query"
             @update="$emit('update')" />
 
     </tbody>
@@ -16,7 +15,6 @@ import DialBodyRow from './DialBodyRow'
 export default {
     props: {
         resources: Array,
-        query: Object,
     },
 
     components: {

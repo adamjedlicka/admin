@@ -8,7 +8,8 @@
             <div class="truncate">
                 <component
                     :is="`${field.type}-index-field`"
-                    :field="field" />
+                    :field="field"
+                    :model="resource.model[field.name]" />
             </div>
 
         </td>
@@ -38,12 +39,11 @@
 export default {
     props: {
         resource: Object,
-        query: Object,
     },
 
     computed: {
         fields() {
-            return this.resource.fields.filter(field => field.visibleOn.includes('index'))
+            return this.resource.fields
         }
     },
 
@@ -56,7 +56,7 @@ export default {
         },
 
         editUrl(resource) {
-            return this.detailUrl(resource) + '/edit?' + toQueryString(this.query)
+            return this.detailUrl(resource) + '/edit'
         },
 
         async onDelete(resource) {

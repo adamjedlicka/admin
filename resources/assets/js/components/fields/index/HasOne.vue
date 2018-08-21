@@ -1,5 +1,5 @@
 <template>
-    <span>{{ field.meta.value.title }}</span>
+    <span>{{ field.value.title }}</span>
 </template>
 
 <script>

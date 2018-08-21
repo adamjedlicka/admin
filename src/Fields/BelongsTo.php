@@ -26,12 +26,17 @@ class BelongsTo extends Field
      */
     protected $foreignKey;
 
-    protected function prepare(Resource $resource, Model $model)
+    public function boot(Resource $resource)
     {
+        $modelName = $resource->model();
+        $model = new $modelName;
+
         $this->relationship = $model->{$this->name}();
+
         $this->foreignKey = $this->relationship->getForeignKey();
+
         $this->relatedResource = ResourceService::getResourceFromModel(
-            $model->{$this->name} ?? $this->relationship->getRelated()
+            $this->relationship->getRelated()
         );
     }
 
@@ -45,9 +50,9 @@ class BelongsTo extends Field
         $model->setAttribute($this->foreignKey, $value);
     }
 
-    protected function metaInfo(Resource $resource)
+    public function meta(Resource $resource)
     {
-        $name = Str::lower($this->relatedResource->name());
+        $name = $this->relatedResource->name();
 
         return [
             'name' => $name,
@@ -55,21 +60,24 @@ class BelongsTo extends Field
         ];
     }
 
-    protected function metaValue(Resource $resource, Model $model)
+    public function value(Resource $resource, Model $model)
     {
-        return [
-            'title' => $this->relatedResource->title(),
-            'key' => $this->relatedResource->getModel()->getKey(),
-        ];
-    }
+        $relatedModel = $model->{$this->name};
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
 
-    protected function resolveName(string $displayName) : string
-    {
-        return Str::camel($displayName);
+        return [
+            'title' => $relatedResource->title(),
+            'key' => $relatedModel->getKey(),
+        ];
     }
 
     public function getForeignKey()
     {
         return $this->foreignKey;
+    }
+
+    protected function resolveName(string $displayName) : string
+    {
+        return Str::camel($displayName);
     }
 }

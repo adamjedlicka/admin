@@ -113,10 +113,10 @@ abstract class Resource
             })
             ->flatten()
             ->filter(function (Field $field) use ($view) {
-                return $view == null ? : $field->isVisibleOn($view);
+                return $view === null ? : $field->isVisibleOn($view);
             })
             ->each(function (Field $field) {
-                $field->compute($this);
+                $field->boot($this);
             })
             ->values();
     }

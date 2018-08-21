@@ -4,7 +4,6 @@ namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -74,18 +73,11 @@ abstract class Field implements Arrayable
     protected $updateRules = [];
 
     /**
-     * Meta attributes
+     * Optional array of values that gets send to API
      *
      * @var array
      */
-    protected $meta = [];
-
-    /**
-     * Value of the field
-     *
-     * @var mixed
-     */
-    protected $value = null;
+    protected $export = [];
 
     /**
      * Constructor. Use static Field::make method instead.
@@ -123,62 +115,13 @@ abstract class Field implements Arrayable
     }
 
     /**
-     * Computes value and metadata of the field
+     * Sets up the field
      *
      * @param \AdamJedlicka\Admin\Resource $resource
-     * @return self
      */
-    public function compute(Resource $resource) : self
+    public function boot(Resource $resource)
     {
-        $modeName = $resource->model();
-        $model = $resource->getModel() ?? new $modeName;
 
-        $this->prepare($resource, $model);
-
-        if ($info = $this->metaInfo($resource)) {
-            $this->meta['info'] = $info;
-        }
-
-        if ($resource->getModel()) {
-            $this->value = $this->retrieve($resource->getModel());
-
-            if ($value = $this->metaValue($resource, $resource->getModel())) {
-                $this->meta['value'] = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Prepare the field for computations
-     */
-    protected function prepare(Resource $resource, Model $model)
-    {
-        //
-    }
-
-    /**
-     * Meta attributes for the field info
-     *
-     * @param \AdamJedlicka\Admin\Resource $resource
-     * @return mixed
-     */
-    protected function metaInfo(Resource $resource)
-    {
-        return null;
-    }
-
-    /**
-     * Meta attributes for the field value
-     *
-     * @param \AdamJedlicka\Admin\Resource $resource
-     * @param \Illuminate\Database\Eloquent\Model $model
-     * @return mixed
-     */
-    protected function metaValue(Resource $resource, Model $model)
-    {
-        return null;
     }
 
     /**
@@ -319,8 +262,15 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    public function export(array $export) : self
+    {
+        $this->export = array_merge($this->export, $export);
+
+        return $this;
+    }
+
     /**
-     * Retrieves the value
+     * Retrieves the model from the database
      *
      * @param Model $model Coresponding model
      * @return mixed
@@ -339,7 +289,7 @@ abstract class Field implements Arrayable
     }
 
     /**
-     * Persists the value to model
+     * Persists the model to the databse
      *
      * @param Model $model Coresponding model
      * @param mixed $value Value to be persisted
@@ -347,6 +297,29 @@ abstract class Field implements Arrayable
     public function persist(Model $model, $value)
     {
         $model->setAttribute($this->getName(), $value);
+    }
+
+    /**
+     * Returns custom meta information about the field
+     *
+     * @param \AdamJedlicka\Admin\Resource $resource
+     * @return mixed
+     */
+    public function meta(Resource $resource)
+    {
+        return null;
+    }
+
+    /**
+     * Returns custom value that can be used on the frontend
+     *
+     * @param \AdamJedlicka\Admin\Resource $resource
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return mixed
+     */
+    public function value(Resource $resource, Model $model)
+    {
+        return null;
     }
 
     /**
@@ -411,23 +384,13 @@ abstract class Field implements Arrayable
     }
 
     /**
-     * Meta getter
+     * Visible on getter
      *
-     * @return mixed
+     * @return array
      */
-    public function getMeta() : array
+    public function getVisibleOn() : array
     {
-        return $this->meta;
-    }
-
-    /**
-     * Value getter
-     *
-     * @return mixed
-     */
-    public function getValue()
-    {
-        return $this->value;
+        return $this->visibleOn;
     }
 
     /**
@@ -473,17 +436,13 @@ abstract class Field implements Arrayable
 
     public function toArray()
     {
-        return [
+        return array_merge([
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
-            'visibleOn' => $this->visibleOn,
+            'visibleOn' => $this->getVisibleOn(),
             'isSortable' => $this->isSortable(),
             'isPanel' => $this->isPanel(),
-
-            // Computed properties
-            'meta' => $this->getMeta(),
-            'value' => $this->getValue(),
-        ];
+        ], $this->export);
     }
 }

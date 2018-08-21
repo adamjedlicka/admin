@@ -74,13 +74,33 @@ class ResourceSerializer implements Arrayable, JsonSerializable
         return $this;
     }
 
-    protected function fields()
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    protected function fields() : Collection
     {
         return $this->resource->getFields($this->view)
             ->filter(function (Field $field) {
                 return !in_array($field->getName(), $this->exceptFields);
             })
+            ->each(function (Field $field) {
+                $field->export([
+                    'meta' => $field->meta($this->resource),
+                    'value' => $field->value($this->resource, $this->resource->getModel()),
+                ]);
+            })
             ->values();
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    protected function model() : Collection
+    {
+        return $this->fields()
+            ->mapWithKeys(function (Field $field) {
+                return [$field->getName() => $field->retrieve($this->resource->getModel())];
+            });
     }
 
     public function toArray()
@@ -90,6 +110,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
             'title' => $this->resource->title(),
             'key' => $this->resource->getModel()->getKey(),
             'fields' => $this->fields(),
+            'model' => $this->model(),
         ];
     }
 

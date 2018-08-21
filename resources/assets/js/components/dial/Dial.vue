@@ -12,7 +12,6 @@
 
                 <DialBody
                     :resources="resources"
-                    :query="query"
                     @update="fetchData" />
 
             </table>
@@ -37,7 +36,6 @@ export default {
     props: {
         prefix: String,
         source: String,
-        query: Object,
     },
 
     data() {
@@ -49,7 +47,7 @@ export default {
 
     computed: {
         fields() {
-            return this.index.fields.filter(field => field.visibleOn.includes('index'))
+            return this.index.fields
         },
 
         resources() {
