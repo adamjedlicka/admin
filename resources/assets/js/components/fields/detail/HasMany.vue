@@ -41,8 +41,8 @@ export default {
         },
 
         createNew() {
-            let resource = this.field.meta.info.relatedName.toLowerCase()
-            let field = this.field.meta.info.relatedFieldName
+            let resource = this.field.meta.relatedName.toLowerCase()
+            let field = this.field.meta.relatedFieldName
             let key = this.$route.params.key
             let previous = this.$route.fullPath
 
@@ -52,7 +52,7 @@ export default {
         query() {
             return {
                 previous: this.$route.fullPath,
-                [`via.${this.field.meta.info.relatedFieldName}`]: this.$route.params.key,
+                [`via.${this.field.meta.relatedFieldName}`]: this.$route.params.key,
             }
         }
     }

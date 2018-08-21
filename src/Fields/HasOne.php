@@ -86,7 +86,7 @@ class HasOne extends Field
 
         return [
             'title' => $relatedResource->title(),
-            'key' => $relatedModel->title(),
+            'key' => $relatedModel->getKey(),
         ];
     }
 

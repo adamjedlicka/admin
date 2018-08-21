@@ -21,7 +21,8 @@
 
         <component v-for="field in panels" :key="field.name"
             :is="`${field.type}-detail-field`"
-            :field="field" />
+            :field="field"
+            :model="model[field.name]" />
 
     </div>
 </template>
@@ -31,7 +32,7 @@ export default {
     data() {
         return {
             resource: null,
-            model: {},
+            model: null,
         }
     },
 
@@ -68,8 +69,7 @@ export default {
             let key = this.$route.params.key
 
             this.resource = await this.$get(`/api/resources/${resourceName}/${key}`)
-
-            this.resource.fields.forEach(field => this.model[field.name] = field.value || null)
+            this.model = this.resource.model
         },
 
         async onDelete() {

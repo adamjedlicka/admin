@@ -10,7 +10,7 @@
 
         <div class="panel">
 
-            <Field v-for="(field, i) in field.meta.info.fields" :key="i"
+            <Field v-for="(field, i) in field.meta.fields" :key="i"
                 :field="field"
                 action="detail" />
 

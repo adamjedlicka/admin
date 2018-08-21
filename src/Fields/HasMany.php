@@ -28,8 +28,11 @@ class HasMany extends Field
      */
     protected $relatedField;
 
-    protected function prepare(Resource $resource, Model $model)
+    public function boot(Resource $resource)
     {
+        $modelName = $resource->model();
+        $model = new $modelName;
+
         $this->relationship = $model->{$this->name}();
 
         $this->relatedResource = ResourceService::getResourceFromModel(
@@ -46,7 +49,7 @@ class HasMany extends Field
             ->first();
     }
 
-    protected function metaInfo(Resource $resource)
+    public function meta(Resource $resource)
     {
         return [
             'relatedName' => $this->relatedResource->name(),
