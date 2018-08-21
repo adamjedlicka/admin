@@ -73,6 +73,13 @@ abstract class Field implements Arrayable
     protected $updateRules = [];
 
     /**
+     * List of relationships to eager load
+     *
+     * @var array
+     */
+    protected $load = [];
+
+    /**
      * Optional array of values that gets send to API
      *
      * @var array
@@ -228,6 +235,7 @@ abstract class Field implements Arrayable
     /**
      * Set validation rules
      *
+     * @param array $rules
      * @return self
      */
     public function rules(...$rules) : self
@@ -241,6 +249,7 @@ abstract class Field implements Arrayable
     /**
      * Set validation rules for model creation
      *
+     * @param array $rules
      * @return self
      */
     public function creationRules(...$rules) : self
@@ -253,6 +262,7 @@ abstract class Field implements Arrayable
     /**
      * Set validation rules for model update
      *
+     * @param array $rules
      * @return self
      */
     public function updateRules(...$rules) : self
@@ -262,6 +272,19 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    public function load(...$load) : self
+    {
+        $this->load = array_merge($this->load, $load);
+
+        return $this;
+    }
+
+    /**
+     * Set extra values to be exported to API
+     *
+     * @param array $export
+     * @return self
+     */
     public function export(array $export) : self
     {
         $this->export = array_merge($this->export, $export);

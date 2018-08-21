@@ -12,6 +12,7 @@
 
             <Field v-for="(field, i) in field.meta.fields" :key="i"
                 :field="field"
+                :model="model[field.name]"
                 action="detail" />
 
         </div>
@@ -23,6 +24,7 @@
 export default {
     props: {
         field: Object,
+        model: Object,
     },
 }
 </script>

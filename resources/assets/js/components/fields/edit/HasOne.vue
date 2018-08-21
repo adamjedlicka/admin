@@ -12,6 +12,7 @@
 
             <Field v-for="(field, i) in field.meta.fields" :key="i"
                 :field="field"
+                :model="model ? model[field.name] : null"
                 :errors="errorsOf(field.name)"
                 action="edit"
                 @input="onInput" />

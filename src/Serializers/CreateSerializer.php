@@ -5,6 +5,8 @@ namespace AdamJedlicka\Admin\Serializers;
 use JsonSerializable;
 use AdamJedlicka\Admin\Model;
 use AdamJedlicka\Admin\Resource;
+use Illuminate\Support\Collection;
+use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Contracts\Support\Arrayable;
 
 class CreateSerializer implements Arrayable, JsonSerializable
@@ -19,11 +21,22 @@ class CreateSerializer implements Arrayable, JsonSerializable
         $this->resource = $resource;
     }
 
+    public function fields() : Collection
+    {
+        return $this->resource->getFields('edit')
+            ->each(function (Field $field) {
+                $field->export([
+                    'meta' => $field->meta($this->resource),
+                ]);
+            })
+            ->values();
+    }
+
     public function toArray()
     {
         return [
             'name' => $this->resource->name(),
-            'fields' => $this->resource->getFields('edit'),
+            'fields' => $this->fields(),
         ];
     }
 
