@@ -44,9 +44,8 @@ export default {
             let resource = this.field.meta.relatedName.toLowerCase()
             let field = this.field.meta.relatedFieldName
             let key = this.$route.params.key
-            let previous = this.$route.fullPath
 
-            return `/resources/${resource}/create?via.${field}=${key}&previous=${previous}`
+            return `/resources/${resource}/create?via.${field}=${key}`
         },
 
         query() {
