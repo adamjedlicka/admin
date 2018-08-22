@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Facades\ResourceService;
 

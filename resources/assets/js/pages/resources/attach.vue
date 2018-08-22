@@ -5,12 +5,19 @@
             <a class="btn btn-green" @click="attach">Attach</a>
         </div>
 
-        <Field v-if="relatedResource" slot="body"
-            :field="field"
-            :model="key"
-            action="edit"
-            @input="onInput" />
+        <div slot="body">
+            <Field v-if="relatedResource"
+                :field="field"
+                :model="key"
+                action="edit"
+                @input="onKeyInput" />
 
+            <Field v-for="field in fields" :key="field.name"
+                :field="field"
+                :model="pivot[field.name]"
+                action="edit"
+                @input="onInput" />
+        </div>
     </Panel>
 </template>
 
@@ -19,8 +26,10 @@ export default {
     data() {
         return {
             relatedResource: null,
+            fields: [],
 
             key: null,
+            pivot: {},
         }
     },
 
@@ -49,11 +58,12 @@ export default {
         let response = await this.$get(this.source)
 
         this.relatedResource = response.relatedResource
+        this.fields = response.fields
     },
 
     methods: {
         async attach() {
-            let response = await this.$post(`${this.source}/${this.key}`)
+            let response = await this.$post(`${this.source}/${this.key}`, this.pivot)
 
             if (response.status == 'success') {
                 let resource = this.$route.params.resource
@@ -63,8 +73,12 @@ export default {
             }
         },
 
-        onInput(name, value) {
+        onKeyInput(name, value) {
             this.key = value
+        },
+
+        onInput(name, value) {
+            this.pivot[name] = value
         }
     }
 }

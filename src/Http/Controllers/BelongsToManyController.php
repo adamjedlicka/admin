@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\Facades\ResourceService;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 
@@ -32,6 +33,10 @@ class BelongsToManyController extends Controller
 
         return [
             'relatedResource' => $relatedResource->name(),
+            'fields' => collect($resource->getField($relationship)->getFields())
+                ->map(function (Field $field) {
+                    return $field->toArray();
+                }),
         ];
     }
 
@@ -40,7 +45,7 @@ class BelongsToManyController extends Controller
         $resource = ResourceService::getResourceFromname($name);
         $model = $resource->model()::findOrFail($key);
 
-        $model->{$relationship}()->attach($relatedKey);
+        $model->{$relationship}()->attach($relatedKey, request()->all());
 
         return response()->json([
             'status' => 'success',
