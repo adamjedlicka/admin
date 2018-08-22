@@ -57,10 +57,10 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     /**
      * Export extra fields. For example for pivot table
      *
-     * @param array $extraFields
+     * @param \Illuminate\Support\Collection|array $extraFields
      * @return self
      */
-    public function extraFields(array $extraFields) : self
+    public function extraFields($extraFields) : self
     {
         $this->extraFields = $extraFields;
 
@@ -103,6 +103,9 @@ class ResourceSerializer implements Arrayable, JsonSerializable
                 return !in_array($field->getName(), $this->exceptFields);
             })
             ->merge($this->extraFields)
+            ->each(function ($field) {
+                info('field: ', [$field]);
+            })
             ->each(function (Field $field) {
                 $field->export([
                     'meta' => $field->meta($this->resource),

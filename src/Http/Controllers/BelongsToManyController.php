@@ -5,21 +5,15 @@ namespace AdamJedlicka\Admin\Http\Controllers;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\Facades\ResourceService;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
+use AdamJedlicka\Admin\Serializers\PivotSerializer;
 
 class BelongsToManyController extends Controller
 {
     public function index(string $name, $key, string $relationship)
     {
-        $resource = ResourceService::getResourceFromname($name);
-        $model = $resource->model()::findOrFail($key);
+        $resource = ResourceService::getResourceFromName($name);
 
-        $query = $model->{$relationship}();
-        $relatedResource = ResourceService::getResourceFromModel(
-            $query->getRelated()
-        );
-
-        return (new IndexSerializer($relatedResource, $query))
-            ->extraFields($resource->getField($relationship)->getFields());
+        return (new PivotSerializer($resource, $key, $relationship));
     }
 
     public function create(string $name, $key, string $relationship)

@@ -89,7 +89,7 @@ class IndexSerializer implements Arrayable, JsonSerializable
         );
     }
 
-    private function fields()
+    protected function fields()
     {
         return $this->resource->getFields('index')
             ->filter(function (Field $field) {
