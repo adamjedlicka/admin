@@ -7,9 +7,9 @@
             </div>
 
             <div>
-                <a @click="attach" class="btn btn-blue">
+                <router-link :to="attachUrl" class="btn btn-blue">
                     Attach
-                </a>
+                </router-link>
             </div>
         </div>
 
@@ -20,8 +20,6 @@
                 :prefix="field.name" />
 
         </div>
-
-        <AttachModal ref="attachModal" />
 
     </div>
 </template>
@@ -40,12 +38,14 @@ export default {
 
             return `/api/resources/${resource}/${key}/belongsToMany/${ofWhat}`
         },
-    },
 
-    methods: {
-        attach() {
-            this.$refs.attachModal.show()
+        attachUrl() {
+            let resource = this.$route.params.resource
+            let key = this.$route.params.key
+            let what = this.field.name
+
+            return `/resources/${resource}/${key}/attach/${what}`
         }
-    }
+    },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="field.visibleOn.includes(action)"
+    <div v-if="field"
         class="flex p-4">
 
         <div class="text-md text-grey-dark font-bold w-1/6">
