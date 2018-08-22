@@ -292,6 +292,13 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    public function options($options) : self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
     /**
      * Retrieves the model from the database
      *

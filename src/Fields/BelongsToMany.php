@@ -53,6 +53,12 @@ class BelongsToMany extends Field
     {
         $this->fields = $fields;
 
+        foreach ($this->fields as $field) {
+            $field->options(function ($model) use ($field) {
+                return $model->pivot->{$field->getName()};
+            });
+        }
+
         return $this;
     }
 
