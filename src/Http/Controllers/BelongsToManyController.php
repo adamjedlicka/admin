@@ -34,16 +34,27 @@ class BelongsToManyController extends Controller
         ];
     }
 
-    public function store(string $name, $key, string $relationship)
+    public function attach(string $name, $key, string $relationship, $relatedKey)
     {
         $resource = ResourceService::getResourceFromname($name);
         $model = $resource->model()::findOrFail($key);
 
-        $response = $model->{$relationship}()->attach(request('key'));
+        $model->{$relationship}()->attach($relatedKey);
 
         return response()->json([
             'status' => 'success',
-            'response' => $response,
+        ]);
+    }
+
+    public function detach(string $name, $key, string $relationship, $relatedKey)
+    {
+        $resource = ResourceService::getResourceFromname($name);
+        $model = $resource->model()::findOrFail($key);
+
+        $model->{$relationship}()->detach($relatedKey);
+
+        return response()->json([
+            'status' => 'success',
         ]);
     }
 }

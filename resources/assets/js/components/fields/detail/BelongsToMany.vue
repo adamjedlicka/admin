@@ -16,8 +16,25 @@
         <div class="panel">
 
             <Dial
+                ref="dial"
                 :source="source"
-                :prefix="field.name" />
+                :prefix="field.name" >
+
+                <template slot="buttons" slot-scope="scope">
+                    <router-link :to="detailUrl(scope.resource)"
+                        title="Detail"
+                        class="text-grey hover:text-black cursor-pointer" >
+                        <i class="py-4 px-1 far fa-eye"></i>
+                    </router-link>
+
+                    <span class="text-grey hover:text-red cursor-pointer"
+                        title="Detach"
+                        @click="onDetach(scope.resource)" >
+                        <i class="py-4 px-1 fas fa-unlink"></i>
+                    </span>
+                </template>
+
+            </Dial>
 
         </div>
 
@@ -31,21 +48,36 @@ export default {
     },
 
     computed: {
-        source() {
-            let resource = this.$route.params.resource
-            let key = this.$route.params.key
-            let ofWhat = this.field.name
+        resource() { return this.$route.params.resource },
+        key() { return this.$route.params.key },
+        relationship() { return this.field.name },
 
-            return `/api/resources/${resource}/${key}/belongsToMany/${ofWhat}`
+        source() {
+            return `/api/resources/${this.resource}/${this.key}/belongsToMany/${this.relationship}`
         },
 
         attachUrl() {
-            let resource = this.$route.params.resource
-            let key = this.$route.params.key
-            let what = this.field.name
-
-            return `/resources/${resource}/${key}/attach/${what}`
+            return `/resources/${this.resource}/${this.key}/attach/${this.relationship}`
         }
     },
+
+    methods: {
+        detailUrl(resource) {
+            let resourceName = resource.name
+            let id = resource.key
+
+            return `/resources/${resourceName}/${id}`
+        },
+
+        async onDetach(resource) {
+            let ok = await modalConfirm('Detach', 'Detach this record?', true)
+            if (!ok) return
+
+            let response = await this.$delete(`/api/resources/${this.resource}/${this.key}/belongsToMany/${this.relationship}/detach/${resource.key}`)
+            if (response.status == 'success') {
+                this.$refs.dial.fetchData()
+            }
+        }
+    }
 }
 </script>

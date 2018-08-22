@@ -53,9 +53,7 @@ export default {
 
     methods: {
         async attach() {
-            let response = await this.$post(this.source, {
-                key: this.key,
-            })
+            let response = await this.$post(`${this.source}/${this.key}`)
 
             if (response.status == 'success') {
                 let resource = this.$route.params.resource
