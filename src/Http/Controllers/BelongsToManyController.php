@@ -17,7 +17,8 @@ class BelongsToManyController extends Controller
             $query->getRelated()
         );
 
-        return (new IndexSerializer($relatedResource, $query));
+        return (new IndexSerializer($relatedResource, $query))
+            ->extraFields($resource->getField($relationship)->getFields());
     }
 
     public function create(string $name, $key, string $relationship)

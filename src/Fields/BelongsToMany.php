@@ -23,6 +23,11 @@ class BelongsToMany extends Field
      */
     protected $relatedResource;
 
+    /**
+     * @var array
+     */
+    protected $fields = [];
+
     protected function prepare(Resource $resource, Model $model)
     {
         $this->relationship = $model->{$this->name}();
@@ -42,5 +47,17 @@ class BelongsToMany extends Field
     protected function resolveName(string $displayName) : string
     {
         return Str::camel($displayName);
+    }
+
+    public function fields(array $fields) : self
+    {
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    public function getFields() : array
+    {
+        return $this->fields;
     }
 }

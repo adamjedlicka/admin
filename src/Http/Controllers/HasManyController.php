@@ -24,6 +24,6 @@ class HasManyController extends Controller
             ->getRelatedField()->getName();
 
         return (new IndexSerializer($relatedResource, $query))
-            ->exceptFields($relatedFieldname);
+            ->exceptFields([$relatedFieldname]);
     }
 }

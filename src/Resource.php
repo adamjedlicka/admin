@@ -104,13 +104,6 @@ abstract class Resource
     public function getFields(? string $view = null) : Collection
     {
         return collect($this->fields())
-            ->map(function ($field) {
-                if ($field instanceof Panel) {
-                    return $field->fields();
-                } else {
-                    return $field;
-                }
-            })
             ->flatten()
             ->filter(function (Field $field) use ($view) {
                 return $view === null ? : $field->isVisibleOn($view);

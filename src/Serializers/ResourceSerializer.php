@@ -29,6 +29,11 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     /**
      * @var array
      */
+    protected $extraFields = [];
+
+    /**
+     * @var array
+     */
     protected $exceptFields = [];
 
     public function __construct(Resource $resource, Model $model)
@@ -50,11 +55,25 @@ class ResourceSerializer implements Arrayable, JsonSerializable
     }
 
     /**
+     * Export extra fields. For example for pivot table
+     *
+     * @param array $extraFields
+     * @return self
+     */
+    public function extraFields(array $extraFields) : self
+    {
+        $this->extraFields = $extraFields;
+
+        return $this;
+    }
+
+    /**
      * Removes certain fields from exporting
      *
-     * @param mixed $exceptFields
+     * @param array $exceptFields
+     * @return self
      */
-    public function exceptFields(...$exceptFields) : self
+    public function exceptFields(array $exceptFields) : self
     {
         $this->exceptFields = $exceptFields;
 
@@ -83,6 +102,7 @@ class ResourceSerializer implements Arrayable, JsonSerializable
             ->filter(function (Field $field) {
                 return !in_array($field->getName(), $this->exceptFields);
             })
+            ->merge($this->extraFields)
             ->each(function (Field $field) {
                 $field->export([
                     'meta' => $field->meta($this->resource),

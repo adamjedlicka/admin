@@ -34,6 +34,11 @@ class IndexSerializer implements Arrayable, JsonSerializable
     /**
      * @var array
      */
+    protected $extraFields = [];
+
+    /**
+     * @var array
+     */
     protected $exceptFields = [];
 
     public function __construct(Resource $resource, $indexQuery = null)
@@ -42,7 +47,14 @@ class IndexSerializer implements Arrayable, JsonSerializable
         $this->indexQuery = $indexQuery ?? $this->resource->indexQuery();
     }
 
-    public function exceptFields(...$exceptFields) : self
+    public function extraFields(array $extraFields) : self
+    {
+        $this->extraFields = $extraFields;
+
+        return $this;
+    }
+
+    public function exceptFields(array $exceptFields) : self
     {
         $this->exceptFields = $exceptFields;
 
@@ -63,7 +75,8 @@ class IndexSerializer implements Arrayable, JsonSerializable
 
         foreach ($result->items() as $model) {
             $this->resources[] = (new ResourceSerializer($this->resource, $model))
-                ->exceptFields(...$this->exceptFields)
+                ->exceptFields($this->exceptFields)
+                ->extraFields($this->extraFields)
                 ->view('index');
         }
     }
@@ -82,6 +95,7 @@ class IndexSerializer implements Arrayable, JsonSerializable
             ->filter(function (Field $field) {
                 return !in_array($field->getName(), $this->exceptFields);
             })
+            ->merge($this->extraFields)
             ->values();
     }
 
