@@ -12,7 +12,7 @@
 
             <Field v-for="(field, i) in field.meta.fields" :key="i"
                 :field="field"
-                :model="model[field.name]"
+                :model="model ? model[field.name] : null"
                 action="detail" />
 
         </div>

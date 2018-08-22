@@ -82,6 +82,9 @@ class HasOne extends Field
     public function value(Resource $resource, Model $model)
     {
         $relatedModel = $model->{$this->getName()};
+
+        if (!$relatedModel) return [];
+
         $relatedResource = ResourceService::getResourceFromModel($model->{$this->getName()});
 
         return [
