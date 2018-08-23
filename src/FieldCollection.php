@@ -6,6 +6,11 @@ use Illuminate\Support\Collection;
 
 class FieldCollection extends Collection
 {
+    /**
+     * Returns array of field names
+     *
+     * @return array
+     */
     public function names()
     {
         $names = [];
