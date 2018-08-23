@@ -40,6 +40,32 @@ class Dial implements Responsable
         return $this;
     }
 
+    /**
+     * Sets the template for generation of editUrl
+     *
+     * @param string $editUrl
+     * @return self
+     */
+    public function editUrl(string $editUrl) : self
+    {
+        $this->links['edit'] = $editUrl;
+
+        return $this;
+    }
+
+    /**
+     * Sets the template for generation of deleteUrl
+     *
+     * @param string $deleteUrl
+     * @return self
+     */
+    public function deleteUrl(string $deleteUrl) : self
+    {
+        $this->links['delete'] = $deleteUrl;
+
+        return $this;
+    }
+
     protected function data()
     {
         return $this->paginated();

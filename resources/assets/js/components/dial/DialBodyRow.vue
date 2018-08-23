@@ -16,11 +16,25 @@
 
         <!-- CRUD buttons -->
         <td class="text-right pr-2 whitespace-no-wrap">
+
             <router-link v-if="links.detail" :to="detailUrl"
                 title="Detail"
                 class="text-grey hover:text-black cursor-pointer" >
                 <i class="py-4 px-1 far fa-eye"></i>
             </router-link>
+
+            <router-link v-if="links.edit" :to="editUrl"
+                title="Detail"
+                class="text-grey hover:text-black cursor-pointer" >
+                <i class="py-4 px-1 far fa-edit"></i>
+            </router-link>
+
+            <a v-if="links.edit" @click="onDelete"
+                title="Detail"
+                class="text-grey hover:text-red cursor-pointer" >
+                <i class="py-4 px-1 far fa-trash-alt"></i>
+            </a>
+
         </td>
 
     </tr>
@@ -40,6 +54,26 @@ export default {
         detailUrl() {
             let compiled = template(this.links.detail)
             return compiled(this.row)
+        },
+
+        editUrl() {
+            let compiled = template(this.links.edit)
+            return compiled(this.row)
+        },
+    },
+
+    methods: {
+        async onDelete() {
+            let ok = await modalConfirm('Delete', 'Delete this record?', true)
+            if (!ok) return
+
+            let compiled = template(this.links.delete)
+            let deleteUrl = compiled(this.row)
+
+            let response = await this.$delete(deleteUrl)
+            if (response.status == 'success') {
+                this.$emit('update')
+            }
         }
     }
 }

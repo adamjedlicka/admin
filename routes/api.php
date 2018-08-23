@@ -36,7 +36,7 @@ Route::group([
     Route::put('/resources/{name}/{key}', 'UpdateController')
         ->name('resources.update');
 
-    Route::delete('/resources/{name}/{key}', 'ResourceController@delete')
+    Route::delete('/resources/{name}/{key}', 'DeleteController')
         ->name('resources.delete');
 
     /**
