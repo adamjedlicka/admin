@@ -44,11 +44,11 @@
 import template from 'lodash/template'
 
 export default {
-    props: {
-        fields: Array,
-        row: Object,
-        links: Object,
-    },
+    props: [
+        'fields',
+        'row',
+        'links',
+    ],
 
     computed: {
         detailUrl() {

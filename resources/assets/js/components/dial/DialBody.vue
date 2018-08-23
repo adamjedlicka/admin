@@ -17,11 +17,11 @@
 import DialBodyRow from './DialBodyRow'
 
 export default {
-    props: {
-        fields: Array,
-        rows: Array,
-        links: Object,
-    },
+    props: [
+        'fields',
+        'rows',
+        'links',
+    ],
 
     components: {
         DialBodyRow,

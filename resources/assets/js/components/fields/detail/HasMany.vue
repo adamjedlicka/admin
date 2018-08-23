@@ -1,28 +1,11 @@
 <template>
-    <div class="p-4">
+    <Panel :displayName="field.displayName">
 
-        <div class="flex justify-between pb-4">
-            <div>
-                <h2 class="h2">{{ field.displayName }}</h2>
-            </div>
+        <template slot="body">
+            <Dial :source="source" :prefix="field.name" />
+        </template>
 
-            <div>
-                <router-link :to="createNew" class="btn btn-blue">
-                    Create
-                </router-link>
-            </div>
-        </div>
-
-        <div class="panel">
-
-            <Dial
-                :source="source"
-                :prefix="field.name"
-                :query="query" />
-
-        </div>
-
-    </div>
+    </Panel>
 </template>
 
 <script>
@@ -35,24 +18,9 @@ export default {
         source() {
             let resource = this.$route.params.resource
             let key = this.$route.params.key
-            let ofWhat = this.field.name
+            let relationship = this.field.name
 
-            return `/api/resources/${resource}/${key}/hasMany/${ofWhat}`
-        },
-
-        createNew() {
-            let resource = this.field.meta.relatedName.toLowerCase()
-            let field = this.field.meta.relatedFieldName
-            let key = this.$route.params.key
-
-            return `/resources/${resource}/create?via.${field}=${key}`
-        },
-
-        query() {
-            return {
-                previous: this.$route.fullPath,
-                [`via.${this.field.meta.relatedFieldName}`]: this.$route.params.key,
-            }
+            return `/api/relationships/${resource}/${key}/hasMany/${relationship}`
         }
     }
 }

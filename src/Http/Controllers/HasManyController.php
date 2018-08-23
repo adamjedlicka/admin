@@ -2,6 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Dial;
 use AdamJedlicka\Admin\Facades\ResourceService;
 use AdamJedlicka\Admin\Serializers\IndexSerializer;
 
@@ -16,14 +17,6 @@ class HasManyController extends Controller
             $query->getRelated()
         );
 
-        /**
-         * We don't want to show related field because it always
-         * contains the same value - title of the current model.
-         */
-        $relatedFieldname = $resource->getField($relationship)
-            ->getRelatedField()->getName();
-
-        return (new IndexSerializer($relatedResource, $query))
-            ->exceptFields([$relatedFieldname]);
+        return (new Dial($relatedResource->getFields('index'), $query));
     }
 }

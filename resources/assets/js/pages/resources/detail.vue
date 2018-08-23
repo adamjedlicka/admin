@@ -21,7 +21,7 @@
 
             <template slot="body">
 
-                <Field v-for="field in detail.fields" :key="field.name"
+                <Field v-for="field in fields" :key="field.name"
                     v-model="detail.data[field.name]"
                     :field="field"
                     action="detail" />
@@ -29,6 +29,11 @@
             </template>
 
         </Panel>
+
+        <component v-for="panel in panels" :key="panel.name"
+            :is="`${panel.type}-detail-field`"
+            :v-model="detail.data[panel.name]"
+            :field="panel" />
 
     </div>
 </template>
@@ -39,6 +44,16 @@ export default {
         return {
             detail: null,
         }
+    },
+
+    computed: {
+        fields() {
+            return this.detail.fields.filter(field => field.isPanel == false)
+        },
+
+        panels() {
+            return this.detail.fields.filter(field => field.isPanel == true)
+        },
     },
 
     mounted() {

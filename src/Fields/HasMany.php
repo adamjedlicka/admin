@@ -13,57 +13,22 @@ class HasMany extends Field
 
     protected $panel = true;
 
-    /**
-     * @var \AdamJedlicka\Admin\Fields\HasMany
-     */
-    protected $relationship;
-
-    /**
-     * @var \AdamJedlicka\Admin\Resource
-     */
-    protected $relatedResource;
-
-    /**
-     * @var \AdamJedlicka\Admin\Fields\BelongsTo
-     */
-    protected $relatedField;
-
-    public function boot(Resource $resource)
-    {
-        $modelName = $resource->model();
-        $model = new $modelName;
-
-        $this->relationship = $model->{$this->name}();
-
-        $this->relatedResource = ResourceService::getResourceFromModel(
-            $this->relationship->getRelated()
-        );
-
-        $this->relatedField = $this->relatedResource->getFields()
-            ->filter(function (Field $field) {
-                return $field instanceof BelongsTo;
-            })
-            ->filter(function (BelongsTo $field) {
-                return $this->relationship->getForeignKeyName() == $field->getForeignKey();
-            })
-            ->first();
-    }
-
     public function meta(Resource $resource)
     {
+        $model = $resource->model()::make();
+        $relationship = $model->{$this->getName()}();
+
+        $relatedModel = $relationship->getRelated();
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+
         return [
-            'relatedName' => $this->relatedResource->name(),
-            'relatedFieldName' => $this->relatedField->getName(),
+            'relatedName' => $relatedResource->name(),
+            // 'relatedFieldName' => $relatedField->getName(),
         ];
     }
 
     protected function resolveName(string $displayName) : string
     {
         return Str::camel($displayName);
-    }
-
-    public function getRelatedField() : Field
-    {
-        return $this->relatedField;
     }
 }
