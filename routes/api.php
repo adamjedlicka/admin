@@ -24,7 +24,7 @@ Route::group([
     Route::get('/resources/{resource}/create', 'CreateController')
         ->name('resources.create');
 
-    Route::post('/resources/{name}', 'ResourceController@store')
+    Route::post('/resources/{name}', 'StoreController')
         ->name('resources.store');
 
     Route::get('/resources/{name}/{key}', 'DetailController')
