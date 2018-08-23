@@ -27,7 +27,7 @@ Route::group([
     Route::post('/resources/{name}', 'ResourceController@store')
         ->name('resources.store');
 
-    Route::get('/resources/{name}/{key}', 'ResourceController@detail')
+    Route::get('/resources/{name}/{key}', 'DetailController')
         ->name('resources.detail');
 
     Route::get('/resources/{name}/{key}/edit', 'ResourceController@edit')

@@ -1,28 +1,28 @@
 <template>
-    <div v-if="resource">
+    <div v-if="detail">
 
-        <Panel
-            :displayName="resource.title"
-            :fields="fields"
-            :model="model"
-            action="detail" >
+        <Panel :displayName="detail.title" >
 
-            <div slot="buttons" class="buttons">
-                <a @click="onDelete" class="btn btn-red">
-                    Delete
-                </a>
+            <template slot="buttons">
 
-                <router-link :to="editUrl" class="btn btn-blue">
+                <router-link v-if="detail.links.edit"
+                    :to="detail.links.edit"
+                    class="btn btn-blue" >
                     Edit
                 </router-link>
-            </div>
+
+            </template>
+
+            <template slot="body">
+
+                <Field v-for="field in detail.fields" :key="field.name"
+                    v-model="detail.data[field.name]"
+                    :field="field"
+                    action="detail" />
+
+            </template>
 
         </Panel>
-
-        <component v-for="field in panels" :key="field.name"
-            :is="`${field.type}-detail-field`"
-            :field="field"
-            :model="model[field.name]" />
 
     </div>
 </template>
@@ -31,32 +31,8 @@
 export default {
     data() {
         return {
-            resource: null,
-            model: null,
+            detail: null,
         }
-    },
-
-    computed: {
-        indexUrl() {
-            let resourceName = this.$route.params.resource
-
-            return `/resources/${resourceName}`
-        },
-
-        editUrl() {
-            let resourceName = this.$route.params.resource
-            let key = this.$route.params.key
-
-            return `/resources/${resourceName}/${key}/edit`
-        },
-
-        fields() {
-            return this.resource.fields.filter(field => !field.isPanel)
-        },
-
-        panels() {
-            return this.resource.fields.filter(field => field.isPanel)
-        },
     },
 
     mounted() {
@@ -68,8 +44,7 @@ export default {
             let resourceName = this.$route.params.resource
             let key = this.$route.params.key
 
-            this.resource = await this.$get(`/api/resources/${resourceName}/${key}`)
-            this.model = this.resource.model
+            this.detail = await this.$get(`/api/resources/${resourceName}/${key}`)
         },
 
         async onDelete() {
