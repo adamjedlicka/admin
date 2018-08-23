@@ -18,6 +18,7 @@
                 <Field v-for="field in edit.fields" :key="field.name"
                     v-model="edit.data[field.name]"
                     :field="field"
+                    :errors="errors[field.name]"
                     action="edit" />
 
             </template>
@@ -32,6 +33,7 @@ export default {
     data() {
         return {
             edit: null,
+            errors: {},
         }
     },
 
@@ -54,6 +56,8 @@ export default {
                 let resourceName = this.$route.params.resource
 
                 this.$router.push(`/resources/${resourceName}/${response.key}`)
+            } else if (response.errors) {
+                this.errors = response.errors
             }
         }
     }
