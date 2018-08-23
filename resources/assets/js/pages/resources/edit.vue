@@ -1,32 +1,28 @@
 <template>
-    <div v-if="resource">
+    <div v-if="edit">
 
-        <Panel
-            :displayName="resource.title"
-            :fields="fields"
-            :model="model"
-            :errors="errors"
-            action="edit"
-            @input="onInput" >
+        <Panel :displayName="edit.title" >
 
-            <div slot="buttons" class="buttons">
-                <router-link :to="cancelUrl" class="btn">
-                    Cancel
-                </router-link>
+            <template slot="buttons">
 
-                <span class="btn btn-green" @click="saveChanges">
-                    Save
-                </span>
-            </div>
+                <a v-if="edit.links.update"
+                    class="btn btn-blue"
+                    @click="update" >
+                    Update
+                </a>
+
+            </template>
+
+            <template slot="body">
+
+                <Field v-for="field in edit.fields" :key="field.name"
+                    v-model="edit.data[field.name]"
+                    :field="field"
+                    action="edit" />
+
+            </template>
 
         </Panel>
-
-        <component v-for="field in panels" :key="field.name"
-            :is="`${field.type}-edit-field`"
-            :field="field"
-            :model="model[field.name]"
-            :errors="errors"
-            @input="onInput" />
 
     </div>
 </template>
@@ -35,32 +31,7 @@
 export default {
     data() {
         return {
-            resource: null,
-            model: {},
-            errors: {},
-        }
-    },
-
-    computed: {
-        resourceName() {
-            return this.$route.params.resource
-        },
-
-        resourceKey() {
-            return this.$route.params.key
-        },
-
-        fields() {
-            return this.resource.fields.filter(field => !field.isPanel)
-        },
-
-        panels() {
-            return this.resource.fields.filter(field => field.isPanel)
-        },
-
-        cancelUrl() {
-            return this.$route.query.previous
-                || `/resources/${this.resourceName}/${this.resourceKey}`
+            edit: null,
         }
     },
 
@@ -70,26 +41,20 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resource = await this.$get(`/api/resources/${this.resourceName}/${this.resourceKey}/edit`)
-            this.model = this.resource.model
+            let resourceName = this.$route.params.resource
+            let key = this.$route.params.key
+
+            this.edit = await this.$get(`/api/resources/${resourceName}/${key}/edit`)
         },
 
-        async saveChanges() {
-            let response = await this.$put(
-                `/api/resources/${this.resourceName}/${this.resourceKey}`,
-                this.model
-            )
+        async update() {
+            let response = await this.$put(this.edit.links.update, this.edit.data)
 
             if (response.status == 'success') {
-                this.$router.push(this.$route.query.previous
-                    || `/resources/${this.resourceName}/${this.resourceKey}`)
-            } else if (response.errors) {
-                this.errors = response.errors
-            }
-        },
+                let resourceName = this.$route.params.resource
 
-        onInput(name, value) {
-            this.$set(this.model, name, value)
+                this.$router.push(`/resources/${resourceName}/${response.key}`)
+            }
         }
     }
 }

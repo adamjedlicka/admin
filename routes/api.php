@@ -30,7 +30,7 @@ Route::group([
     Route::get('/resources/{name}/{key}', 'DetailController')
         ->name('resources.detail');
 
-    Route::get('/resources/{name}/{key}/edit', 'ResourceController@edit')
+    Route::get('/resources/{name}/{key}/edit', 'EditController')
         ->name('resources.edit');
 
     Route::put('/resources/{name}/{key}', 'ResourceController@update')

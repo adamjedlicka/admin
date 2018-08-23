@@ -4,7 +4,7 @@ namespace AdamJedlicka\Admin;
 
 use Illuminate\Contracts\Support\Responsable;
 
-class Detail implements Responsable
+class Edit implements Responsable
 {
     /**
      * @var \AdamJedlicka\Admin\FieldCollection
@@ -26,12 +26,6 @@ class Detail implements Responsable
      */
     protected $links = [];
 
-    public function __construct(FieldCollection $fields, $model)
-    {
-        $this->fields = $fields;
-        $this->model = $model;
-    }
-
     /**
      * Sets title of the detail page
      *
@@ -46,16 +40,22 @@ class Detail implements Responsable
     }
 
     /**
-     * Sets the template for generation of editUrl
+     * Sets the template for generation of updateUrl
      *
-     * @param string $editUrl
+     * @param string $updateUrl
      * @return self
      */
-    public function editUrl(string $editUrl) : self
+    public function updateUrl(string $updateUrl) : self
     {
-        $this->links['edit'] = $editUrl;
+        $this->links['update'] = $updateUrl;
 
         return $this;
+    }
+
+    public function __construct(FieldCollection $fields, $model)
+    {
+        $this->fields = $fields;
+        $this->model = $model;
     }
 
     protected function data()
@@ -66,12 +66,6 @@ class Detail implements Responsable
             });
     }
 
-    /**
-     * Create an HTTP response that represents the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function toResponse($request)
     {
         return [

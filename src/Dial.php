@@ -3,12 +3,9 @@
 namespace AdamJedlicka\Admin;
 
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class Dial implements Responsable
 {
-    use ConditionallyLoadsAttributes;
-
     /**
      * @var \AdamJedlicka\Admin\FieldCollection
      */

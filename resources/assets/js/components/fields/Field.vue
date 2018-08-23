@@ -8,8 +8,9 @@
 
         <div class="w-5/6 text-grey-darkest">
             <component :is="`${field.type}-${action}-field`"
-                v-model="value"
-                :field="field" />
+                :value="value"
+                :field="field"
+                @input="onInput" />
 
             <div>
                 <p v-for="(error, i) in errors" :key="i"
@@ -29,6 +30,12 @@ export default {
         value: null,
         errors: Array,
         action: String,
+    },
+
+    methods: {
+        onInput(value) {
+            this.$emit('input', value)
+        }
     }
 }
 </script>
