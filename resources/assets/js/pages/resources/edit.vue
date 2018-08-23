@@ -7,7 +7,7 @@
 
                 <a v-if="edit.links.update"
                     class="btn btn-blue"
-                    @click="update" >
+                    @click="onUpdate" >
                     Update
                 </a>
 
@@ -49,7 +49,7 @@ export default {
             this.edit = await this.$get(`/api/resources/${resourceName}/${key}/edit`)
         },
 
-        async update() {
+        async onUpdate() {
             let response = await this.$put(this.edit.links.update, this.edit.data)
 
             if (response.status == 'success') {
@@ -59,7 +59,7 @@ export default {
             } else if (response.errors) {
                 this.errors = response.errors
             }
-        }
+        },
     }
 }
 </script>

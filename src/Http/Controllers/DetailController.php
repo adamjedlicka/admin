@@ -14,6 +14,7 @@ class DetailController extends Controller
 
         return (new Detail($resource->getFields('detail'), $model))
             ->title($resource->title())
-            ->editUrl("/resources/{$resource->name()}/{$model->getKey()}/edit");
+            ->editUrl("/resources/{$resource->name()}/{$model->getKey()}/edit")
+            ->deleteUrl("/api/resources/{$resource->name()}/{$model->getKey()}");
     }
 }

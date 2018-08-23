@@ -5,6 +5,12 @@
 
             <template slot="buttons">
 
+                <a v-if="detail.links.delete"
+                    class="btn btn-red"
+                    @click="onDelete" >
+                    Delete
+                </a>
+
                 <router-link v-if="detail.links.edit"
                     :to="detail.links.edit"
                     class="btn btn-blue" >
@@ -51,11 +57,10 @@ export default {
             let ok = await modalConfirm('Delete', 'Delete this record?', true)
             if (!ok) return
 
-            let resourceName = this.$route.params.resource
-            let key = this.$route.params.key
-
-            let response = await this.$delete(`/api/resources/${resourceName}/${key}`)
+            let response = await this.$delete(this.detail.links.delete)
             if (response.status == 'success') {
+                let resourceName = this.$route.params.resource
+
                 this.$router.push(`/resources/${resourceName}`)
             }
         }
