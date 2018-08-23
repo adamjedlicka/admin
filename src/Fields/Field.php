@@ -466,13 +466,12 @@ abstract class Field implements Arrayable
 
     public function toArray()
     {
-        return array_merge([
+        return collect([
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
-            'visibleOn' => $this->getVisibleOn(),
             'isSortable' => $this->isSortable(),
             'isPanel' => $this->isPanel(),
-        ], $this->export);
+        ])->merge($this->export);
     }
 }

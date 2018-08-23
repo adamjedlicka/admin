@@ -55,6 +55,7 @@ class PivotSerializer extends IndexSerializer implements JsonSerializable
         }
 
         $this->indexQuery = $this->model->{$this->relationship}();
+        dd($this->indexQuery);
 
         $this->relatedResource = ResourceService::getResourceFromModel(
             $this->indexQuery->getRelated()
@@ -73,6 +74,10 @@ class PivotSerializer extends IndexSerializer implements JsonSerializable
     protected function fields()
     {
         return collect([
+
+            Id::make('Id', function ($model) {
+                return $model->pivot->getKey();
+            }),
 
             PivotBelongsTo::make($this->relatedResource->name()),
 

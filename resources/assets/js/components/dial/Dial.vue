@@ -1,5 +1,5 @@
 <template>
-    <div v-if="index"
+    <div v-if="dial"
         class="bg-white shadow-md rounded-lg min-w-100" >
 
         <div class="rounded-t-lg overflow-x-auto">
@@ -7,11 +7,12 @@
 
                 <DialHeader
                     :prefix="prefix"
-                    :fields="fields"
+                    :fields="dial.fields"
                     @sort="onSort" />
 
                 <DialBody
-                    :resources="resources"
+                    :fields="dial.fields"
+                    :rows="dial.data"
                     @update="fetchData" >
 
                     <template v-if="!!$scopedSlots.buttons" slot="buttons" slot-scope="scope">
@@ -24,9 +25,7 @@
         </div>
 
         <DialPagination
-            :currentPage="index.pagination.currentPage"
-            :hasPreviousPage="index.pagination.hasPreviousPage"
-            :hasNextPage="index.pagination.hasNextPage"
+            :pagination="dial.pagination"
             @page="onPageChange" />
 
     </div>
@@ -46,18 +45,8 @@ export default {
 
     data() {
         return {
-            index: null,
+            dial: null,
             url: null,
-        }
-    },
-
-    computed: {
-        fields() {
-            return this.index.fields
-        },
-
-        resources() {
-            return this.index.resources
         }
     },
 
@@ -80,10 +69,10 @@ export default {
         },
 
         async fetchData() {
-            this.index = await this.$get(this.url)
+            this.dial = await this.$get(this.url)
                 .syncQueryString(this.prefix)
 
-            this.$emit('update', this.index)
+            this.$emit('update', this.dial)
         },
     },
 

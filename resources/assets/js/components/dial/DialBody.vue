@@ -1,20 +1,21 @@
 <template>
     <tbody>
 
-        <DialBodyRow v-for="(resource, i) in resources" :key="i"
+        <DialBodyRow v-for="(row, i) in rows" :key="i"
             class="hover:bg-grey-lighter"
-            :resource="resource"
+            :fields="fields"
+            :row="row"
             @update="$emit('update')" >
 
             <template v-if="!!$scopedSlots.buttons" slot="buttons" slot-scope="scope">
-                <slot name="buttons" :resource="scope.resource">
-                    <router-link :to="detailUrl(resource)"
+                <slot name="buttons" :row="scope.row">
+                    <router-link :to="detailUrl(row)"
                         title="Detail"
                         class="text-grey hover:text-black cursor-pointer" >
                         <i class="py-4 px-1 far fa-eye"></i>
                     </router-link>
 
-                    <router-link :to="editUrl(resource)"
+                    <router-link :to="editUrl(row)"
                         title="Edit"
                         class="text-grey hover:text-black cursor-pointer" >
                         <i class="py-4 px-1 far fa-edit"></i>
@@ -22,7 +23,7 @@
 
                     <span class="text-grey hover:text-red cursor-pointer"
                         title="Delete"
-                        @click="onDelete(resource)" >
+                        @click="onDelete(row)" >
                         <i class="py-4 px-1 far fa-trash-alt"></i>
                     </span>
                 </slot>
@@ -38,24 +39,25 @@ import DialBodyRow from './DialBodyRow'
 
 export default {
     props: {
-        resources: Array,
+        fields: Array,
+        rows: Array,
     },
 
     methods: {
-        detailUrl(resource) {
-            let resourceName = resource.name
-            let id = resource.key
+        detailUrl(row) {
+            let resourceName = row.name
+            let id = row.key
 
             return `/resources/${resourceName}/${id}`
         },
 
-        editUrl(resource) {
-            return this.detailUrl(resource) + '/edit'
+        editUrl(row) {
+            return this.detailUrl(row) + '/edit'
         },
 
-        async onDelete(resource) {
-            let resourceName = resource.name
-            let id = resource.key
+        async onDelete(row) {
+            let resourceName = row.name
+            let id = row.key
 
             let ok = await modalConfirm('Delete', 'Delete this record?', true)
             if (ok) {

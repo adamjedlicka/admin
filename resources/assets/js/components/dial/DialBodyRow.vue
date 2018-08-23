@@ -9,14 +9,14 @@
                 <component
                     :is="`${field.type}-index-field`"
                     :field="field"
-                    :model="resource.model[field.name]" />
+                    :model="row[field.name]" />
             </div>
 
         </td>
 
         <!-- CRUD buttons -->
         <td class="text-right pr-2 whitespace-no-wrap">
-            <slot name="buttons" :resource="resource">
+            <slot name="buttons" :row="row">
             </slot>
         </td>
 
@@ -26,13 +26,8 @@
 <script>
 export default {
     props: {
-        resource: Object,
-    },
-
-    computed: {
-        fields() {
-            return this.resource.fields
-        }
+        fields: Array,
+        row: Object,
     },
 }
 </script>

@@ -99,17 +99,14 @@ abstract class Resource
      * Returns filtered out fields without panels
      *
      * @param string|null $view
-     * @return \Illuminate\Support\Collection
+     * @return \AdamJedlicka\Admin\FieldCollection
      */
-    public function getFields(? string $view = null) : Collection
+    public function getFields(? string $view = null) : FieldCollection
     {
-        return collect($this->fields())
+        return (new FieldCollection($this->fields()))
             ->flatten()
             ->filter(function (Field $field) use ($view) {
                 return $view === null ? : $field->isVisibleOn($view);
-            })
-            ->each(function (Field $field) {
-                $field->boot($this);
             })
             ->values();
     }

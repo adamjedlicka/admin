@@ -18,7 +18,7 @@ Route::group([
     /**
      * ResourceController
      */
-    Route::get('/resources/{name}', 'ResourceController@index')
+    Route::get('/resources/{name}', 'IndexController')
         ->name('resources.index');
 
     Route::get('/resources/{name}/create', 'ResourceController@create')
