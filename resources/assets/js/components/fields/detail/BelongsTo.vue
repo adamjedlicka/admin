@@ -9,12 +9,13 @@
 export default {
     props: {
         field: Object,
+        value: null,
     },
 
     computed: {
         url() {
             let resourceName = this.field.meta.name
-            let resourceId = this.field.value.key
+            let resourceId = this.value
 
             return `/resources/${resourceName}/${resourceId}`
         }

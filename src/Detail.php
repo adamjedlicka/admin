@@ -61,6 +61,9 @@ class Detail implements Responsable
     protected function data()
     {
         return $this->fields
+            ->each(function ($field) {
+                $field->setModel($this->model);
+            })
             ->mapWithKeys(function ($field) {
                 return [$field->getName() => $field->retrieve($this->model)];
             });

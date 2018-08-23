@@ -42,8 +42,6 @@ class Dial implements Responsable
 
     protected function data()
     {
-        $this->query->select($this->fields->names());
-
         return $this->paginated();
     }
 
@@ -51,7 +49,16 @@ class Dial implements Responsable
     {
         $paginated = $this->query->simplePaginate();
 
-        $data = $paginated->items();
+        $data = collect($paginated->items())
+            ->map(function ($item) {
+                return $this->fields
+                    ->each(function ($field) use ($item) {
+                        $field->setModel($item);
+                    })
+                    ->mapWithKeys(function ($field) use ($item) {
+                        return [$field->getName() => $field->retrieve($item)];
+                    });
+            });
 
         $pagination = [
             'currentPage' => $paginated->currentPage(),

@@ -11,35 +11,6 @@ class BelongsTo extends Field
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
 
-    /**
-     * @var \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    protected $relationship;
-
-    /**
-     * @var \AdamJedlicka\Admin\Resource
-     */
-    protected $relatedResource;
-
-    /**
-     * @var string
-     */
-    protected $foreignKey;
-
-    public function boot(Resource $resource)
-    {
-        $modelName = $resource->model();
-        $model = new $modelName;
-
-        $this->relationship = $model->{$this->name}();
-
-        $this->foreignKey = $this->relationship->getForeignKey();
-
-        $this->relatedResource = ResourceService::getResourceFromModel(
-            $this->relationship->getRelated()
-        );
-    }
-
     public function retrieve(Model $model)
     {
         return $model->getAttribute($this->name)->getKey();
@@ -47,33 +18,34 @@ class BelongsTo extends Field
 
     public function persist(Model $model, $value)
     {
-        $model->setAttribute($this->foreignKey, $value);
+        $foreignKey = $model->{$this->getName()}()->getForeignKey();
+
+        $model->setAttribute($foreignKey, $value);
     }
 
     public function meta(Resource $resource)
     {
-        $name = $this->relatedResource->name();
+        $model = $resource->model()::make();
+        $relationship = $model->{$this->getName()}();
+        $relatedModel = $relationship->getRelated();
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+
+        $name = $relatedResource->name();
 
         return [
             'name' => $name,
-            'source' => "/api/resources/$name",
+            'source' => "/api/relationships/belongsTo/$name",
         ];
     }
 
-    public function value(Resource $resource, Model $model)
+    public function value(Model $model)
     {
-        $relatedModel = $model->{$this->name};
+        $relatedModel = $model->{$this->getName()};
         $relatedResource = ResourceService::getResourceFromModel($relatedModel);
 
         return [
             'title' => $relatedResource->title(),
-            'key' => $relatedModel->getKey(),
         ];
-    }
-
-    public function getForeignKey()
-    {
-        return $this->foreignKey;
     }
 
     protected function resolveName(string $displayName) : string

@@ -40,6 +40,12 @@ Route::group([
         ->name('resources.delete');
 
     /**
+     * BelongsToController
+     */
+    Route::get('/relationships/belongsTo/{resource}', 'BelongsToController@index')
+        ->name('relationships.belongsTo');
+
+    /**
      * HasManyController
      */
     Route::get('/resources/{name}/{key}/hasMany/{relationship}', 'HasManyController@index')

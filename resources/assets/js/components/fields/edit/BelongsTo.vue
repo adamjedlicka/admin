@@ -1,15 +1,15 @@
 <template>
     <div>
 
-        <select @input="onInput" :value="model"
+        <select @input="onInput" :value="value"
             class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline"
             :disabled="disabled" >
 
             <option :value="null"></option>
 
-            <option v-for="(resource, i) in resources" :key="i"
+            <option v-for="resource in resources" :key="resource.key"
                 :value="resource.key"
-                :selected="resource.key == model" >
+                :selected="resource.key == value" >
                 {{ resource.title }}
             </option>
 
@@ -24,7 +24,7 @@ import Url from '~/support/Url'
 export default {
     props: {
         field: Object,
-        model: null,
+        value: null,
     },
 
     data() {
@@ -41,20 +41,12 @@ export default {
 
     methods: {
         onInput(e) {
-            this.$emit('input', this.field.name, e.target.value)
+            this.$emit('input', e.target.value)
         }
     },
 
     async mounted() {
-        if (this.field.value) {
-            this.resources = [{
-                key: this.field.value.key,
-                title: this.field.value.title,
-            }]
-        }
-
-        let response = await this.$get(this.field.meta.source)
-        this.resources = response.resources
+        this.resources = await this.$get(this.field.meta.source)
     }
 }
 </script>

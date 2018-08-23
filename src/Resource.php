@@ -108,6 +108,9 @@ abstract class Resource
             ->filter(function (Field $field) use ($view) {
                 return $view === null ? : $field->isVisibleOn($view);
             })
+            ->each(function (Field $field) {
+                $field->setResource($this);
+            })
             ->values();
     }
 

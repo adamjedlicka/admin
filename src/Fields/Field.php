@@ -10,6 +10,16 @@ use Illuminate\Contracts\Support\Arrayable;
 abstract class Field implements Arrayable
 {
     /**
+     * @var \AdamJedlicka\Admin\Resource|null
+     */
+    protected $resource = null;
+
+    /**
+     * @var \Illuminate\Database\Eloquent\Model|null
+     */
+    protected $model = null;
+
+    /**
      * Type of the field
      *
      * @var string
@@ -119,16 +129,6 @@ abstract class Field implements Arrayable
     public static function make(string $displayName, $options = null) : self
     {
         return new static($displayName, $options);
-    }
-
-    /**
-     * Sets up the field
-     *
-     * @param \AdamJedlicka\Admin\Resource $resource
-     */
-    public function boot(Resource $resource)
-    {
-
     }
 
     /**
@@ -343,11 +343,10 @@ abstract class Field implements Arrayable
     /**
      * Returns custom value that can be used on the frontend
      *
-     * @param \AdamJedlicka\Admin\Resource $resource
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return mixed
      */
-    public function value(Resource $resource, Model $model)
+    public function value(Model $model)
     {
         return null;
     }
@@ -361,6 +360,26 @@ abstract class Field implements Arrayable
     protected function resolveName(string $displayName) : string
     {
         return Str::snake($displayName);
+    }
+
+    /**
+     * Sets the coresponding resource
+     *
+     * @param \AdamJedlicka\Admin\Resource $resource
+     */
+    public function setResource(Resource $resource)
+    {
+        $this->resource = $resource;
+    }
+
+    /**
+     * Sets the coresponding model
+     *
+     * @param \Illuminate\Database\Eloquent\Model
+     */
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
     }
 
     /**
@@ -466,12 +485,15 @@ abstract class Field implements Arrayable
 
     public function toArray()
     {
-        return collect([
+        return [
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'isSortable' => $this->isSortable(),
             'isPanel' => $this->isPanel(),
-        ])->merge($this->export);
+
+            'meta' => $this->resource ? $this->meta($this->resource) : null,
+            'value' => $this->model ? $this->value($this->model) : null,
+        ];
     }
 }

@@ -9,11 +9,12 @@
 export default {
     props: {
         field: Object,
+        value: null,
     },
 
     computed: {
         urlDetail() {
-            return `/resources/${this.field.meta.name}/${this.field.value.key}`
+            return `/resources/${this.field.meta.name}/${this.value}`
         }
     }
 }
