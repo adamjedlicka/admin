@@ -13,11 +13,8 @@
                 <DialBody
                     :fields="dial.fields"
                     :rows="dial.data"
+                    :links="dial.links"
                     @update="fetchData" >
-
-                    <template v-if="!!$scopedSlots.buttons" slot="buttons" slot-scope="scope">
-                        <slot name="buttons" :resource="scope.resource" />
-                    </template>
 
                 </DialBody>
 

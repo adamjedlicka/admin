@@ -16,18 +16,31 @@
 
         <!-- CRUD buttons -->
         <td class="text-right pr-2 whitespace-no-wrap">
-            <slot name="buttons" :row="row">
-            </slot>
+            <router-link v-if="links.detail" :to="detailUrl"
+                title="Detail"
+                class="text-grey hover:text-black cursor-pointer" >
+                <i class="py-4 px-1 far fa-eye"></i>
+            </router-link>
         </td>
 
     </tr>
 </template>
 
 <script>
+import template from 'lodash/template'
+
 export default {
     props: {
         fields: Array,
         row: Object,
+        links: Object,
     },
+
+    computed: {
+        detailUrl() {
+            let compiled = template(this.links.detail)
+            return compiled(this.row)
+        }
+    }
 }
 </script>

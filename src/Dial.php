@@ -3,9 +3,12 @@
 namespace AdamJedlicka\Admin;
 
 use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class Dial implements Responsable
 {
+    use ConditionallyLoadsAttributes;
+
     /**
      * @var \AdamJedlicka\Admin\FieldCollection
      */
@@ -16,10 +19,28 @@ class Dial implements Responsable
      */
     protected $query;
 
+    /**
+     * @var array
+     */
+    protected $links = [];
+
     public function __construct(FieldCollection $fields, $query)
     {
         $this->fields = $fields;
         $this->query = $query;
+    }
+
+    /**
+     * Sets the template for generation of detailUrl
+     *
+     * @param string $detailUrl
+     * @return self
+     */
+    public function detailUrl(string $detailUrl) : self
+    {
+        $this->links['detail'] = $detailUrl;
+
+        return $this;
     }
 
     protected function data()
@@ -58,6 +79,7 @@ class Dial implements Responsable
             'fields' => $this->fields,
             'data' => $data,
             'pagination' => $pagination,
+            'links' => $this->links,
         ];
     }
 }

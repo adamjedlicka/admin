@@ -11,6 +11,7 @@ class IndexController extends Controller
     {
         $resource = $this->getResource($name);
 
-        return new Dial($resource->getFields('index'), $resource->indexQuery());
+        return (new Dial($resource->getFields('index'), $resource->indexQuery()))
+            ->detailUrl("/resources/{$resource->name()}/\${{$resource->getKeyName()}}");
     }
 }
