@@ -13,10 +13,13 @@ class HasManyController extends Controller
         $resource = ResourceService::getResourceFromName($name);
         $model = $resource->model()::findOrFail($key);
         $query = $model->{$relationship}();
-        $relatedResource = ResourceService::getResourceFromModel(
-            $query->getRelated()
-        );
 
-        return (new Dial($relatedResource->getFields('index'), $query));
+        $relatedModel = $query->getRelated();
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+
+        return (new Dial($relatedResource->getFields('index'), $query))
+            ->detailUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}")
+            ->editUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}/edit")
+            ->deleteUrl("/api/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}");
     }
 }

@@ -69,7 +69,7 @@ export default {
             if (!ok) return
 
             let compiled = template(this.links.delete)
-            let deleteUrl = compiled(this.row)
+            let deleteUrl = compiled(this.row.data)
 
             let response = await this.$delete(deleteUrl)
             if (response.status == 'success') {
