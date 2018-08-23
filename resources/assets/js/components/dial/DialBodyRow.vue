@@ -9,7 +9,8 @@
                 <component
                     :is="`${field.type}-index-field`"
                     :field="field"
-                    :value="row[field.name]" />
+                    :value="row.data[field.name]"
+                    :meta="row.meta[field.name]" />
             </div>
 
         </td>
@@ -53,12 +54,12 @@ export default {
     computed: {
         detailUrl() {
             let compiled = template(this.links.detail)
-            return compiled(this.row)
+            return compiled(this.row.data)
         },
 
         editUrl() {
             let compiled = template(this.links.edit)
-            return compiled(this.row)
+            return compiled(this.row.data)
         },
     },
 

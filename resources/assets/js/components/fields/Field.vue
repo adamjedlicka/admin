@@ -8,8 +8,9 @@
 
         <div class="w-5/6 text-grey-darkest">
             <component :is="`${field.type}-${action}-field`"
-                :value="value"
                 :field="field"
+                :value="value"
+                :meta="meta"
                 @input="onInput" />
 
             <div>
@@ -28,6 +29,7 @@ export default {
     props: {
         field: Object,
         value: null,
+        meta: null,
         errors: Array,
         action: String,
     },

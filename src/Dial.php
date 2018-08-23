@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin;
 
 use Illuminate\Contracts\Support\Responsable;
+use AdamJedlicka\Admin\Facades\ResourceService;
 
 class Dial implements Responsable
 {
@@ -77,13 +78,16 @@ class Dial implements Responsable
 
         $data = collect($paginated->items())
             ->map(function ($item) {
-                return $this->fields
-                    ->each(function ($field) use ($item) {
-                        $field->setModel($item);
-                    })
-                    ->mapWithKeys(function ($field) use ($item) {
-                        return [$field->getName() => $field->retrieve($item)];
-                    });
+                return [
+                    'meta' => $this->fields
+                        ->mapWithKeys(function ($field) use ($item) {
+                            return [$field->getName() => $field->value($item)];
+                        }),
+                    'data' => $this->fields
+                        ->mapWithKeys(function ($field) use ($item) {
+                            return [$field->getName() => $field->retrieve($item)];
+                        }),
+                ];
             });
 
         $pagination = [

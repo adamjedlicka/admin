@@ -22,8 +22,9 @@
             <template slot="body">
 
                 <Field v-for="field in fields" :key="field.name"
-                    v-model="detail.data[field.name]"
                     :field="field"
+                    v-model="detail.data[field.name]"
+                    :meta="detail.meta[field.name]"
                     action="detail" />
 
             </template>

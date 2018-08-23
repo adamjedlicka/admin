@@ -82,6 +82,17 @@ class Detail implements Responsable
             });
     }
 
+    protected function meta()
+    {
+        return $this->fields
+            ->each(function ($field) {
+                $field->setModel($this->model);
+            })
+            ->mapWithKeys(function ($field) {
+                return [$field->getName() => $field->value($this->model)];
+            });
+    }
+
     /**
      * Create an HTTP response that represents the object.
      *
@@ -93,6 +104,7 @@ class Detail implements Responsable
         return [
             'fields' => $this->fields,
             'data' => $this->data(),
+            'meta' => $this->meta(),
             'title' => $this->title,
             'links' => $this->links,
         ];
