@@ -1,64 +1,39 @@
 <template>
-    <div v-if="resource">
+    <div v-if="create">
 
-        <Panel
-            :displayName="`Create new ${resource.name}`"
-            :fields="fields"
-            :model="model"
-            :errors="errors"
-            action="edit"
-            @input="onInput" >
+        <Panel :displayName="create.title" >
 
-            <div slot="buttons" class="buttons">
-                <router-link :to="backUrl" class="btn">
-                    Cancel
-                </router-link>
+            <template slot="buttons">
 
-                <span class="btn btn-green" @click="saveChanges">
-                    Save
-                </span>
-            </div>
+                <a v-if="create.links.store"
+                    class="btn btn-blue"
+                    @click="store" >
+                    Store
+                </a>
+
+            </template>
+
+            <template slot="body">
+
+                <Field v-for="field in create.fields" :key="field.name"
+                    v-model="create.data[field.name]"
+                    :field="field"
+                    :errors="errors[field.name]"
+                    action="edit" />
+
+            </template>
 
         </Panel>
-
-        <component v-for="field in panels" :key="field.name"
-            :is="`${field.type}-edit-field`"
-            :field="field"
-            :model="model[field.name]"
-            :errors="errors"
-            @input="onInput" />
 
     </div>
 </template>
 
 <script>
-import Url from '~/support/Url'
-
 export default {
     data() {
         return {
-            resource: null,
-            model: {},
+            create: null,
             errors: {},
-        }
-    },
-
-    computed: {
-        resourceName() {
-            return this.$route.params.resource
-        },
-
-        fields() {
-            return this.resource.fields.filter(field => !field.isPanel)
-        },
-
-        panels() {
-            return this.resource.fields.filter(field => field.isPanel)
-        },
-
-        backUrl() {
-            return this.$route.query.previous
-                || `/resources/${this.resourceName}`
         }
     },
 
@@ -68,40 +43,22 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resource = await this.$get(`/api/resources/${this.resourceName}/create`)
+            let resourceName = this.$route.params.resource
+            let key = this.$route.params.key
 
-            this.initModel()
+            this.create = await this.$get(`/api/resources/${resourceName}/create`)
         },
 
-        initModel() {
-            this.resource.fields.forEach(field => {
-                this.$set(this.model, field.name, field.value || null)
-            })
-
-            let model = new Url().object('via')
-            for (let name in model) {
-                this.$set(this.model, name, model[name])
-            }
-        },
-
-        async saveChanges() {
-            let response = await this.$post(
-                `/api/resources/${this.resourceName}`,
-                this.model
-            )
+        async store() {
+            let response = await this.$post(this.create.links.store, this.create.data)
 
             if (response.status == 'success') {
-                this.$router.push(
-                    this.$route.query.previous
-                    || `/resources/${this.resourceName}/${response.key}`
-                )
+                let resourceName = this.$route.params.resource
+
+                this.$router.push(`/resources/${resourceName}/${response.key}`)
             } else if (response.errors) {
                 this.errors = response.errors
             }
-        },
-
-        onInput(name, value) {
-            this.$set(this.model, name, value)
         }
     }
 }

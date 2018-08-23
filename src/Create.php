@@ -2,19 +2,15 @@
 
 namespace AdamJedlicka\Admin;
 
+use AdamJedlicka\Admin\FieldCollection;
 use Illuminate\Contracts\Support\Responsable;
 
-class Edit implements Responsable
+class Create implements Responsable
 {
     /**
      * @var \AdamJedlicka\Admin\FieldCollection
      */
     protected $fields;
-
-    /**
-     * @var \Illuminate\Database\Eloquent\Model
-     */
-    protected $model;
 
     /**
      * @var string
@@ -26,10 +22,9 @@ class Edit implements Responsable
      */
     protected $links = [];
 
-    public function __construct(FieldCollection $fields, $model)
+    public function __construct(FieldCollection $fields)
     {
         $this->fields = $fields;
-        $this->model = $model;
     }
 
     /**
@@ -46,14 +41,14 @@ class Edit implements Responsable
     }
 
     /**
-     * Sets the template for generation of updateUrl
+     * Sets the template for generation of storeUrl
      *
-     * @param string $updateUrl
+     * @param string $storeUrl
      * @return self
      */
-    public function updateUrl(string $updateUrl) : self
+    public function storeUrl(string $storeUrl) : self
     {
-        $this->links['update'] = $updateUrl;
+        $this->links['store'] = $storeUrl;
 
         return $this;
     }
@@ -62,7 +57,7 @@ class Edit implements Responsable
     {
         return $this->fields
             ->mapWithKeys(function ($field) {
-                return [$field->getName() => $field->retrieve($this->model)];
+                return [$field->getName() => null];
             });
     }
 
