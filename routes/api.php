@@ -54,16 +54,7 @@ Route::group([
     /**
      * BelongsToManyController
      */
-    Route::get('/resources/{name}/{key}/belongsToMany/{relationship}', 'BelongsToManyController@index')
+    Route::get('/relationships/{resource}/{key}/belongsToMany/{relationship}', 'BelongsToManyController@index')
         ->name('resources.belongsToMany');
-
-    Route::get('/resources/{name}/{key}/belongsToMany/{relationship}/attach', 'BelongsToManyController@create')
-        ->name('resources.belongsToMany.create');
-
-    Route::post('/resources/{name}/{key}/belongsToMany/{relationship}/attach/{relatedKey}', 'BelongsToManyController@attach')
-        ->name('resources.belongsToMany.attach');
-
-    Route::delete('/resources/{name}/{key}/belongsToMany/{relationship}/detach/{relatedKey}', 'BelongsToManyController@detach')
-        ->name('resources.belongsToMany.detach');
 
 });

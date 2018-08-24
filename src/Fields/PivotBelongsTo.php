@@ -20,7 +20,7 @@ class PivotBelongsTo extends Field
         ];
     }
 
-    public function value(Resource $resource, Model $model)
+    public function value(Model $model)
     {
         $relatedResource = ResourceService::getResourceFromModel($model);
 

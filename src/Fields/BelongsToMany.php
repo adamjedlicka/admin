@@ -4,7 +4,7 @@ namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
-use Illuminate\Support\Collection;
+use AdamJedlicka\Admin\FieldCollection;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Facades\ResourceService;
 
@@ -15,39 +15,15 @@ class BelongsToMany extends Field
     protected $panel = true;
 
     /**
-     * @var \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    protected $relationship;
-
-    /**
-     * @var \AdamJedlicka\Admin\Fields\BelongsToMany
-     */
-    protected $relatedResource;
-
-    /**
      * @var array
      */
     protected $fields = [];
 
-    protected function prepare(Resource $resource, Model $model)
-    {
-        $this->relationship = $model->{$this->name}();
-
-        $this->relatedResource = ResourceService::getResourceFromModel(
-            $this->relationship->getRelated()
-        );
-    }
-
-    protected function metaInfo(Resource $resource)
+    public function meta(Resource $resource)
     {
         return [
-            'relatedName' => $this->relatedResource->name(),
+            'name' => $this->relatedResource($resource)->name(),
         ];
-    }
-
-    protected function resolveName(string $displayName) : string
-    {
-        return Str::camel($displayName);
     }
 
     public function fields(array $fields) : self
@@ -63,8 +39,41 @@ class BelongsToMany extends Field
         return $this;
     }
 
-    public function getFields() : array
+    public function getFields(Resource $resource) : FieldCollection
     {
-        return $this->fields;
+        $relatedResource = $this->relatedResource($resource);
+        $relatedPivotKeyName = $this->relatedPivotKeyName($resource);
+
+        return (new FieldCollection([
+
+            PivotBelongsTo::make($relatedResource->name(), function ($model) use ($relatedPivotKeyName) {
+                return $model->pivot->$relatedPivotKeyName;
+            }),
+
+        ]))->merge($this->fields)
+            ->each(function ($field) use ($resource) {
+                $field->setResource($resource);
+            });
+    }
+
+    protected function resolveName(string $displayName) : string
+    {
+        return Str::camel($displayName);
+    }
+
+    protected function relatedResource(Resource $resource) : Resource
+    {
+        $model = $resource->model()::make();
+        $relationship = $model->{$this->getName()}();
+
+        return ResourceService::getResourceFromModel($relationship->getRelated());
+    }
+
+    protected function relatedPivotKeyName(Resource $resource) : string
+    {
+        $model = $resource->model()::make();
+        $relationship = $model->{$this->getName()}();
+
+        return $relationship->getRelatedPivotKeyName();
     }
 }
