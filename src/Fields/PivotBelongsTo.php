@@ -8,6 +8,11 @@ use AdamJedlicka\Admin\Facades\ResourceService;
 
 class PivotBelongsTo extends Field
 {
+    /**
+     * @var string
+     */
+    protected $relationship;
+
     public function getType() : string
     {
         return 'BelongsTo';
@@ -24,6 +29,7 @@ class PivotBelongsTo extends Field
 
         return [
             'name' => $relatedResource->name(),
+            'source' => "/api/relationships/{$resource->name()}/belongsTo/{$this->relationship}",
         ];
     }
 
@@ -35,5 +41,19 @@ class PivotBelongsTo extends Field
             'title' => $relatedResource->title(),
             'key' => $model->getKey(),
         ];
+    }
+
+
+    /**
+     * Sets the relationship
+     *
+     * @param string $relationship
+     * @return self
+     */
+    public function relationship(string $relationship) : self
+    {
+        $this->relationship = $relationship;
+
+        return $this;
     }
 }

@@ -1,6 +1,15 @@
 <template>
     <Panel :displayName="field.displayName">
 
+        <template slot="buttons">
+
+            <router-link :to="attachUrl"
+                class="btn btn-blue" >
+                Attach
+            </router-link>
+
+        </template>
+
         <template slot="body">
             <Dial :source="source" :prefix="field.name" />
         </template>
@@ -21,6 +30,14 @@ export default {
             let relationship = this.field.name
 
             return `/api/relationships/${resource}/${key}/belongsToMany/${relationship}`
+        },
+
+        attachUrl() {
+            let resource = this.$route.params.resource
+            let key = this.$route.params.key
+            let relationship = this.field.name
+
+            return `/resources/${resource}/${key}/attach/${relationship}`
         }
     }
 }

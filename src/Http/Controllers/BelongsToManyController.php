@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Dial;
+use AdamJedlicka\Admin\Attach;
 
 class BelongsToManyController extends Controller
 {
@@ -15,5 +16,33 @@ class BelongsToManyController extends Controller
         $query = $model->$relationship();
 
         return (new Dial($fields, $query));
+    }
+
+    public function create(string $resource, $key, string $relationship)
+    {
+        $resource = $this->getResource($resource);
+        $fields = $resource->getField($relationship)->getFields($resource);
+
+        return (new Attach($fields))
+            ->attachUrl("/api/relationships/{$resource->name()}/$key/belongsToMany/$relationship/attach");
+    }
+
+    public function attach(string $resource, $key, string $relationship)
+    {
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($key);
+        $relationship = $model->$relationship();
+
+        $relatedKeyName = $relationship->getRelatedPivotKeyName();
+
+        request()->validate([
+            $relatedKeyName => 'required',
+        ]);
+
+        $relationship->attach(request()->only($relatedKeyName), request()->except($relatedKeyName));
+
+        return response()->json([
+            'status' => 'success'
+        ]);
     }
 }

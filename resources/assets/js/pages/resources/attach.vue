@@ -1,23 +1,20 @@
 <template>
-    <Panel :displayName="'Attach'">
+    <Panel v-if="attach" displayName="Attach">
 
-        <div slot="buttons" class="buttons">
-            <a class="btn btn-green" @click="attach">Attach</a>
-        </div>
+        <template slot="buttons">
+            <a class="btn btn-green" @click="onAttach">Attach</a>
+        </template>
 
-        <div slot="body">
-            <Field v-if="relatedResource"
-                :field="field"
-                :model="key"
-                action="edit"
-                @input="onKeyInput" />
+        <template slot="body">
 
-            <Field v-for="field in fields" :key="field.name"
-                :field="field"
-                :model="pivot[field.name]"
-                action="edit"
-                @input="onInput" />
-        </div>
+            <Field v-for="field in attach.fields" :key="field.name"
+                    v-model="attach.data[field.name]"
+                    :field="field"
+                    :errors="errors[field.name]"
+                    action="edit" />
+
+        </template>
+
     </Panel>
 </template>
 
@@ -25,60 +22,32 @@
 export default {
     data() {
         return {
-            relatedResource: null,
-            fields: [],
-
-            key: null,
-            pivot: {},
+            attach: null,
+            errors: {},
         }
     },
 
-    computed: {
-        source() {
-            let resource = this.$route.params.resource
-            let key = this.$route.params.key
-            let what = this.$route.params.what
-
-            return `/api/resources/${resource}/${key}/belongsToMany/${what}/attach`
-        },
-
-        field() {
-            return {
-                type: 'BelongsTo',
-                name: this.relatedResource,
-                displayName: this.relatedResource,
-                meta: {
-                    source: `/api/resources/${this.relatedResource}`
-                }
-            }
-        }
-    },
-
-    async mounted() {
-        let response = await this.$get(this.source)
-
-        this.relatedResource = response.relatedResource
-        this.fields = response.fields
+    mounted() {
+        this.fetchData()
     },
 
     methods: {
-        async attach() {
-            let response = await this.$post(`${this.source}/${this.key}`, this.pivot)
+        async fetchData() {
+            let resource = this.$route.params.resource
+            let key = this.$route.params.key
+            let relationship = this.$route.params.relationship
+
+            this.attach = await this.$get(`/api/relationships/${resource}/${key}/belongsToMany/${relationship}/attach`)
+        },
+
+        async onAttach() {
+            let response = await this.$post(this.attach.links.attach, this.attach.data)
 
             if (response.status == 'success') {
-                let resource = this.$route.params.resource
-                let key = this.$route.params.key
-
-                this.$router.push(`/resources/${resource}/${key}`)
+                this.$router.go(-1)
+            } else if (response.errors) {
+                this.errors = response.errors
             }
-        },
-
-        onKeyInput(name, value) {
-            this.key = value
-        },
-
-        onInput(name, value) {
-            this.pivot[name] = value
         }
     }
 }

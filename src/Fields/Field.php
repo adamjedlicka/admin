@@ -83,6 +83,13 @@ abstract class Field implements Arrayable
     protected $updateRules = [];
 
     /**
+     * Default value for the field
+     *
+     * @var mixed
+     */
+    protected $default = null;
+
+    /**
      * List of relationships to eager load
      *
      * @var array
@@ -272,6 +279,19 @@ abstract class Field implements Arrayable
         return $this;
     }
 
+    /**
+     * Sets the defualt value
+     *
+     * @param mixed $default
+     * @return self
+     */
+    public function default($default) : self
+    {
+        $this->default = $default;
+
+        return $this;
+    }
+
     public function load(...$load) : self
     {
         $this->load = array_merge($this->load, $load);
@@ -440,6 +460,16 @@ abstract class Field implements Arrayable
     public function getVisibleOn() : array
     {
         return $this->visibleOn;
+    }
+
+    /**
+     * Default value getter
+     *
+     * @return mixed
+     */
+    public function getDefault()
+    {
+        return $this->default;
     }
 
     /**

@@ -28,7 +28,7 @@ export default new VueRouter({
                     component: require('~/pages/resources/edit'),
                 },
                 {
-                    path: 'resources/:resource/:key/attach/:what',
+                    path: 'resources/:resource/:key/attach/:relationship',
                     component: require('~/pages/resources/attach'),
                 }
             ]

@@ -47,6 +47,7 @@ class BelongsToMany extends Field
         return (new FieldCollection([
 
             PivotBelongsTo::make($relatedResource->name(), $relatedPivotKeyName)
+                ->relationship($this->getName())
                 ->sortable(),
 
         ]))->merge($this->fields)
