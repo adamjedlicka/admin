@@ -18,31 +18,31 @@ Route::group([
     /**
      * ResourceController
      */
-    Route::get('/resources/{name}', 'IndexController')
+    Route::get('/resources/{resource}', 'IndexController')
         ->name('resources.index');
 
     Route::get('/resources/{resource}/create', 'CreateController')
         ->name('resources.create');
 
-    Route::post('/resources/{name}', 'StoreController')
+    Route::post('/resources/{resource}', 'StoreController')
         ->name('resources.store');
 
-    Route::get('/resources/{name}/{key}', 'DetailController')
+    Route::get('/resources/{resource}/{key}', 'DetailController')
         ->name('resources.detail');
 
-    Route::get('/resources/{name}/{key}/edit', 'EditController')
+    Route::get('/resources/{resource}/{key}/edit', 'EditController')
         ->name('resources.edit');
 
-    Route::put('/resources/{name}/{key}', 'UpdateController')
+    Route::put('/resources/{resource}/{key}', 'UpdateController')
         ->name('resources.update');
 
-    Route::delete('/resources/{name}/{key}', 'DeleteController')
+    Route::delete('/resources/{resource}/{key}', 'DeleteController')
         ->name('resources.delete');
 
     /**
      * BelongsToController
      */
-    Route::get('/relationships/belongsTo/{resource}', 'BelongsToController@index')
+    Route::get('/relationships/{resource}/belongsTo/{relationship}', 'BelongsToController@index')
         ->name('relationships.belongsTo');
 
     /**

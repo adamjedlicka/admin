@@ -4,18 +4,22 @@ namespace AdamJedlicka\Admin\Http\Controllers;
 
 class BelongsToController extends Controller
 {
-    public function index(string $resource)
+    public function index(string $resource, string $relationship)
     {
         $resource = $this->getResource($resource);
-        $models = $resource->model()::all();
+        $model = $resource->model()::make();
+        $relationship = $model->$relationship();
 
-        return $models
-            ->map(function ($model) use ($resource) {
-                $resource->setModel($model);
+        $relatedResource = $this->getResource($relationship->getRelated());
+        $relatedModels = $relatedResource->model()::all();
+
+        return $relatedModels
+            ->map(function ($relatedModel) use ($relatedResource) {
+                $relatedResource->setModel($relatedModel);
 
                 return [
-                    'key' => $model->getKey(),
-                    'title' => $resource->title(),
+                    'key' => $relatedModel->getKey(),
+                    'title' => $relatedResource->title(),
                 ];
             });
     }

@@ -30,11 +30,9 @@ class BelongsTo extends Field
         $relatedModel = $relationship->getRelated();
         $relatedResource = ResourceService::getResourceFromModel($relatedModel);
 
-        $name = $relatedResource->name();
-
         return [
-            'name' => $name,
-            'source' => "/api/relationships/belongsTo/$name",
+            'name' => $relatedResource->name(),
+            'source' => "/api/relationships/{$resource->name()}/belongsTo/{$this->getName()}",
         ];
     }
 
