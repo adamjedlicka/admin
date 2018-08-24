@@ -70,8 +70,15 @@ class BelongsToManyController extends Controller
     {
         $resource = $this->getResource($resource);
         $model = $resource->model()::findOrFail($key);
+        $relationship = $model->$relationship();
 
-        $model->$relationship()->updateExistingPivot($what, request()->all());
+        $relatedKeyName = $relationship->getRelatedPivotKeyName();
+
+        request()->validate([
+            $relatedKeyName => 'required',
+        ]);
+
+        $relationship->updateExistingPivot($what, request()->all());
 
         return response()->json([
             'status' => 'success',
