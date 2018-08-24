@@ -63,6 +63,12 @@ Route::group([
     Route::post('/relationships/{resource}/{key}/belongsToMany/{relationship}/attach', 'BelongsToManyController@attach')
         ->name('resources.belongsToMany.attach');
 
+    Route::get('/relationships/{resource}/{key}/belongsToMany/{relationship}/{what}/edit', 'BelongsToManyController@edit')
+        ->name('resources.belongsToMany.edit');
+
+    Route::put('/relationships/{resource}/{key}/belongsToMany/{relationship}/{what}', 'BelongsToManyController@update')
+        ->name('resources.belongsToMany.update');
+
     Route::delete('/relationships/{resource}/{key}/belongsToMany/{relationship}/detach/{what}', 'BelongsToManyController@detach')
         ->name('resources.belongsToMany.detach');
 

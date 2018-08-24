@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Dial;
+use AdamJedlicka\Admin\Edit;
 use AdamJedlicka\Admin\Attach;
 
 class BelongsToManyController extends Controller
@@ -18,6 +19,7 @@ class BelongsToManyController extends Controller
         $relatedPivotKeyName = $query->getRelatedPivotKeyName();
 
         return (new Dial($fields, $query))
+            ->editUrl("/relationships/{$resource->name()}/$key/belongsToMany/$relationship/\${{$relatedPivotKeyName}}/edit")
             ->detachUrl("/api/relationships/{$resource->name()}/$key/belongsToMany/$relationship/detach/\${{$relatedPivotKeyName}}");
     }
 
@@ -46,6 +48,33 @@ class BelongsToManyController extends Controller
 
         return response()->json([
             'status' => 'success'
+        ]);
+    }
+
+    public function edit(string $resource, $key, string $relationship, $what)
+    {
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($key);
+
+        $relatedPivotKeyName = $model->$relationship()->getRelatedPivotKeyName();
+
+        $fields = $resource->getField($relationship)->getFields($resource);
+        $relatedModel = $model->$relationship()->where($relatedPivotKeyName, $what)->first();
+
+        return (new Edit($fields, $relatedModel))
+            ->title('Edit')
+            ->updateUrl("/api/relationships/{$resource->name()}/$key/belongsToMany/$relationship/$what");
+    }
+
+    public function update(string $resource, $key, string $relationship, $what)
+    {
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($key);
+
+        $model->$relationship()->updateExistingPivot($what, request()->all());
+
+        return response()->json([
+            'status' => 'success',
         ]);
     }
 
