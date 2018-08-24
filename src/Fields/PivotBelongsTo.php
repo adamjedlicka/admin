@@ -13,10 +13,17 @@ class PivotBelongsTo extends Field
         return 'BelongsTo';
     }
 
+    public function retrieve(Model $model)
+    {
+        return $model->getKey();
+    }
+
     public function meta(Resource $resource)
     {
+        $relatedResource = ResourceService::getResourceFromName($this->getDisplayName());
+
         return [
-            'name' => $this->name,
+            'name' => $relatedResource->name(),
         ];
     }
 
