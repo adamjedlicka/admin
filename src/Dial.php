@@ -67,6 +67,19 @@ class Dial implements Responsable
         return $this;
     }
 
+    /**
+     * Sets the template for generation of detachUrl
+     *
+     * @param string $detachUrl
+     * @return self
+     */
+    public function detachUrl(string $detachUrl) : self
+    {
+        $this->links['detach'] = $detachUrl;
+
+        return $this;
+    }
+
     protected function data()
     {
         if ($sortBy = request('sortBy')) {

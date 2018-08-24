@@ -63,4 +63,7 @@ Route::group([
     Route::post('/relationships/{resource}/{key}/belongsToMany/{relationship}/attach', 'BelongsToManyController@attach')
         ->name('resources.belongsToMany.attach');
 
+    Route::delete('/relationships/{resource}/{key}/belongsToMany/{relationship}/detach/{what}', 'BelongsToManyController@detach')
+        ->name('resources.belongsToMany.detach');
+
 });

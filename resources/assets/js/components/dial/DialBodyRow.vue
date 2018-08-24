@@ -30,10 +30,16 @@
                 <i class="py-4 px-1 far fa-edit"></i>
             </router-link>
 
-            <a v-if="links.edit" @click="onDelete"
+            <a v-if="links.delete" @click="onDelete"
                 title="Detail"
                 class="text-grey hover:text-red cursor-pointer" >
                 <i class="py-4 px-1 far fa-trash-alt"></i>
+            </a>
+
+            <a v-if="links.detach" @click="onDetach"
+                title="Detail"
+                class="text-grey hover:text-red cursor-pointer" >
+                <i class="py-4 px-1 fas fa-unlink"></i>
             </a>
 
         </td>
@@ -75,7 +81,20 @@ export default {
             if (response.status == 'success') {
                 this.$emit('update')
             }
-        }
+        },
+
+        async onDetach() {
+            let ok = await modalConfirm('Detach', 'Detach this record?', true)
+            if (!ok) return
+
+            let compiled = template(this.links.detach)
+            let detachUrl = compiled(this.row.data)
+
+            let response = await this.$delete(detachUrl)
+            if (response.status == 'success') {
+                this.$emit('update')
+            }
+        },
     }
 }
 </script>

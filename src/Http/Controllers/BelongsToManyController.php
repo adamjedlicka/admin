@@ -15,7 +15,10 @@ class BelongsToManyController extends Controller
         $fields = $resource->getField($relationship)->getFields($resource);
         $query = $model->$relationship();
 
-        return (new Dial($fields, $query));
+        $relatedPivotKeyName = $query->getRelatedPivotKeyName();
+
+        return (new Dial($fields, $query))
+            ->detachUrl("/api/relationships/{$resource->name()}/$key/belongsToMany/$relationship/detach/\${{$relatedPivotKeyName}}");
     }
 
     public function create(string $resource, $key, string $relationship)
@@ -40,6 +43,19 @@ class BelongsToManyController extends Controller
         ]);
 
         $relationship->attach(request()->only($relatedKeyName), request()->except($relatedKeyName));
+
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+    public function detach(string $resource, $key, string $relationship, $what)
+    {
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($key);
+        $relationship = $model->$relationship();
+
+        $relationship->detach($what);
 
         return response()->json([
             'status' => 'success'
