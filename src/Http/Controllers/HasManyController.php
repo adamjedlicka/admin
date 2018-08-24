@@ -16,8 +16,15 @@ class HasManyController extends Controller
 
         $relatedModel = $query->getRelated();
         $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedField = $resource->getField($relationship)->getRelatedField($resource);
 
-        return (new Dial($relatedResource->getFields('index'), $query))
+        $fields = $relatedResource->getFields('index')
+            ->filter(function ($field) use ($relatedField) {
+                return $field->getName() != $relatedField->getName();
+            })
+            ->values();
+
+        return (new Dial($fields, $query))
             ->detailUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}")
             ->editUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}/edit")
             ->deleteUrl("/api/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}");
