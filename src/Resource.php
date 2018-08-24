@@ -76,26 +76,6 @@ abstract class Resource
     }
 
     /**
-     * Field by which resources are sorted by default
-     *
-     * @return string
-     */
-    public function sortBy() : string
-    {
-        return 'id';
-    }
-
-    /**
-     * Order by which resources are sorted by default
-     *
-     * @return string
-     */
-    public function sortOrder() : string
-    {
-        return 'asc';
-    }
-
-    /**
      * Returns filtered out fields without panels
      *
      * @param string|null $view

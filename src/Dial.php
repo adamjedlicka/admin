@@ -69,6 +69,10 @@ class Dial implements Responsable
 
     protected function data()
     {
+        if ($sortBy = request('sortBy')) {
+            $this->query->orderBy($sortBy, request('orderBy', 'asc'));
+        }
+
         return $this->paginated();
     }
 
