@@ -55,7 +55,8 @@ export default {
             if (response.status == 'success') {
                 let resourceName = this.$route.params.resource
 
-                this.$router.push(`/resources/${resourceName}/${response.key}`)
+                // this.$router.replace(`/resources/${resourceName}/${response.key}`)
+                this.$router.go(-1)
             } else if (response.errors) {
                 this.errors = response.errors
             }
