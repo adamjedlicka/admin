@@ -2,12 +2,24 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use AdamJedlicka\Admin\Serializers\ListSerializer;
+use function AdamJedlicka\Admin\Support\get_class_from_file;
 
 class AdminController extends Controller
 {
     public function resources()
     {
-        return new ListSerializer();
+        $resources = [];
+
+        foreach (glob(app_path(config('admin.directory') . '/Resources/' . '*\.php')) as $file) {
+            $resourceClass = get_class_from_file($file);
+            $resource = new $resourceClass;
+
+            $resources[] = [
+                'name' => $resource->name(),
+                'pluralName' => $resource->pluralName(),
+            ];
+        }
+
+        return $resources;
     }
 }
