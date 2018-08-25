@@ -20,16 +20,20 @@ export default new VueRouter({
                     component: require('~/pages/resources/create'),
                 },
                 {
-                    path: 'resources/:resource/:key',
+                    path: 'resources/:resource/:resourceKey',
                     component: require('~/pages/resources/detail'),
                 },
                 {
-                    path: 'resources/:resource/:key/edit',
+                    path: 'resources/:resource/:resourceKey/edit',
                     component: require('~/pages/resources/edit'),
                 },
                 {
-                    path: 'resources/:resource/:key/attach/:relationship',
+                    path: 'resources/:resource/:resourceKey/attach/:relationship',
                     component: require('~/pages/resources/attach'),
+                },
+                {
+                    path: 'relationships/:resource/:resourceKey/hasOne/:relationship/create',
+                    component: require('~/pages/relationships/hasOne/create'),
                 },
                 {
                     path: 'relationships/:resource/:resourceKey/hasMany/:relationship/create',

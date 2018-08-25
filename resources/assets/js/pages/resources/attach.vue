@@ -34,10 +34,10 @@ export default {
     methods: {
         async fetchData() {
             let resource = this.$route.params.resource
-            let key = this.$route.params.key
+            let resourceKey = this.$route.params.resourceKey
             let relationship = this.$route.params.relationship
 
-            this.attach = await this.$get(`/api/relationships/${resource}/${key}/belongsToMany/${relationship}/attach`)
+            this.attach = await this.$get(`/api/relationships/${resource}/${resourceKey}/belongsToMany/${relationship}/attach`)
         },
 
         async onAttach() {

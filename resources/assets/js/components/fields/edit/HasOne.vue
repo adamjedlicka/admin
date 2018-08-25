@@ -1,46 +1,37 @@
 <template>
-    <div class="p-4">
-
-        <div class="flex justify-between pb-4">
-            <div>
-                <h2 class="h2">{{ field.displayName }}</h2>
-            </div>
-
-        </div>
-
-        <div class="panel">
-
-            <Field v-for="(field, i) in field.meta.fields" :key="i"
-                :field="field"
-                :model="model ? model[field.name] : null"
-                :errors="errorsOf(field.name)"
-                action="edit"
-                @input="onInput" />
-
-        </div>
-
-    </div>
+    <span>
+        <router-link v-if="value"
+            :to="detailUrl" class="link font-bold">
+            {{ meta.title }}
+        </router-link>
+        <router-link v-else
+            :to="createUrl" class="link font-bold">
+            Create
+        </router-link>
+    </span>
 </template>
 
 <script>
 export default {
-    props: {
-        field: Object,
-        model: Object,
-        errors: Object,
-    },
+    props: [
+        'field',
+        'meta',
+        'value',
+    ],
 
-    methods: {
-        onInput(name, value) {
-            let model = this.model || {}
-            model[name] = value
+    computed: {
+        detailUrl() {
+            if (!this.value) return
 
-            this.$emit('input', this.field.name, model)
+            return `/resources/${this.field.meta.resource}/${this.value}`
         },
 
-        errorsOf(name) {
-            return this.errors[`${this.field.name}.${name}`]
-        }
+        createUrl() {
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
+
+            return `/relationships/${resource}/${resourceKey}/hasOne/${this.field.name}/create`
+        },
     }
 }
 </script>

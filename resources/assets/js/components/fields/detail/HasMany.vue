@@ -23,18 +23,18 @@ export default {
     computed: {
         source() {
             let resource = this.$route.params.resource
-            let key = this.$route.params.key
+            let resourceKey = this.$route.params.resourceKey
             let relationship = this.field.name
 
-            return `/api/relationships/${resource}/${key}/hasMany/${relationship}`
+            return `/api/relationships/${resource}/${resourceKey}/hasMany/${relationship}`
         },
 
         createUrl() {
             let resource = this.$route.params.resource
-            let key = this.$route.params.key
+            let resourceKey = this.$route.params.resourceKey
             let relationship = this.field.name
 
-            return `/relationships/${resource}/${key}/hasMany/${relationship}/create`
+            return `/relationships/${resource}/${resourceKey}/hasMany/${relationship}/create`
         }
     }
 }

@@ -45,8 +45,9 @@ export default {
         async fetchData() {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
+            let relationship = this.$route.params.relationship
 
-            this.create = await this.$get(`/api/resources/${resource}/create`)
+            this.create = await this.$get(`/api/relationships/${resource}/${resourceKey}/hasMany/${relationship}/create`)
         },
 
         async store() {
@@ -54,8 +55,9 @@ export default {
 
             if (response.status == 'success') {
                 let resource = this.$route.params.resource
+                let resourceKey = this.$route.params.resourceKey
 
-                this.$router.push(`/resources/${resource}/${response.key}`)
+                this.$router.push(`/resources/${resource}/${resourceKey}`)
             } else if (response.errors) {
                 this.errors = response.errors
             }

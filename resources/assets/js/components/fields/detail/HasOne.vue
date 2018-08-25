@@ -1,30 +1,26 @@
 <template>
-    <div class="p-4">
-
-        <div class="flex justify-between pb-4">
-            <div>
-                <h2 class="h2">{{ field.displayName }}</h2>
-            </div>
-
-        </div>
-
-        <div class="panel">
-
-            <Field v-for="(field, i) in field.meta.fields" :key="i"
-                :field="field"
-                :model="model ? model[field.name] : null"
-                action="detail" />
-
-        </div>
-
-    </div>
+    <span>
+        <router-link v-if="value"
+            :to="detailUrl" class="link font-bold">
+            {{ meta.title }}
+        </router-link>
+    </span>
 </template>
 
 <script>
 export default {
-    props: {
-        field: Object,
-        model: Object,
-    },
+    props: [
+        'field',
+        'meta',
+        'value',
+    ],
+
+    computed: {
+        detailUrl() {
+            if (!this.value) return
+
+            return `/resources/${this.field.meta.resource}/${this.value}`
+        }
+    }
 }
 </script>

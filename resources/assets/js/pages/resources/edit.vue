@@ -16,8 +16,9 @@
             <template slot="body">
 
                 <Field v-for="field in edit.fields" :key="field.name"
-                    v-model="edit.data[field.name]"
                     :field="field"
+                    v-model="edit.data[field.name]"
+                    :meta="edit.meta[field.name]"
                     :errors="errors[field.name]"
                     action="edit" />
 
@@ -43,19 +44,19 @@ export default {
 
     methods: {
         async fetchData() {
-            let resourceName = this.$route.params.resource
-            let key = this.$route.params.key
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
 
-            this.edit = await this.$get(`/api/resources/${resourceName}/${key}/edit`)
+            this.edit = await this.$get(`/api/resources/${resource}/${resourceKey}/edit`)
         },
 
         async onUpdate() {
             let response = await this.$put(this.edit.links.update, this.edit.data)
 
             if (response.status == 'success') {
-                let resourceName = this.$route.params.resource
+                let resource = this.$route.params.resource
 
-                // this.$router.replace(`/resources/${resourceName}/${response.key}`)
+                // this.$router.replace(`/resources/${resource}/${response.key}`)
                 this.$router.go(-1)
             } else if (response.errors) {
                 this.errors = response.errors

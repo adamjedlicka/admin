@@ -63,10 +63,10 @@ export default {
 
     methods: {
         async fetchData() {
-            let resourceName = this.$route.params.resource
-            let key = this.$route.params.key
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
 
-            this.detail = await this.$get(`/api/resources/${resourceName}/${key}`)
+            this.detail = await this.$get(`/api/resources/${resource}/${resourceKey}`)
         },
 
         async onDelete() {
@@ -75,9 +75,9 @@ export default {
 
             let response = await this.$delete(this.detail.links.delete)
             if (response.status == 'success') {
-                let resourceName = this.$route.params.resource
+                let resource = this.$route.params.resource
 
-                this.$router.push(`/resources/${resourceName}`)
+                this.$router.push(`/resources/${resource}`)
             }
         }
     }

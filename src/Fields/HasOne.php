@@ -3,126 +3,66 @@
 namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Panel;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Facades\ResourceService;
-use function AdamJedlicka\Admin\Support\get_resource_from_name;
-use function AdamJedlicka\Admin\Support\get_resource_from_model;
 
-/**
- * TODO : One big not good. DO SOMETHING ABOUT IT!
- * Maybe something like constructor for fields so we can commonly used stuff like relationships.
- */
 class HasOne extends Field
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
 
-    protected $panel = true;
-
-    /**
-     * @var \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    protected $relationship;
-
-    /**
-     * @var \AdamJedlicka\Admin\Resource
-     */
-    protected $relatedResource;
-
-    /**
-     * @var string
-     */
-    protected $foreignKey;
-
-    public function boot(Resource $resource)
-    {
-        $modelName = $resource->model();
-        $model = new $modelName;
-
-        $this->relationship = $model->{$this->name}();
-
-        $this->foreignKey = $this->relationship->getForeignKeyName();
-
-        $this->relatedResource = ResourceService::getResourceFromModel(
-            $this->relationship->getRelated()
-        );
-    }
-
     public function retrieve(Model $model)
     {
-        return optional($model->getAttribute($this->name))
-            ->only($this->fieldNames());
+        return optional($model->{$this->getName()})->getKey();
     }
 
-    public function persist(Model $model, $value)
+    public function value(Model $model)
     {
-        if (!$value) return;
+        $title = '';
 
-        $model->saved(function ($model) use ($value) {
-            $key = $this->relationship->getRelated()->getKeyName();
+        $relatedModel = $model->{$this->getName()};
 
-            $model->{$this->name}()->updateOrCreate([$key => $value[$key] ?? null], $value);
-        });
+        if ($relatedModel) {
+            $title = ResourceService::getResourceFromModel($relatedModel)->title();
+        }
+
+        return [
+            'title' => $title,
+        ];
     }
 
     public function meta(Resource $resource)
     {
-        return [
-            'fields' => $this->relatedResource->getFields()
-                ->filter(function (Field $field) {
-                    if (!$field instanceof BelongsTo) return $field;
+        $relationship = $resource->model()::make()->{$this->getName()}();
+        $relatedModel = $relationship->getRelated();
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
 
-                    return $this->foreignKey != $field->getForeignKey();
-                })
-                ->values(),
+        return [
+            'resource' => $relatedResource->name(),
         ];
     }
 
-    public function value(Resource $resource, Model $model)
+    public function getRelatedField(Resource $resource)
     {
-        $relatedModel = $model->{$this->getName()};
+        $model = $resource->model()::make();
+        $relationship = $model->{$this->getName()}();
+        $foreignKeyName = $relationship->getForeignKeyName();
 
-        if (!$relatedModel) return [];
+        $relatedModel = $relationship->getRelated();
+        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
 
-        $relatedResource = ResourceService::getResourceFromModel($model->{$this->getName()});
-
-        return [
-            'title' => $relatedResource->title(),
-            'key' => $relatedModel->getKey(),
-        ];
+        return collect($relatedResource->fields())
+            ->filter(function ($field) {
+                return $field instanceof BelongsTo;
+            })
+            ->filter(function ($field) use ($relatedModel, $foreignKeyName) {
+                return $relatedModel->{$field->getName()}()->getForeignKey() == $foreignKeyName;
+            })
+            ->first();
     }
 
     protected function resolveName(string $displayName) : string
     {
         return Str::camel($displayName);
-    }
-
-    public function getCreationRules() : array
-    {
-        return collect($this->relatedResource->getCreationRules())
-            ->only($this->fieldNames())
-            ->toArray();
-    }
-
-    public function getUpdateRules() : array
-    {
-        return collect($this->relatedResource->getUpdateRules())
-            ->only($this->fieldNames())
-            ->toArray();
-    }
-
-    protected function fieldNames() : array
-    {
-        return $this->relatedResource->getFields()
-            ->filter(function (Field $field) {
-                if (!$field instanceof BelongsTo) return true;
-
-                return $this->foreignKey != $field->getForeignKey();
-            })
-            ->map(function (Field $field) {
-                return $field->getName();
-            })
-            ->toArray();
     }
 }
