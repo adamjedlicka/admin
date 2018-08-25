@@ -9,7 +9,7 @@ use AdamJedlicka\Admin\Facades\ResourceService;
 
 class HasOne extends Field
 {
-    protected $visibleOn = ['index', 'detail', 'edit'];
+    protected $visibleOn = ['index', 'detail'];
 
     public function retrieve(Model $model)
     {

@@ -4,6 +4,10 @@
             :to="detailUrl" class="link font-bold">
             {{ meta.title }}
         </router-link>
+        <router-link v-else
+            :to="createUrl" class="link font-bold">
+            Create
+        </router-link>
     </span>
 </template>
 
@@ -20,7 +24,14 @@ export default {
             if (!this.value) return
 
             return `/resources/${this.field.meta.resource}/${this.value}`
-        }
+        },
+
+        createUrl() {
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
+
+            return `/relationships/${resource}/${resourceKey}/hasOne/${this.field.name}/create`
+        },
     }
 }
 </script>
