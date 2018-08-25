@@ -3,19 +3,18 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Dial;
-use AdamJedlicka\Admin\Facades\ResourceService;
-use AdamJedlicka\Admin\Serializers\IndexSerializer;
+use AdamJedlicka\Admin\Create;
 
 class HasManyController extends Controller
 {
-    public function index(string $name, $key, string $relationship)
+    public function index(string $resource, $resourceKey, string $relationship)
     {
-        $resource = ResourceService::getResourceFromName($name);
-        $model = $resource->model()::findOrFail($key);
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($resourceKey);
         $query = $model->{$relationship}();
 
         $relatedModel = $query->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = $this->getResource($relatedModel);
         $relatedField = $resource->getField($relationship)->getRelatedField($resource);
 
         $fields = $relatedResource->getFields('index')
@@ -28,5 +27,29 @@ class HasManyController extends Controller
             ->detailUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}")
             ->editUrl("/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}/edit")
             ->deleteUrl("/api/resources/{$relatedResource->name()}/\${{$relatedModel->getKeyName()}}");
+    }
+
+    public function create(string $resource, $resourceKey, string $relationship)
+    {
+        $relationshipName = $relationship;
+
+        $resource = $this->getResource($resource);
+        $model = $resource->model()::findOrFail($resourceKey);
+        $relationship = $model->$relationship();
+        $foreignKeyName = $relationship->getForeignKeyName();
+
+        $hasManyField = $resource->getField($relationshipName);
+        $relatedFieldName = $hasManyField->getRelatedField($resource)->getName();
+
+        $relatedModel = $relationship->getRelated();
+        $relatedResource = $this->getResource($relatedModel);
+
+        $fields = $relatedResource->getFields('edit');
+
+        $fields->named($relatedFieldName)->default($resourceKey);
+
+        return (new Create($fields))
+            ->title('Create')
+            ->storeUrl("/api/resources/{$relatedResource->name()}");
     }
 }

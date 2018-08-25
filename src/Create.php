@@ -57,7 +57,7 @@ class Create implements Responsable
     {
         return $this->fields
             ->mapWithKeys(function ($field) {
-                return [$field->getName() => null];
+                return [$field->getName() => $field->getDefault()];
             });
     }
 
