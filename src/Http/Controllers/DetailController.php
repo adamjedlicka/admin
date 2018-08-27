@@ -3,14 +3,14 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Detail;
+use AdamJedlicka\Admin\Http\Requests\ResourceDetailRequest;
 
 class DetailController extends Controller
 {
-    public function __invoke(string $resource, $key)
+    public function __invoke(ResourceDetailRequest $request)
     {
-        $resource = $this->getResource($resource);
-        $model = $resource->model()::findOrFail($key);
-        $resource->setModel($model);
+        $resource = $request->resource();
+        $model = $resource->getModel();
 
         return (new Detail($resource->getFields('detail'), $model))
             ->title($resource->title())

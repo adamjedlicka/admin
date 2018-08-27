@@ -4,9 +4,8 @@ namespace AdamJedlicka\Admin\Http\Requests;
 
 use AdamJedlicka\Admin\Resource;
 use AdamJedlicka\Admin\Facades\Resources;
-use Illuminate\Foundation\Http\FormRequest;
 
-class ResourceRequest extends FormRequest
+class ResourceDetailRequest extends ResourceRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,24 +14,14 @@ class ResourceRequest extends FormRequest
      */
     public function authorize()
     {
-        $model = $this->resource()::$model;
+        $model = $this->resource()->getModel();
         $policy = policy($model);
 
-        if ($policy && method_exists($policy, 'viewAny')) {
-            return auth()->user()->can('viewAny', $model);
+        if ($policy && method_exists($policy, 'view')) {
+            return parent::authorize() && auth()->user()->can('view', $model);
         }
 
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [];
+        return parent::authorize();
     }
 
     /**
@@ -42,6 +31,10 @@ class ResourceRequest extends FormRequest
      */
     public function resource() : Resource
     {
-        return Resources::forName($this->resource);
+        $resource = Resources::forName($this->resource);
+        $model = $resource::$model::findOrFail($this->key);
+        $resource->setModel($model);
+
+        return $resource;
     }
 }
