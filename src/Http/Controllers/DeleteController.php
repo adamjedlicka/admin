@@ -2,12 +2,13 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Http\Requests\DeleteRequest;
+
 class DeleteController extends Controller
 {
-    public function __invoke(string $resource, $key)
+    public function __invoke(DeleteRequest $request)
     {
-        $resource = $this->getResource($resource);
-        $model = $resource->model()::findOrFail($key);
+        $model = $request->resource()->getModel();
 
         $model->delete();
 

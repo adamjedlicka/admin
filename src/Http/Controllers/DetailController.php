@@ -3,11 +3,11 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Detail;
-use AdamJedlicka\Admin\Http\Requests\ResourceDetailRequest;
+use AdamJedlicka\Admin\Http\Requests\DetailRequest;
 
 class DetailController extends Controller
 {
-    public function __invoke(ResourceDetailRequest $request)
+    public function __invoke(DetailRequest $request)
     {
         $resource = $request->resource();
         $model = $resource->getModel();

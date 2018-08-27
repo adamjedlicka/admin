@@ -3,11 +3,11 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Dial;
-use AdamJedlicka\Admin\Http\Requests\ResourceRequest;
+use AdamJedlicka\Admin\Http\Requests\IndexRequest;
 
 class IndexController extends Controller
 {
-    public function __invoke(ResourceRequest $request)
+    public function __invoke(IndexRequest $request)
     {
         $resource = $request->resource();
 

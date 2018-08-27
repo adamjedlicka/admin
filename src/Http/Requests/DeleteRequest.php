@@ -5,7 +5,7 @@ namespace AdamJedlicka\Admin\Http\Requests;
 use AdamJedlicka\Admin\Resource;
 use AdamJedlicka\Admin\Facades\Resources;
 
-class ResourceDetailRequest extends ResourceRequest
+class DeleteRequest extends IndexRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -15,13 +15,8 @@ class ResourceDetailRequest extends ResourceRequest
     public function authorize()
     {
         $model = $this->resource()->getModel();
-        $policy = policy($model);
 
-        if ($policy && method_exists($policy, 'view')) {
-            return parent::authorize() && auth()->user()->can('view', $model);
-        }
-
-        return parent::authorize();
+        return parent::authorize() && $this->authorizeIfPolicyExists('delete', $model);
     }
 
     /**
