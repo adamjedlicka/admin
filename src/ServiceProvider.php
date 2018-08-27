@@ -4,12 +4,14 @@ namespace AdamJedlicka\Admin;
 
 use Illuminate\Support\Facades\Log;
 use AdamJedlicka\Admin\ResourceService;
+use AdamJedlicka\Admin\Support\Resources;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
 {
     public function register()
     {
+        $this->app->bind('admin.resources', Resources::class);
         $this->app->bind('resourceService', ResourceService::class);
     }
 

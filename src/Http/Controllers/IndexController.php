@@ -3,13 +3,13 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Dial;
-
+use AdamJedlicka\Admin\Http\Requests\ResourceRequest;
 
 class IndexController extends Controller
 {
-    public function __invoke(string $name)
+    public function __invoke(ResourceRequest $request)
     {
-        $resource = $this->getResource($name);
+        $resource = $request->resource();
 
         return (new Dial($resource->getFields('index'), $resource->indexQuery()))
             ->detailUrl("/resources/{$resource->name()}/\${{$resource->getKeyName()}}")

@@ -18,6 +18,13 @@ abstract class Resource
     protected $modelInstance = null;
 
     /**
+     * Fully qualified name of the coresponding model
+     *
+     * @var string
+     */
+    public static $model;
+
+    /**
      * Definition of fields
      *
      * @return array
@@ -62,6 +69,11 @@ abstract class Resource
     public function model() : string
     {
         return config('admin.models.namespace') . '\\' . $this->name();
+    }
+
+    public function newModel() : Model
+    {
+        return new static::$model;
     }
 
     /**
