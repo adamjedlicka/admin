@@ -12,7 +12,7 @@
                 </a>
 
                 <a v-if="edit.links.update"
-                    class="btn btn-blue"
+                    class="btn btn-green"
                     @click="onUpdate" >
                     Update
                 </a>

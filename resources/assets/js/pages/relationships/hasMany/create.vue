@@ -12,7 +12,7 @@
                 </a>
 
                 <a v-if="create.links.store"
-                    class="btn btn-blue"
+                    class="btn btn-green"
                     @click="store" >
                     Store
                 </a>
