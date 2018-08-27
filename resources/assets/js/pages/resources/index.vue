@@ -4,7 +4,7 @@
         <template slot="buttons">
             <router-link :to="`/resources/${resource}/create`"
                 class="btn btn-blue">
-                New
+                Create
             </router-link>
         </template>
 

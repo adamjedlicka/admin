@@ -49,7 +49,7 @@ export default {
             let response = await this.$put(`/api/resources/${this.resource.name}/${this.resource.key}`, this.model)
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resource.name}/${response.key}`)
+                this.$router.replace(`/resources/${this.resource.name}/${response.key}`)
             } else {
                 this.errors = response.errors
             }

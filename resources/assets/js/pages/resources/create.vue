@@ -11,7 +11,7 @@
             <a v-if="resource.policies.create"
                 @click="onCreate"
                 class="btn btn-green" >
-                Create
+                Store
             </a>
 
         </template>
@@ -49,7 +49,7 @@ export default {
             let response = await this.$post(`/api/resources/${this.resource.name}`, this.model)
 
             if (response.status == 'success') {
-                this.$router.push(`/resources/${this.resource.name}/${response.key}`)
+                this.$router.replace(`/resources/${this.resource.name}/${response.key}`)
             } else {
                 this.errors = response.errors
             }
