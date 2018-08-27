@@ -20,5 +20,12 @@
         "files": [
             "src/Support/helpers.php"
         ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AdamJedlicka\\Admin\\ServiceProvider"
+            ]
+        }
     }
 }
