@@ -71,6 +71,11 @@ abstract class Resource
         return config('admin.models.namespace') . '\\' . $this->name();
     }
 
+    /**
+     * Creates new instance of associated model
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function newModel() : Model
     {
         return new static::$model;
