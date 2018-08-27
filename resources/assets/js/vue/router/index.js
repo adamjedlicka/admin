@@ -45,5 +45,19 @@ export default new VueRouter({
                 }
             ]
         },
+        {
+            path: '/',
+            component: require('~/layouts/error'),
+            children: [
+                {
+                    path: '403',
+                    component: require('~/pages/403'),
+                },
+                {
+                    path: '404',
+                    component: require('~/pages/404'),
+                }
+            ]
+        }
     ]
 })

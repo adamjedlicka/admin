@@ -1,4 +1,5 @@
 import Request from '~/support/Request'
+import router from '~/vue/router'
 import Url from '~/support/Url'
 
 let get = (url) => {
@@ -47,6 +48,18 @@ let del = (url) => {
 Request.intercept((response, data) => {
     if (response.status == 500) {
         toast(data.message).error()
+    }
+})
+
+Request.intercept((response, data) => {
+    if (response.status == 403) {
+        router.replace('/403')
+    }
+})
+
+Request.intercept((response, data) => {
+    if (response.status == 404) {
+        router.replace('/404')
     }
 })
 
