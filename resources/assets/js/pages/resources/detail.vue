@@ -1,41 +1,21 @@
 <template>
-    <div v-if="resource">
+    <ResourceDetail v-if="resource"
+        :resource="resource"
+        :model="model"
+        :title="resource.title"
+        action="detail" >
 
-        <Panel :displayName="resource.title" >
+        <template slot="buttons">
 
-            <template slot="buttons">
+            <router-link v-if="resource.policies.create"
+                :to="`/resources/${resource.name}`"
+                class="btn btn-blue" >
+                Create
+            </router-link>
 
-                <a v-if="resource.policies.delete"
-                    @click="onDelete"
-                    class="btn btn-red" >
-                    Delete
-                </a>
+        </template>
 
-                <router-link v-if="resource.policies.update"
-                    :to="`/resources/${resource.name}/${resource.key}/edit`"
-                    class="btn btn-blue" >
-                    Edit
-                </router-link>
-
-            </template>
-
-            <template slot="body">
-
-                <Field v-for="field in fields" :key="field.name"
-                    :field="field"
-                    v-model="field.value"
-                    action="detail" />
-
-            </template>
-
-        </Panel>
-
-        <component v-for="panel in panels" :key="panel.name"
-            :is="`${panel.type}-detail-field`"
-            :field="panel"
-            :v-model="panel.value" />
-
-    </div>
+    </ResourceDetail>
 </template>
 
 <script>
@@ -43,17 +23,8 @@ export default {
     data() {
         return {
             resource: null,
+            model: {},
         }
-    },
-
-    computed: {
-        fields() {
-            return this.resource.fields.filter(field => field.isPanel == false)
-        },
-
-        panels() {
-            return this.resource.fields.filter(field => field.isPanel == true)
-        },
     },
 
     mounted() {
@@ -66,6 +37,10 @@ export default {
             let resourceKey = this.$route.params.resourceKey
 
             this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}`)
+
+            this.resource.fields.forEach(field => {
+                this.model[field.name] = field.value
+            })
         },
 
         async onDelete() {

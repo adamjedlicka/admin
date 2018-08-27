@@ -11,9 +11,6 @@ class IndexController extends Controller
     {
         $resource = $request->resource();
 
-        return (new Dial($resource->getFields('index'), $resource->indexQuery()))
-            ->detailUrl("/resources/{$resource->name()}/\${{$resource->getKeyName()}}")
-            ->editUrl("/resources/{$resource->name()}/\${{$resource->getKeyName()}}/edit")
-            ->deleteUrl("/api/resources/{$resource->name()}/\${{$resource->getKeyName()}}");
+        return (new Dial($resource->getFields()->onlyFor('index'), $resource->indexQuery()));
     }
 }

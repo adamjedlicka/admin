@@ -3,19 +3,21 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use AdamJedlicka\Admin\Http\Requests\StoreReqeust;
 
 class StoreController extends Controller
 {
-    public function __invoke(string $resource)
+    public function __invoke(StoreReqeust $request)
     {
-        $resource = $this->getResource($resource);
+        $resource = $request->resource();
 
         request()->validate($resource->getCreationRules());
 
-        $model = $resource->model()::make();
+        $model = $resource->newModel();
 
         DB::transaction(function () use ($resource, $model) {
-            $resource->getFields('edit')
+            $resource->getFields()
+                ->onlyFor('edit')
                 ->each(function ($field) use ($model) {
                     $field->persist($model, request($field->getName()));
                 });

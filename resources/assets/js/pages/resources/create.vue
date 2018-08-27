@@ -1,44 +1,30 @@
 <template>
-    <div v-if="create">
+    <ResourceDetail v-if="resource"
+        :resource="resource"
+        :model="model"
+        :errors="errors"
+        title="Create"
+        action="edit" >
 
-        <Panel :displayName="create.title" >
+        <template slot="buttons">
 
-            <template slot="buttons">
+            <a v-if="resource.policies.create"
+                @click="onCreate"
+                class="btn btn-green" >
+                Create
+            </a>
 
-                <a v-if="create.links.store"
-                    class="btn"
-                    @click="$router.go(-1)" >
-                    Cancel
-                </a>
+        </template>
 
-                <a v-if="create.links.store"
-                    class="btn btn-green"
-                    @click="store" >
-                    Store
-                </a>
-
-            </template>
-
-            <template slot="body">
-
-                <Field v-for="field in create.fields" :key="field.name"
-                    v-model="create.data[field.name]"
-                    :field="field"
-                    :errors="errors[field.name]"
-                    action="edit" />
-
-            </template>
-
-        </Panel>
-
-    </div>
+    </ResourceDetail>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            create: null,
+            resource: null,
+            model: {},
             errors: {},
         }
     },
@@ -52,17 +38,19 @@ export default {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
 
-            this.create = await this.$get(`/api/resources/${resource}/create`)
+            this.resource = await this.$get(`/api/resources/${resource}/create`)
+
+            this.resource.fields.forEach(field => {
+                this.model[field.name] = field.value
+            })
         },
 
-        async store() {
-            let response = await this.$post(this.create.links.store, this.create.data)
+        async onCreate() {
+            let response = await this.$post(`/api/resources/${this.resource.name}`, this.model)
 
             if (response.status == 'success') {
-                let resource = this.$route.params.resource
-
-                this.$router.push(`/resources/${resource}/${response.key}`)
-            } else if (response.errors) {
+                this.$router.push(`/resources/${this.resource.name}/${response.key}`)
+            } else {
                 this.errors = response.errors
             }
         }

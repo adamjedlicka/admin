@@ -1,10 +1,10 @@
 <template>
-    <Panel displayName="Index">
+    <Panel :title="`${resourceName} index`">
 
         <template slot="buttons">
             <router-link :to="`/resources/${resourceName}/create`"
                 class="btn btn-blue">
-                Create
+                New
             </router-link>
         </template>
 

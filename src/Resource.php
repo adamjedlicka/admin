@@ -86,7 +86,7 @@ abstract class Resource implements Arrayable
      */
     public function indexQuery() : Builder
     {
-        return $this->model()::query();
+        return $this::$model::query();
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class Resource implements Arrayable
         return (new FieldCollection($this->fields()))
             ->each(function (Field $field) {
                 $field->setResource($this);
-                $field->setModel($this->modelInstance);
+                if ($this->modelInstance) $field->setModel($this->modelInstance);
             });
     }
 
@@ -134,13 +134,12 @@ abstract class Resource implements Arrayable
     public function getPolicies() : array
     {
         $user = auth()->user();
-        $model = $this->getModel();
 
         return [
-            'view' => $user->can('view', $model),
-            'create' => $user->can('create', $model),
-            'update' => $user->can('update', $model),
-            'delete' => $user->can('delete', $model),
+            'view' => $user->can('view', $this->getModel()),
+            'create' => $user->can('create', $this::$model),
+            'update' => $user->can('update', $this->getModel()),
+            'delete' => $user->can('delete', $this->getModel()),
         ];
     }
 
@@ -195,9 +194,11 @@ abstract class Resource implements Arrayable
             'title' => $this->title(),
 
             'policies' => $this->getPolicies(),
-            'fields' => $this->getFields()->filter(function (Field $field) {
-                return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
-            }),
+            'fields' => $this->getFields()
+                ->filter(function (Field $field) {
+                    return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
+                })
+                ->values(),
         ];
     }
 

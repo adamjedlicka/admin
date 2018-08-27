@@ -2,7 +2,7 @@
     <div class="p-4">
         <div class="flex justify-between pb-4">
             <slot name="title">
-                <h1 class="h1">{{ displayName }}</h1>
+                <h1 class="h1">{{ title }}</h1>
             </slot>
 
             <div class="buttons">
@@ -18,8 +18,8 @@
 
 <script>
 export default {
-    props: {
-        displayName: null,
-    },
+    props: [
+        'title',
+    ]
 }
 </script>

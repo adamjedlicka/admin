@@ -7,3 +7,5 @@ Vue.component('Dial', require('./dial/Dial'))
 Vue.component('Toasts', require('./toasts/Toasts'))
 Vue.component('AttachModal', require('./AttachModal'))
 Vue.component('ConfirmModal', require('./ConfirmModal'))
+
+Vue.component('ResourceDetail', require('./resources/Detail'))

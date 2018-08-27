@@ -37,10 +37,8 @@ class FieldCollection extends Collection
 
     public function onlyFor(string $view) : self
     {
-        $this->filter(function (Field $field) use ($view) {
+        return $this->filter(function (Field $field) use ($view) {
             return $field->isVisibleOn($view);
         });
-
-        return $this;
     }
 }
