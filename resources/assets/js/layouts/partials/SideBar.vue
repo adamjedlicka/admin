@@ -1,5 +1,15 @@
 <template>
-    <div class="w-64 bg-grey-darker text-white">
+    <div class="hidden lg:block h-screen w-64 bg-grey-darker text-white">
+
+        <div class="w-64 p-5 text-grey-lighter bg-grey-darkest shadow-md select-none">
+            <span class="font-bold text-xl">
+                AdamJedlicka
+            </span>
+            <span class="text-xl">
+                Admin
+            </span>
+        </div>
+
         <nav>
 
             <router-link

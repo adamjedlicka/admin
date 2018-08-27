@@ -4,7 +4,7 @@
             type="text"
             :value="value"
             @input="onInput"
-            class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline" >
+            class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline max-w-full" >
     </div>
 </template>
 

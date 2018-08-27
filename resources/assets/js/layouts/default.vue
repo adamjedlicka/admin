@@ -1,12 +1,12 @@
 <template>
     <div class="h-screen">
 
-        <HeaderBar />
-
-        <div class="flex bg-grey-light">
+        <div class="flex h-screen bg-grey-light">
             <SideBar id="sidebar" />
 
-            <div class="flex-1 p-4 overflow-x-hidden">
+            <div class="flex-1 overflow-x-hidden">
+                <HeaderBar />
+
                 <router-view :key="$route.path" />
             </div>
 
@@ -29,9 +29,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss">
-#sidebar {
-  height: calc(100vh - 4rem);
-}
-</style>
