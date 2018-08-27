@@ -1,15 +1,15 @@
 <template>
-    <Panel :title="`${resourceName} index`">
+    <Panel title="Index">
 
         <template slot="buttons">
-            <router-link :to="`/resources/${resourceName}/create`"
+            <router-link :to="`/resources/${resource}/create`"
                 class="btn btn-blue">
                 New
             </router-link>
         </template>
 
         <template slot="body">
-            <Dial :source="`/api/resources/${resourceName}`" />
+            <Dial :source="`/api/resources/${resource}`" />
         </template>
 
     </Panel>
@@ -18,7 +18,7 @@
 <script>
 export default {
     computed: {
-        resourceName() {
+        resource() {
             return this.$route.params.resource
         }
     }

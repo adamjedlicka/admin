@@ -5,6 +5,7 @@ namespace AdamJedlicka\Admin\Support;
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Symfony\Component\Finder\Finder;
+use Illuminate\Database\Eloquent\Model;
 
 class Resources
 {
@@ -29,5 +30,21 @@ class Resources
 
             return new $path;
         }
+    }
+
+    /**
+     * Returns resource for given model
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @return \AdamJedlicka\Admin\Resource
+     */
+    public function forModel(Model $model) : Resource
+    {
+        $name = (new \ReflectionClass($model))->getShortName();
+
+        $resource = $this->forName($name);
+        $resource->setModel($model);
+
+        return $resource;
     }
 }

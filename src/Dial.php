@@ -2,82 +2,28 @@
 
 namespace AdamJedlicka\Admin;
 
-use Illuminate\Contracts\Support\Responsable;
-use AdamJedlicka\Admin\Facades\ResourceService;
+use AdamJedlicka\Admin\Traits\HasLinks;
+use AdamJedlicka\Admin\Facades\Resources;
+use Illuminate\Contracts\Support\Arrayable;
 
-class Dial implements Responsable
+class Dial implements Arrayable
 {
+    use HasLinks;
+
     /**
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Admin\Resource
      */
-    protected $fields;
+    protected $resource;
 
     /**
      * @var \Illuminate\Database\Eloquent\Builder
      */
     protected $query;
 
-    /**
-     * @var array
-     */
-    protected $links = [];
-
-    public function __construct(FieldCollection $fields, $query)
+    public function __construct(Resource $resource)
     {
-        $this->fields = $fields;
-        $this->query = $query;
-    }
-
-    /**
-     * Sets the template for generation of detailUrl
-     *
-     * @param string $detailUrl
-     * @return self
-     */
-    public function detailUrl(string $detailUrl) : self
-    {
-        $this->links['detail'] = $detailUrl;
-
-        return $this;
-    }
-
-    /**
-     * Sets the template for generation of editUrl
-     *
-     * @param string $editUrl
-     * @return self
-     */
-    public function editUrl(string $editUrl) : self
-    {
-        $this->links['edit'] = $editUrl;
-
-        return $this;
-    }
-
-    /**
-     * Sets the template for generation of deleteUrl
-     *
-     * @param string $deleteUrl
-     * @return self
-     */
-    public function deleteUrl(string $deleteUrl) : self
-    {
-        $this->links['delete'] = $deleteUrl;
-
-        return $this;
-    }
-
-    /**
-     * Sets the template for generation of detachUrl
-     *
-     * @param string $detachUrl
-     * @return self
-     */
-    public function detachUrl(string $detachUrl) : self
-    {
-        $this->links['detach'] = $detachUrl;
-
-        return $this;
+        $this->resource = $resource;
+        $this->query = $this->resource->indexQuery();
     }
 
     protected function data()
@@ -95,16 +41,8 @@ class Dial implements Responsable
 
         $data = collect($paginated->items())
             ->map(function ($item) {
-                return [
-                    'meta' => $this->fields
-                        ->mapWithKeys(function ($field) use ($item) {
-                            return [$field->getName() => $field->value($item)];
-                        }),
-                    'data' => $this->fields
-                        ->mapWithKeys(function ($field) use ($item) {
-                            return [$field->getName() => $field->retrieve($item)];
-                        }),
-                ];
+                return Resources::forModel($item)
+                    ->onlyFieldsFor('index');
             });
 
         $pagination = [
@@ -116,18 +54,18 @@ class Dial implements Responsable
         return [$data, $pagination];
     }
 
-    /**
-     * Create an HTTP response that represents the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function toResponse($request)
+    protected function fields()
+    {
+        return $this->resource->getFields()
+            ->onlyFor('index');
+    }
+
+    public function toArray()
     {
         [$data, $pagination] = $this->data();
 
         return [
-            'fields' => $this->fields,
+            'fields' => $this->fields(),
             'data' => $data,
             'pagination' => $pagination,
             'links' => $this->links,

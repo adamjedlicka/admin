@@ -6,12 +6,11 @@
             <table class="w-full">
 
                 <DialHeader
-                    :prefix="prefix"
+                    :prefix="name"
                     :fields="dial.fields"
                     @sort="onSort" />
 
                 <DialBody
-                    :fields="dial.fields"
                     :rows="dial.data"
                     :links="dial.links"
                     @update="fetchData" >
@@ -35,10 +34,10 @@ import DialBody from './DialBody'
 import Url from '~/support/Url'
 
 export default {
-    props: {
-        prefix: String,
-        source: String,
-    },
+    props: [
+        'source',
+        'name',
+    ],
 
     data() {
         return {
@@ -67,7 +66,7 @@ export default {
 
         async fetchData() {
             this.dial = await this.$get(this.url)
-                .syncQueryString(this.prefix)
+                .syncQueryString(this.name)
 
             this.$emit('update', this.dial)
         },

@@ -12,7 +12,6 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         $this->app->bind('admin.resources', Resources::class);
-        $this->app->bind('resourceService', ResourceService::class);
     }
 
     public function boot()

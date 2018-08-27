@@ -2,15 +2,15 @@
     <tr
         class="hover:bg-grey-lighter" >
 
-        <td v-for="(field, j) in fields" :key="j"
+        <td v-for="(field, j) in row.fields" :key="j"
             class="p-4 text-black text-left" >
 
             <div class="truncate">
                 <component
                     :is="`${field.type}-index-field`"
                     :field="field"
-                    :value="row.data[field.name]"
-                    :meta="row.meta[field.name]" />
+                    :value="field.value"
+                    :meta="field.meta" />
             </div>
 
         </td>
@@ -18,19 +18,19 @@
         <!-- CRUD buttons -->
         <td class="text-right pr-2 whitespace-no-wrap">
 
-            <router-link v-if="links.detail" :to="detailUrl"
+            <router-link v-if="row.policies.view" :to="detailUrl"
                 title="Detail"
                 class="text-grey hover:text-black cursor-pointer" >
                 <i class="py-4 px-1 far fa-eye"></i>
             </router-link>
 
-            <router-link v-if="links.edit" :to="editUrl"
-                title="Detail"
+            <router-link v-if="row.policies.update" :to="editUrl"
+                title="Edit"
                 class="text-grey hover:text-black cursor-pointer" >
                 <i class="py-4 px-1 far fa-edit"></i>
             </router-link>
 
-            <a v-if="links.delete" @click="onDelete"
+            <a v-if="row.policies.delete" @click="onDelete"
                 title="Detail"
                 class="text-grey hover:text-red cursor-pointer" >
                 <i class="py-4 px-1 far fa-trash-alt"></i>
@@ -48,52 +48,34 @@
 </template>
 
 <script>
-import template from 'lodash/template'
-
 export default {
     props: [
-        'fields',
         'row',
         'links',
     ],
 
     computed: {
         detailUrl() {
-            let compiled = template(this.links.detail)
-            return compiled(this.row.data)
+            return `/resources/${this.row.name}/${this.row.key}`
         },
 
         editUrl() {
-            let compiled = template(this.links.edit)
-            return compiled(this.row.data)
+            return `/resources/${this.row.name}/${this.row.key}/edit`
         },
+
+        deleteUrl() {
+            return `/api/resources/${this.row.name}/${this.row.key}`
+        }
     },
 
     methods: {
         async onDelete() {
-            let ok = await modalConfirm('Delete', 'Delete this record?', true)
+            let ok = await modalConfirm('Delete', `Delete ${this.row.title} ?`, true)
             if (!ok) return
 
-            let compiled = template(this.links.delete)
-            let deleteUrl = compiled(this.row.data)
+            let response = await this.$delete(this.deleteUrl)
+            if (response.status == 'success') this.$emit('update')
 
-            let response = await this.$delete(deleteUrl)
-            if (response.status == 'success') {
-                this.$emit('update')
-            }
-        },
-
-        async onDetach() {
-            let ok = await modalConfirm('Detach', 'Detach this record?', true)
-            if (!ok) return
-
-            let compiled = template(this.links.detach)
-            let detachUrl = compiled(this.row.data)
-
-            let response = await this.$delete(detachUrl)
-            if (response.status == 'success') {
-                this.$emit('update')
-            }
         },
     }
 }

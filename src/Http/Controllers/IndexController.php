@@ -9,8 +9,6 @@ class IndexController extends Controller
 {
     public function __invoke(IndexRequest $request)
     {
-        $resource = $request->resource();
-
-        return (new Dial($resource->getFields()->onlyFor('index'), $resource->indexQuery()));
+        return (new Dial($request->resource()));
     }
 }
