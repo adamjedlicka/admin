@@ -6,6 +6,12 @@
             <template slot="buttons">
 
                 <a v-if="edit.links.update"
+                    class="btn"
+                    @click="$router.go(-1)" >
+                    Cancel
+                </a>
+
+                <a v-if="edit.links.update"
                     class="btn btn-blue"
                     @click="onUpdate" >
                     Update

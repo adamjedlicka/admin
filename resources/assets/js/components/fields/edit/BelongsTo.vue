@@ -2,7 +2,7 @@
     <div>
 
         <select @input="onInput" :value="value"
-            class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline"
+            class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline w-96 max-w-full"
             :disabled="disabled" >
 
             <option :value="null"></option>

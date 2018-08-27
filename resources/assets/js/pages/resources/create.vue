@@ -6,6 +6,12 @@
             <template slot="buttons">
 
                 <a v-if="create.links.store"
+                    class="btn"
+                    @click="$router.go(-1)" >
+                    Cancel
+                </a>
+
+                <a v-if="create.links.store"
                     class="btn btn-blue"
                     @click="store" >
                     Store
