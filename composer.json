@@ -16,6 +16,9 @@
     "autoload": {
         "psr-4": {
             "AdamJedlicka\\Admin\\": "src/"
-        }
+        },
+        "files": [
+            "src/Support/helpers.php"
+        ]
     }
 }

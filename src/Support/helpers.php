@@ -1,7 +1,5 @@
 <?php
 
-namespace AdamJedlicka\Admin\Support;
-
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;

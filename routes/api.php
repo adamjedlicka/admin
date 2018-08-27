@@ -4,6 +4,7 @@ Route::group([
     'namespace' => 'AdamJedlicka\Admin\Http\Controllers',
     'middleware' => [
         \Illuminate\Cookie\Middleware\EncryptCookies::class,
+        \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\Auth\Middleware\Authenticate::class,
     ],
     'prefix' => config('admin.prefix') . '/api',

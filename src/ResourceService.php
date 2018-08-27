@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
-use function AdamJedlicka\Admin\Support\get_class_from_file;
 
 class ResourceService
 {

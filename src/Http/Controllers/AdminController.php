@@ -2,8 +2,6 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use function AdamJedlicka\Admin\Support\get_class_from_file;
-
 class AdminController extends Controller
 {
     public function resources()

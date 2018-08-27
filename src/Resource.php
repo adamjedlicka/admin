@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use function AdamJedlicka\Admin\Support\array_depth;
 
 abstract class Resource
 {
