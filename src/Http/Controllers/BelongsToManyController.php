@@ -26,9 +26,11 @@ class BelongsToManyController extends Controller
     public function create(string $resource, $key, string $relationship)
     {
         $resource = $this->getResource($resource);
+        $resource->setModel($resource->model()::findOrFail($key));
         $fields = $resource->getField($relationship)->getFields($resource);
 
         return (new Attach($fields))
+            ->title('Attach to: ' . $resource->title())
             ->attachUrl("/api/relationships/{$resource->name()}/$key/belongsToMany/$relationship/attach");
     }
 
@@ -60,6 +62,8 @@ class BelongsToManyController extends Controller
 
         $fields = $resource->getField($relationship)->getFields($resource);
         $relatedModel = $model->$relationship()->where($relatedPivotKeyName, $what)->first();
+
+        $fields->first()->cannotBeChanged();
 
         return (new Edit($fields, $relatedModel))
             ->title('Edit')

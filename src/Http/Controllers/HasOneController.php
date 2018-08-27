@@ -21,7 +21,9 @@ class HasOneController extends Controller
 
         $fields = $relatedResource->getFields('edit');
 
-        $fields->named($relatedFieldName)->default($resourceKey);
+        $fields->named($relatedFieldName)
+            ->default($resourceKey)
+            ->cannotBeChanged();
 
         return (new Create($fields))
             ->title('Create')

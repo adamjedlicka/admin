@@ -1,5 +1,5 @@
 <template>
-    <Panel v-if="attach" displayName="Attach">
+    <Panel v-if="attach" :displayName="attach.title">
 
         <template slot="buttons">
             <a class="btn btn-green" @click="onAttach">Attach</a>

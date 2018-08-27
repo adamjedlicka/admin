@@ -83,6 +83,14 @@ abstract class Field implements Arrayable
     protected $updateRules = [];
 
     /**
+     * If value of field is already set, it cannot be changed.
+     * For example in edit or when field has default value.
+     *
+     * @var bool
+     */
+    protected $cannotBeChanged = false;
+
+    /**
      * Default value for the field
      *
      * @var mixed
@@ -280,6 +288,20 @@ abstract class Field implements Arrayable
     }
 
     /**
+     * If value of field is already set, it cannot be changed.
+     * For example in edit or when field has default value.
+     *
+     * @param bool $cannotBeChanged
+     * @return self
+     */
+    public function cannotBeChanged(bool $cannotBeChanged = true) : self
+    {
+        $this->cannotBeChanged = $cannotBeChanged;
+
+        return $this;
+    }
+
+    /**
      * Sets the defualt value
      *
      * @param mixed $default
@@ -453,6 +475,16 @@ abstract class Field implements Arrayable
     }
 
     /**
+     * CannotBeChanged getter
+     *
+     * @return bool
+     */
+    public function isUnchangeable() : bool
+    {
+        return $this->cannotBeChanged;
+    }
+
+    /**
      * Visible on getter
      *
      * @return array
@@ -520,6 +552,7 @@ abstract class Field implements Arrayable
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'isSortable' => $this->isSortable(),
+            'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
 
             'meta' => $this->resource ? $this->meta($this->resource) : null,

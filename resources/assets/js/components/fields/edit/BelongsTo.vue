@@ -3,7 +3,7 @@
 
         <select @input="onInput" :value="value"
             class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline w-96 max-w-full"
-            :disabled="disabled" >
+            :disabled="cannotBeChanged" >
 
             <option :value="null"></option>
 
@@ -29,6 +29,7 @@ export default {
 
     data() {
         return {
+            cannotBeChanged: false,
             resources: [],
         }
     },
@@ -39,14 +40,19 @@ export default {
         }
     },
 
+
+    async mounted() {
+        if (this.value) {
+            this.cannotBeChanged = this.field.isUnchangeable
+        }
+
+        this.resources = await this.$get(this.field.meta.source)
+    },
+
     methods: {
         onInput(e) {
             this.$emit('input', e.target.value)
         }
     },
-
-    async mounted() {
-        this.resources = await this.$get(this.field.meta.source)
-    }
 }
 </script>
