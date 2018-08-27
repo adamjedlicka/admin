@@ -3,6 +3,7 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use AdamJedlicka\Admin\Facades\Models;
 use AdamJedlicka\Admin\Http\Requests\StoreReqeust;
 
 class StoreController extends Controller
@@ -13,17 +14,7 @@ class StoreController extends Controller
 
         request()->validate($resource->getCreationRules());
 
-        $model = $resource->newModel();
-
-        DB::transaction(function () use ($resource, $model) {
-            $resource->getFields()
-                ->onlyFor('edit')
-                ->each(function ($field) use ($model) {
-                    $field->persist($model, request($field->getName()));
-                });
-
-            $model->saveOrFail();
-        });
+        $model = Models::persist($resource->newModel());
 
         return response()->json([
             'status' => 'success',

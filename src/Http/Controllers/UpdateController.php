@@ -2,7 +2,7 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
+use AdamJedlicka\Admin\Facades\Models;
 use AdamJedlicka\Admin\Http\Requests\UpdateRequest;
 
 class UpdateController extends Controller
@@ -13,17 +13,7 @@ class UpdateController extends Controller
 
         request()->validate($resource->getUpdateRules());
 
-        $model = $resource->getModel();
-
-        DB::transaction(function () use ($resource, $model) {
-            $resource->getFields('edit')
-                ->onlyFor('edit')
-                ->each(function ($field) use ($model) {
-                    $field->persist($model, request($field->getName()));
-                });
-
-            $model->saveOrFail();
-        });
+        $model = Models::persist($resource->getModel());
 
         return response()->json([
             'status' => 'success',
