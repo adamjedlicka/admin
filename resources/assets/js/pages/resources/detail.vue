@@ -7,10 +7,16 @@
 
         <template slot="buttons">
 
-            <router-link v-if="resource.policies.create"
-                :to="`/resources/${resource.name}`"
+            <a v-if="resource.policies.delete"
+                @click="onDelete"
+                class="btn btn-red" >
+                Delete
+            </a>
+
+            <router-link v-if="resource.policies.update"
+                :to="`/resources/${resource.name}/${resource.key}/edit`"
                 class="btn btn-blue" >
-                Create
+                Edit
             </router-link>
 
         </template>

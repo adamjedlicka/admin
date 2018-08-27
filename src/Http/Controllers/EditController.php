@@ -2,19 +2,14 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
-use AdamJedlicka\Admin\Edit;
+use AdamJedlicka\Admin\Http\Requests\EditRequest;
 
 
 class EditController extends Controller
 {
-    public function __invoke(string $resource, $key)
+    public function __invoke(EditRequest $request)
     {
-        $resource = $this->getResource($resource);
-        $model = $resource->model()::findOrFail($key);
-        $resource->setModel($model);
-
-        return (new Edit($resource->getFields('edit'), $model))
-            ->title($resource->title())
-            ->updateUrl("/api/resources/{$resource->name()}/{$model->getKey()}");
+        return $request->resource()
+            ->onlyFieldsFor('edit');
     }
 }

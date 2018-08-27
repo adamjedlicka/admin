@@ -1,45 +1,30 @@
 <template>
-    <div v-if="edit">
+    <ResourceDetail v-if="resource"
+        :resource="resource"
+        :model="model"
+        :errors="errors"
+        title="Edit"
+        action="edit" >
 
-        <Panel :displayName="edit.title" >
+        <template slot="buttons">
 
-            <template slot="buttons">
+            <a v-if="resource.policies.update"
+                @click="onUpdate"
+                class="btn btn-green" >
+                Update
+            </a>
 
-                <a v-if="edit.links.update"
-                    class="btn"
-                    @click="$router.go(-1)" >
-                    Cancel
-                </a>
+        </template>
 
-                <a v-if="edit.links.update"
-                    class="btn btn-green"
-                    @click="onUpdate" >
-                    Update
-                </a>
-
-            </template>
-
-            <template slot="body">
-
-                <Field v-for="field in edit.fields" :key="field.name"
-                    :field="field"
-                    v-model="edit.data[field.name]"
-                    :meta="edit.meta[field.name]"
-                    :errors="errors[field.name]"
-                    action="edit" />
-
-            </template>
-
-        </Panel>
-
-    </div>
+    </ResourceDetail>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            edit: null,
+            resource: null,
+            model: {},
             errors: {},
         }
     },
@@ -53,18 +38,19 @@ export default {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
 
-            this.edit = await this.$get(`/api/resources/${resource}/${resourceKey}/edit`)
+            this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}/edit`)
+
+            this.resource.fields.forEach(field => {
+                this.model[field.name] = field.value
+            })
         },
 
         async onUpdate() {
-            let response = await this.$put(this.edit.links.update, this.edit.data)
+            let response = await this.$put(`/api/resources/${this.resource.name}/${this.resource.key}`, this.model)
 
             if (response.status == 'success') {
-                let resource = this.$route.params.resource
-
-                // this.$router.replace(`/resources/${resource}/${response.key}`)
-                this.$router.go(-1)
-            } else if (response.errors) {
+                this.$router.push(`/resources/${this.resource.name}/${response.key}`)
+            } else {
                 this.errors = response.errors
             }
         },
