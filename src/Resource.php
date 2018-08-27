@@ -7,9 +7,17 @@ use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Support\Arrayable;
 
-abstract class Resource
+abstract class Resource implements Arrayable
 {
+    /**
+     * Fully qualified name of the coresponding model
+     *
+     * @var string
+     */
+    public static $model;
+
     /**
      * Instance of coresponding model
      *
@@ -18,11 +26,11 @@ abstract class Resource
     protected $modelInstance = null;
 
     /**
-     * Fully qualified name of the coresponding model
+     * Limits fields to single view type
      *
      * @var string
      */
-    public static $model;
+    protected $onlyFieldsFor = null;
 
     /**
      * Definition of fields
@@ -62,16 +70,6 @@ abstract class Resource
     }
 
     /**
-     * Returns fully qualified class name of the coresponding model
-     *
-     * @return string
-     */
-    public function model() : string
-    {
-        return config('admin.models.namespace') . '\\' . $this->name();
-    }
-
-    /**
      * Creates new instance of associated model
      *
      * @return \Illuminate\Database\Eloquent\Model
@@ -94,35 +92,15 @@ abstract class Resource
     /**
      * Returns filtered out fields without panels
      *
-     * @param string|null $view
      * @return \AdamJedlicka\Admin\FieldCollection
      */
-    public function getFields(? string $view = null) : FieldCollection
+    public function getFields() : FieldCollection
     {
         return (new FieldCollection($this->fields()))
-            ->flatten()
-            ->filter(function (Field $field) use ($view) {
-                return $view === null ? : $field->isVisibleOn($view);
-            })
             ->each(function (Field $field) {
                 $field->setResource($this);
-            })
-            ->values();
-    }
-
-    /**
-     * Returns single field of specified name
-     *
-     * @param string $name
-     * @return \AdamJedlicka\Admin\Fields\Field
-     */
-    public function getField(string $name) : Field
-    {
-        return $this->getFields()
-            ->filter(function (Field $field) use ($name) {
-                return $field->getName() == $name;
-            })
-            ->first();
+                $field->setModel($this->modelInstance);
+            });
     }
 
     /**
@@ -135,18 +113,6 @@ abstract class Resource
         return $this->getFields()
             ->mapWithKeys(function (Field $field) {
                 return [$field->getName() => $field->getCreationRules()];
-            })
-            ->mapWithKeys(function ($rules, $key) {
-                if (array_depth($rules) == 1) {
-                    return [$key => $rules];
-                }
-
-                // Transform array into dot notation
-                foreach ($rules as $ruleKey => $rule) {
-                    $result[$key . '.' . $ruleKey] = $rule;
-                }
-
-                return $result;
             })
             ->toArray();
     }
@@ -162,19 +128,20 @@ abstract class Resource
             ->mapWithKeys(function (Field $field) {
                 return [$field->getName() => $field->getUpdateRules()];
             })
-            ->mapWithKeys(function ($rules, $key) {
-                if (array_depth($rules) == 1) {
-                    return [$key => $rules];
-                }
-
-                // Transform array into dot notation
-                foreach ($rules as $ruleKey => $rule) {
-                    $result[$key . '.' . $ruleKey] = $rule;
-                }
-
-                return $result;
-            })
             ->toArray();
+    }
+
+    public function getPolicies() : array
+    {
+        $user = auth()->user();
+        $model = $this->getModel();
+
+        return [
+            'view' => $user->can('view', $model),
+            'create' => $user->can('create', $model),
+            'update' => $user->can('update', $model),
+            'delete' => $user->can('delete', $model),
+        ];
     }
 
     /**
@@ -204,9 +171,34 @@ abstract class Resource
      */
     public function getKeyName() : string
     {
-        $model = $this->model();
+        return (new $this::$model)->getKeyName();
+    }
 
-        return (new $model)->getKeyName();
+    /**
+     * Limits fields to single view type
+     *
+     * @return self
+     */
+    public function onlyFieldsFor(string $view) : self
+    {
+        $this->onlyFieldsFor = $view;
+
+        return $this;
+    }
+
+    public function toArray()
+    {
+        return [
+            'name' => $this->name(),
+            'key' => $this->getModel() ? $this->getModel()->getKey() : null,
+            'pluralName' => $this->pluralName(),
+            'title' => $this->title(),
+
+            'policies' => $this->getPolicies(),
+            'fields' => $this->getFields()->filter(function (Field $field) {
+                return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
+            }),
+        ];
     }
 
     public function __get($name)

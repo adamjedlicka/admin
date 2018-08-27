@@ -1,18 +1,18 @@
 <template>
-    <div v-if="detail">
+    <div v-if="resource">
 
-        <Panel :displayName="detail.title" >
+        <Panel :displayName="resource.title" >
 
             <template slot="buttons">
 
-                <a v-if="detail.links.delete"
-                    class="btn btn-red"
-                    @click="onDelete" >
+                <a v-if="resource.policies.delete"
+                    @click="onDelete"
+                    class="btn btn-red" >
                     Delete
                 </a>
 
-                <router-link v-if="detail.links.edit"
-                    :to="detail.links.edit"
+                <router-link v-if="resource.policies.update"
+                    :to="`/resources/${resource.name}/${resource.key}/edit`"
                     class="btn btn-blue" >
                     Edit
                 </router-link>
@@ -23,8 +23,7 @@
 
                 <Field v-for="field in fields" :key="field.name"
                     :field="field"
-                    v-model="detail.data[field.name]"
-                    :meta="detail.meta[field.name]"
+                    v-model="field.value"
                     action="detail" />
 
             </template>
@@ -33,8 +32,8 @@
 
         <component v-for="panel in panels" :key="panel.name"
             :is="`${panel.type}-detail-field`"
-            :v-model="detail.data[panel.name]"
-            :field="panel" />
+            :field="panel"
+            :v-model="panel.value" />
 
     </div>
 </template>
@@ -43,17 +42,17 @@
 export default {
     data() {
         return {
-            detail: null,
+            resource: null,
         }
     },
 
     computed: {
         fields() {
-            return this.detail.fields.filter(field => field.isPanel == false)
+            return this.resource.fields.filter(field => field.isPanel == false)
         },
 
         panels() {
-            return this.detail.fields.filter(field => field.isPanel == true)
+            return this.resource.fields.filter(field => field.isPanel == true)
         },
     },
 
@@ -66,18 +65,16 @@ export default {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
 
-            this.detail = await this.$get(`/api/resources/${resource}/${resourceKey}`)
+            this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}`)
         },
 
         async onDelete() {
-            let ok = await modalConfirm('Delete', 'Delete this record?', true)
+            let ok = await modalConfirm('Delete', `Delete this record: ${this.resource.title} ?`, true)
             if (!ok) return
 
-            let response = await this.$delete(this.detail.links.delete)
+            let response = await this.$delete(`/api/resources/${this.resource.name}/${this.resource.key}`)
             if (response.status == 'success') {
-                let resource = this.$route.params.resource
-
-                this.$router.push(`/resources/${resource}`)
+                this.$router.push(`/resources/${this.resource.name}`)
             }
         }
     }

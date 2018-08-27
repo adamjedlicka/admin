@@ -10,7 +10,6 @@
             <component :is="`${field.type}-${action}-field`"
                 :field="field"
                 :value="value"
-                :meta="meta"
                 @input="onInput" />
 
             <div>
@@ -26,13 +25,12 @@
 
 <script>
 export default {
-    props: {
-        field: Object,
-        value: null,
-        meta: null,
-        errors: Array,
-        action: String,
-    },
+    props: [
+        'field',
+        'value',
+        'errors',
+        'action',
+    ],
 
     methods: {
         onInput(value) {

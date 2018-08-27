@@ -28,8 +28,8 @@ Route::group([
     Route::post('/resources/{resource}', 'StoreController')
         ->name('resources.store');
 
-    Route::get('/resources/{resource}/{key}', 'DetailController')
-        ->name('resources.detail');
+    Route::get('/resources/{resource}/{key}', 'ShowController')
+        ->name('resources.show');
 
     Route::get('/resources/{resource}/{key}/edit', 'EditController')
         ->name('resources.edit');

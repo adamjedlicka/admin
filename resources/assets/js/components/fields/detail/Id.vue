@@ -4,9 +4,9 @@
 
 <script>
 export default {
-    props: {
-        field: Object,
-        value: null,
-    }
+    props: [
+        'field',
+        'value',
+    ]
 }
 </script>

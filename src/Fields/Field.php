@@ -556,7 +556,7 @@ abstract class Field implements Arrayable
             'isPanel' => $this->isPanel(),
 
             'meta' => $this->resource ? $this->meta($this->resource) : null,
-            // 'value' => $this->model ? $this->value($this->model) : null,
+            'value' => $this->model ? $this->retrieve($this->model) : null,
         ];
     }
 }

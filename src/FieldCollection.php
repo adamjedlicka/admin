@@ -30,8 +30,17 @@ class FieldCollection extends Collection
      */
     public function named(string $name) : Field
     {
-        return $this->filter(function ($field) use ($name) {
+        return $this->filter(function (Field $field) use ($name) {
             return $field->getName() == $name;
         })->first();
+    }
+
+    public function onlyFor(string $view) : self
+    {
+        $this->filter(function (Field $field) use ($view) {
+            return $field->isVisibleOn($view);
+        });
+
+        return $this;
     }
 }
