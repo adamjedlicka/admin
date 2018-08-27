@@ -3,12 +3,13 @@
 namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\Create;
+use AdamJedlicka\Admin\Http\Requests\CreateRequest;
 
 class CreateController extends Controller
 {
-    public function __invoke(string $resource)
+    public function __invoke(CreateRequest $request)
     {
-        return $this->getResource($resource)
+        return $request->resource()
             ->onlyFieldsFor('edit');
     }
 }
