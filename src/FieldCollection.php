@@ -39,6 +39,6 @@ class FieldCollection extends Collection
     {
         return $this->filter(function (Field $field) use ($view) {
             return $field->isVisibleOn($view);
-        });
+        })->values();
     }
 }

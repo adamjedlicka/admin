@@ -2,7 +2,7 @@
     <span>
         <router-link v-if="value"
             :to="detailUrl" class="link font-bold">
-            {{ meta.title }}
+            {{ field.meta.title }}
         </router-link>
         <router-link v-else
             :to="createUrl" class="link font-bold">
@@ -15,7 +15,6 @@
 export default {
     props: [
         'field',
-        'meta',
         'value',
     ],
 
@@ -23,14 +22,15 @@ export default {
         detailUrl() {
             if (!this.value) return
 
-            return `/resources/${this.field.meta.resource}/${this.value}`
+            return `/resources/${this.field.exports.resource}/${this.value}`
         },
 
         createUrl() {
-            let resource = this.$route.params.resource
-            let resourceKey = this.$route.params.resourceKey
+            let key = this.$route.params.resourceKey
+            let resource = this.field.exports.resource
+            let relatedFieldName = this.field.exports.relatedFieldName
 
-            return `/relationships/${resource}/${resourceKey}/hasOne/${this.field.name}/create`
+            return `/resources/${resource}/create?via.${relatedFieldName}=${key}`
         },
     }
 }

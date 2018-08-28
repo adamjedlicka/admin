@@ -53,7 +53,7 @@ export default {
             let resourceKey = this.$route.params.resourceKey
             let relationship = this.$route.params.relationship
 
-            this.create = await this.$get(`/api/relationships/${resource}/${resourceKey}/hasMany/${relationship}/create`)
+            this.create = await this.$get(`/api/relationships/${resource}/${resourceKey}/hasOne/${relationship}/create`)
         },
 
         async store() {

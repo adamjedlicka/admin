@@ -7,8 +7,6 @@
 
             <option :value="null"></option>
 
-            <option v-if="cannotBeChanged" :value="value" selected>{{ field.meta.title }}</option>
-
             <option v-for="resource in resources" :key="resource.key"
                 :value="resource.key"
                 :selected="resource.key == value" >
@@ -36,24 +34,25 @@ export default {
         }
     },
 
-    computed: {
-        disabled() {
-            return !!new Url().object('via')[this.field.name]
-        }
-    },
-
-
     async mounted() {
         if (this.value) {
             this.cannotBeChanged = this.field.isUnchangeable
         }
 
-        if (this.cannotBeChanged) return
-
-        this.resources = await this.$get(this.field.exports.source)
+        this.fetchData()
     },
 
     methods: {
+        async fetchData() {
+            this.resources = await this.$get(this.field.exports.source)
+
+            let via = new Url().object('via')[this.field.name]
+            if (via) {
+                this.cannotBeChanged = true
+                this.$emit('input', via)
+            }
+        },
+
         onInput(e) {
             this.$emit('input', e.target.value)
         }

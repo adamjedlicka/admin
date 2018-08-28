@@ -1,7 +1,7 @@
 <template>
     <ResourceDetail v-if="resource"
         :resource="resource"
-        :model="model"
+        :value="model"
         :title="resource.title"
         action="detail" >
 

@@ -10,7 +10,7 @@
             <component :is="`${field.type}-${action}-field`"
                 :field="field"
                 :value="value"
-                @input="onInput" />
+                @input="$emit('input', $event)" />
 
             <div>
                 <p v-for="(error, i) in errors" :key="i"
@@ -31,11 +31,5 @@ export default {
         'errors',
         'action',
     ],
-
-    methods: {
-        onInput(value) {
-            this.$emit('input', value)
-        }
-    }
 }
 </script>

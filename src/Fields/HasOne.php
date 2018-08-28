@@ -5,7 +5,7 @@ namespace AdamJedlicka\Admin\Fields;
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\ResourceService;
+use AdamJedlicka\Admin\Facades\Resources;
 
 class HasOne extends Field
 {
@@ -16,40 +16,44 @@ class HasOne extends Field
         return optional($model->{$this->getName()})->getKey();
     }
 
-    public function value(Model $model)
+    public function persist(Model $model, $value)
     {
-        $title = '';
-
-        $relatedModel = $model->{$this->getName()};
-
-        if ($relatedModel) {
-            $title = ResourceService::getResourceFromModel($relatedModel)->title();
-        }
-
-        return [
-            'title' => $title,
-        ];
+        //
     }
 
-    public function meta(Resource $resource)
+    public function exports(Resource $resource)
     {
-        $relationship = $resource->model()::make()->{$this->getName()}();
+        $relationship = $resource->newModel()->{$this->getName()}();
         $relatedModel = $relationship->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
 
         return [
             'resource' => $relatedResource->name(),
+            'relatedFieldName' => $this->getRelatedField($resource)->getName(),
+        ];
+    }
+
+    public function meta(Resource $resource, Model $model)
+    {
+        $relatedModel = $model->{$this->getName()};
+
+        if ($relatedModel) {
+            $title = Resources::forModel($relatedModel)->title();
+        }
+
+        return [
+            'title' => $title ?? null,
         ];
     }
 
     public function getRelatedField(Resource $resource)
     {
-        $model = $resource->model()::make();
+        $model = $resource->newModel();
         $relationship = $model->{$this->getName()}();
         $foreignKeyName = $relationship->getForeignKeyName();
 
         $relatedModel = $relationship->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
 
         return collect($relatedResource->fields())
             ->filter(function ($field) {

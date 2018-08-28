@@ -1,10 +1,11 @@
 <template>
     <ResourceDetail v-if="resource"
         :resource="resource"
-        :model="model"
+        :value="model"
         :errors="errors"
         title="Edit"
-        action="edit" >
+        action="edit"
+        @input="onInput" >
 
         <template slot="buttons">
 
@@ -54,6 +55,11 @@ export default {
                 this.errors = response.errors
             }
         },
+
+        onInput(field, value) {
+            this.$set(this.model, field, value)
+            this.$forceUpdate()
+        }
     }
 }
 </script>

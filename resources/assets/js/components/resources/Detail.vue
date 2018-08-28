@@ -11,9 +11,10 @@
 
                 <Field v-for="field in fields" :key="field.name"
                     :field="field"
-                    v-model="model[field.name]"
+                    :value="value[field.name]"
                     :errors="errors ? errors[field.name] : []"
-                    :action="action" />
+                    :action="action"
+                    @input="$emit('input', field.name, $event)" />
 
             </template>
 
@@ -32,7 +33,7 @@
 export default {
     props: [
         'resource',
-        'model',
+        'value',
         'errors',
         'title',
         'action',

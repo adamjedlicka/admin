@@ -13,7 +13,7 @@ class BelongsTo extends Field
 
     public function retrieve(Model $model)
     {
-        return $model->getAttribute($this->name)->getKey();
+        return optional($model->getAttribute($this->name))->getKey();
     }
 
     public function persist(Model $model, $value)
@@ -39,10 +39,14 @@ class BelongsTo extends Field
     public function meta(Resource $resource, Model $model)
     {
         $relatedModel = $model->{$this->getName()};
-        $relatedResource = Resources::forModel($relatedModel);
+
+        if ($relatedModel) {
+            $relatedResource = Resources::forModel($relatedModel);
+            $title = $relatedResource->title();
+        }
 
         return [
-            'title' => $relatedResource->title(),
+            'title' => $title ?? null,
         ];
     }
 

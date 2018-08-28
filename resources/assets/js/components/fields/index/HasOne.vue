@@ -2,7 +2,7 @@
     <span>
         <router-link v-if="value"
             :to="detailUrl" class="link font-bold">
-            {{ meta.title }}
+            {{ field.meta.title }}
         </router-link>
     </span>
 </template>
@@ -11,13 +11,12 @@
 export default {
     props: [
         'field',
-        'meta',
         'value',
     ],
 
     computed: {
         detailUrl() {
-            return `/resources/${this.field.meta.resource}/${this.value}`
+            return `/resources/${this.field.exports.resource}/${this.value}`
         }
     }
 }
