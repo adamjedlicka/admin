@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="resource">
 
         <select @input="onInput" :value="value"
             class="bg-white border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline w-96 max-w-full"
@@ -7,7 +7,7 @@
 
             <option :value="null"></option>
 
-            <option v-for="resource in resources" :key="resource.key"
+            <option v-for="resource in resource.data" :key="resource.key"
                 :value="resource.key"
                 :selected="resource.key == value" >
                 {{ resource.title }}
@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             cannotBeChanged: false,
-            resources: [],
+            resource: null,
         }
     },
 
@@ -44,7 +44,9 @@ export default {
 
     methods: {
         async fetchData() {
-            this.resources = await this.$get(this.field.exports.source)
+            let relatedResourceName = this.field.exports.relatedResourceName
+
+            this.resource = await this.$get(`/api/resources/${relatedResourceName}`)
 
             let via = new Url().object('via')[this.field.name]
             if (via) {

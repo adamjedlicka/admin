@@ -32,7 +32,6 @@ class BelongsTo extends Field
 
         return [
             'relatedResourceName' => $relatedResource->name(),
-            'source' => "/api/relationships/{$resource->name()}/belongsTo/{$this->getName()}",
         ];
     }
 
