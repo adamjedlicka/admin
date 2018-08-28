@@ -26,6 +26,7 @@ class HasMany extends Field
         return [
             'relatedResourceName' => $relatedResource->name(),
             'relatedFieldName' => $relatedField->getName(),
+            'policies' => $relatedResource->getPolicies(),
         ];
     }
 

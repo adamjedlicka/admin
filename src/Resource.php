@@ -5,6 +5,7 @@ namespace AdamJedlicka\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
+use AdamJedlicka\Admin\Fields\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Traits\Authorizes;
 use Illuminate\Database\Eloquent\Builder;
