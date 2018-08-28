@@ -7,6 +7,8 @@
 
             <option :value="null"></option>
 
+            <option v-if="cannotBeChanged" :value="value" selected>{{ field.meta.title }}</option>
+
             <option v-for="resource in resources" :key="resource.key"
                 :value="resource.key"
                 :selected="resource.key == value" >
@@ -46,7 +48,9 @@ export default {
             this.cannotBeChanged = this.field.isUnchangeable
         }
 
-        this.resources = await this.$get(this.field.meta.source)
+        if (this.cannotBeChanged) return
+
+        this.resources = await this.$get(this.field.source)
     },
 
     methods: {

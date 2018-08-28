@@ -1,7 +1,7 @@
 <template>
     <router-link :to="url"
         class="link font-bold" >
-        {{ meta.title }}
+        {{ field.meta.title }}
     </router-link>
 </template>
 
@@ -10,12 +10,11 @@ export default {
     props: {
         field: Object,
         value: null,
-        meta: null,
     },
 
     computed: {
         url() {
-            let resourceName = this.field.meta.name
+            let resourceName = this.field.relatedResourceName
             let resourceId = this.value
 
             return `/resources/${resourceName}/${resourceId}`

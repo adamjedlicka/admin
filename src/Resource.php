@@ -6,11 +6,14 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use AdamJedlicka\Admin\Fields\Field;
 use Illuminate\Database\Eloquent\Model;
+use AdamJedlicka\Admin\Traits\Authorizes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
 abstract class Resource implements Arrayable
 {
+    use Authorizes;
+
     /**
      * Fully qualified name of the coresponding model
      *
@@ -133,13 +136,11 @@ abstract class Resource implements Arrayable
 
     public function getPolicies() : array
     {
-        $user = auth()->user();
-
         return [
-            'view' => $user->can('view', $this->getModel()),
-            'create' => $user->can('create', $this::$model),
-            'update' => $user->can('update', $this->getModel()),
-            'delete' => $user->can('delete', $this->getModel()),
+            'view' => $this->authorizeIfPolicyExists('view', $this->getModel()),
+            'create' => $this->authorizeIfPolicyExists('create', $this::$model),
+            'update' => $this->authorizeIfPolicyExists('update', $this->getModel()),
+            'delete' => $this->authorizeIfPolicyExists('delete', $this->getModel()),
         ];
     }
 

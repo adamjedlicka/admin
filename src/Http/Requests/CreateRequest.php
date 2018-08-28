@@ -14,9 +14,9 @@ class CreateRequest extends IndexRequest
      */
     public function authorize()
     {
-        $model = $this->resource()->getModel();
+        $model = $this->resource()::$model;
 
-        return parent::authorize() && $this->authorizeIfPolicyExists('store', $model);
+        return parent::authorize() && $this->authorizeIfPolicyExists('create', $model);
     }
 
     /**

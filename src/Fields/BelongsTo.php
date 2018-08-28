@@ -5,7 +5,7 @@ namespace AdamJedlicka\Admin\Fields;
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\ResourceService;
+use AdamJedlicka\Admin\Facades\Resources;
 
 class BelongsTo extends Field
 {
@@ -23,23 +23,23 @@ class BelongsTo extends Field
         $model->setAttribute($foreignKey, $value);
     }
 
-    public function meta(Resource $resource)
+    public function exports(Resource $resource)
     {
-        $model = $resource->model()::make();
+        $model = $resource->newModel();
         $relationship = $model->{$this->getName()}();
         $relatedModel = $relationship->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
 
         return [
-            'name' => $relatedResource->name(),
+            'relatedResourceName' => $relatedResource->name(),
             'source' => "/api/relationships/{$resource->name()}/belongsTo/{$this->getName()}",
         ];
     }
 
-    public function value(Model $model)
+    public function meta(Resource $resource, Model $model)
     {
         $relatedModel = $model->{$this->getName()};
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
 
         return [
             'title' => $relatedResource->title(),

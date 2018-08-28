@@ -9,8 +9,7 @@
                 <component
                     :is="`${field.type}-index-field`"
                     :field="field"
-                    :value="field.value"
-                    :meta="field.meta" />
+                    :value="field.value" />
             </div>
 
         </td>

@@ -5,7 +5,7 @@ namespace AdamJedlicka\Admin\Http\Requests;
 use AdamJedlicka\Admin\Resource;
 use AdamJedlicka\Admin\Facades\Resources;
 
-class DetailRequest extends IndexRequest
+class ViewRequest extends IndexRequest
 {
     /**
      * Determine if the user is authorized to make this request.

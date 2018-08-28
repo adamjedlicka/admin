@@ -98,20 +98,6 @@ abstract class Field implements Arrayable
     protected $default = null;
 
     /**
-     * List of relationships to eager load
-     *
-     * @var array
-     */
-    protected $load = [];
-
-    /**
-     * Optional array of values that gets send to API
-     *
-     * @var array
-     */
-    protected $export = [];
-
-    /**
      * Constructor. Use static Field::make method instead.
      *
      * @param string $displayName
@@ -137,13 +123,12 @@ abstract class Field implements Arrayable
     /**
      * Named constructor for fluent syntax
      *
-     * @param string $displayName
-     * @param mixed $options
+     * @param mixed $args
      * @return self
      */
-    public static function make(string $displayName, $options = null) : self
+    public static function make(...$args) : self
     {
-        return new static($displayName, $options);
+        return new static(...$args);
     }
 
     /**
@@ -314,33 +299,6 @@ abstract class Field implements Arrayable
         return $this;
     }
 
-    public function load(...$load) : self
-    {
-        $this->load = array_merge($this->load, $load);
-
-        return $this;
-    }
-
-    /**
-     * Set extra values to be exported to API
-     *
-     * @param array $export
-     * @return self
-     */
-    public function export(array $export) : self
-    {
-        $this->export = array_merge($this->export, $export);
-
-        return $this;
-    }
-
-    public function options($options) : self
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
     /**
      * Retrieves the model from the database
      *
@@ -372,23 +330,24 @@ abstract class Field implements Arrayable
     }
 
     /**
-     * Returns custom meta information about the field
+     * Returns extra information which gets send to frontend API
      *
      * @param \AdamJedlicka\Admin\Resource $resource
-     * @return mixed
+     * @return array
      */
-    public function meta(Resource $resource)
+    public function exports(Resource $resource)
     {
-        return null;
+        return [];
     }
 
     /**
-     * Returns custom value that can be used on the frontend
+     * Returns custom meta information about the field for current model
      *
+     * @param \AdamJedlicka\Admin\Resource $resource
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return mixed
      */
-    public function value(Model $model)
+    public function meta(Resource $resource, Model $model)
     {
         return null;
     }
@@ -547,7 +506,7 @@ abstract class Field implements Arrayable
 
     public function toArray()
     {
-        return [
+        return array_merge([
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
@@ -555,8 +514,8 @@ abstract class Field implements Arrayable
             'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
 
-            'meta' => $this->resource ? $this->meta($this->resource) : null,
+            'meta' => $this->model ? $this->meta($this->resource, $this->model) : null,
             'value' => $this->model ? $this->retrieve($this->model) : null,
-        ];
+        ], $this->exports($this->resource));
     }
 }

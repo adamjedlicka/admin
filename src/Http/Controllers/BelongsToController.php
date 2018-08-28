@@ -2,16 +2,19 @@
 
 namespace AdamJedlicka\Admin\Http\Controllers;
 
+use AdamJedlicka\Admin\Facades\Resources;
+
+
 class BelongsToController extends Controller
 {
     public function index(string $resource, string $relationship)
     {
-        $resource = $this->getResource($resource);
-        $model = $resource->model()::make();
+        $resource = Resources::forName($resource);
+        $model = $resource->newModel();
         $relationship = $model->$relationship();
 
-        $relatedResource = $this->getResource($relationship->getRelated());
-        $relatedModels = $relatedResource->model()::all();
+        $relatedResource = Resources::forModel($relationship->getRelated());
+        $relatedModels = $relatedResource::$model::all();
 
         return $relatedModels
             ->map(function ($relatedModel) use ($relatedResource) {
