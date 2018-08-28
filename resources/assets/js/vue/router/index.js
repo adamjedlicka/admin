@@ -32,10 +32,6 @@ export default new VueRouter({
                     component: require('~/pages/resources/attach'),
                 },
                 {
-                    path: 'relationships/:resource/:resourceKey/hasOne/:relationship/create',
-                    component: require('~/pages/relationships/hasOne/create'),
-                },
-                {
                     path: 'relationships/:resource/:resourceKey/hasMany/:relationship/create',
                     component: require('~/pages/relationships/hasMany/create'),
                 },
