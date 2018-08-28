@@ -506,7 +506,7 @@ abstract class Field implements Arrayable
 
     public function toArray()
     {
-        return array_merge([
+        return [
             'type' => $this->getType(),
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
@@ -514,8 +514,9 @@ abstract class Field implements Arrayable
             'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
 
+            'exports' => $this->resource ? $this->exports($this->resource) : [],
             'meta' => $this->model ? $this->meta($this->resource, $this->model) : null,
             'value' => $this->model ? $this->retrieve($this->model) : null,
-        ], $this->exports($this->resource));
+        ];
     }
 }

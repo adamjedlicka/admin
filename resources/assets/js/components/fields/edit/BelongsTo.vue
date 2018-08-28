@@ -50,7 +50,7 @@ export default {
 
         if (this.cannotBeChanged) return
 
-        this.resources = await this.$get(this.field.source)
+        this.resources = await this.$get(this.field.exports.source)
     },
 
     methods: {
