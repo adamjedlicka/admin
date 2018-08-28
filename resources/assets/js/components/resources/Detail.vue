@@ -23,8 +23,8 @@
         <component v-for="panel in panels" :key="panel.name"
             :is="`${panel.type}-${action}-field`"
             :field="panel"
-            :v-model="model[panel.name]"
-            :errors="errors[panel.name]" />
+            :value="value[panel.name]"
+            :errors="errors ? errors[field.name] : []" />
 
     </div>
 </template>

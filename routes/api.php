@@ -28,26 +28,23 @@ Route::group([
     Route::post('/resources/{resource}', 'StoreController')
         ->name('resources.store');
 
-    Route::get('/resources/{resource}/{key}', 'ShowController')
+    Route::get('/resources/{resource}/{resourceKey}', 'ShowController')
         ->name('resources.show');
 
-    Route::get('/resources/{resource}/{key}/edit', 'EditController')
+    Route::get('/resources/{resource}/{resourceKey}/edit', 'EditController')
         ->name('resources.edit');
 
-    Route::put('/resources/{resource}/{key}', 'UpdateController')
+    Route::put('/resources/{resource}/{resourceKey}', 'UpdateController')
         ->name('resources.update');
 
-    Route::delete('/resources/{resource}/{key}', 'DeleteController')
+    Route::delete('/resources/{resource}/{resourceKey}', 'DeleteController')
         ->name('resources.delete');
 
     /**
      * HasManyController
      */
-    Route::get('/relationships/{resource}/{resourceKey}/hasMany/{relationship}', 'HasManyController@index')
+    Route::get('/resources/{resource}/{resourceKey}/hasMany/{relationship}', 'HasManyController@index')
         ->name('relationships.hasMany');
-
-    Route::get('/relationships/{resource}/{resourceKey}/hasMany/{relationship}/create', 'HasManyController@create')
-        ->name('relationships.hasMany.create');
 
     /**
      * BelongsToManyController

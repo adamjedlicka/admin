@@ -27,7 +27,7 @@ class UpdateRequest extends IndexRequest
     public function resource() : Resource
     {
         $resource = Resources::forName($this->resource);
-        $model = $resource::$model::findOrFail($this->key);
+        $model = $resource::$model::findOrFail($this->resourceKey);
         $resource->setModel($model);
 
         return $resource;

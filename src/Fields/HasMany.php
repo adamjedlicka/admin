@@ -5,7 +5,7 @@ namespace AdamJedlicka\Admin\Fields;
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\ResourceService;
+use AdamJedlicka\Admin\Facades\Resources;
 
 class HasMany extends Field
 {
@@ -13,30 +13,30 @@ class HasMany extends Field
 
     protected $panel = true;
 
-    public function meta(Resource $resource)
+    public function exports(Resource $resource)
     {
-        $model = $resource->model()::make();
+        $model = $resource->newModel();
         $relationship = $model->{$this->getName()}();
         $foreignKeyName = $relationship->getForeignKeyName();
 
         $relatedModel = $relationship->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
         $relatedField = $this->getRelatedField($resource);
 
         return [
-            'relatedName' => $relatedResource->name(),
+            'relatedResourceName' => $relatedResource->name(),
             'relatedFieldName' => $relatedField->getName(),
         ];
     }
 
     public function getRelatedField(Resource $resource)
     {
-        $model = $resource->model()::make();
+        $model = $resource::$model::make();
         $relationship = $model->{$this->getName()}();
         $foreignKeyName = $relationship->getForeignKeyName();
 
         $relatedModel = $relationship->getRelated();
-        $relatedResource = ResourceService::getResourceFromModel($relatedModel);
+        $relatedResource = Resources::forModel($relatedModel);
 
         return collect($relatedResource->fields())
             ->filter(function ($field) {

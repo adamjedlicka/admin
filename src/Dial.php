@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin;
 
 use AdamJedlicka\Admin\Traits\HasLinks;
 use AdamJedlicka\Admin\Facades\Resources;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Dial implements Arrayable
@@ -20,10 +21,37 @@ class Dial implements Arrayable
      */
     protected $query;
 
+    /**
+     * @var \AdamJedlicka\Admin\FieldCollection
+     */
+    protected $hiddenFields;
+
     public function __construct(Resource $resource)
     {
         $this->resource = $resource;
         $this->query = $this->resource->indexQuery();
+
+        $this->hiddenFields = new FieldCollection([]);
+    }
+
+    /**
+     * Sets query which is used to display dial data
+     *
+     * @param mixed $query
+     * @return self
+     */
+    public function query($query) : self
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+    public function hideFields(...$fields) : self
+    {
+        $this->hiddenFields = new FieldCollection($fields);
+
+        return $this;
     }
 
     protected function data()
@@ -42,7 +70,7 @@ class Dial implements Arrayable
         $data = collect($paginated->items())
             ->map(function ($item) {
                 return Resources::forModel($item)
-                    ->onlyFieldsFor('index');
+                    ->onlyFields($this->fields());
             });
 
         $pagination = [
@@ -57,7 +85,11 @@ class Dial implements Arrayable
     protected function fields()
     {
         return $this->resource->getFields()
-            ->onlyFor('index');
+            ->onlyFor('index')
+            ->filter(function ($field) {
+                return array_search($field->getName(), $this->hiddenFields->names()) === false;
+            })
+            ->values();
     }
 
     public function toArray()

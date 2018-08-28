@@ -29,6 +29,13 @@ abstract class Resource implements Arrayable
     protected $modelInstance = null;
 
     /**
+     * Limits fields to be displayed
+     *
+     * @var \AdamJedlicka\Admin\FieldCollection
+     */
+    protected $onlyFields = null;
+
+    /**
      * Limits fields to single view type
      *
      * @var string
@@ -107,6 +114,18 @@ abstract class Resource implements Arrayable
     }
 
     /**
+     * Returns related field
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function getRelatedFieldOf(string $field) : Field
+    {
+        return $this->getFields()
+            ->named($field)
+            ->getRelatedField($this);
+    }
+
+    /**
      * Returns computed array of all creation rules
      *
      * @return array
@@ -175,6 +194,19 @@ abstract class Resource implements Arrayable
     }
 
     /**
+     * Sets which fields are displayed
+     *
+     * @param \AdamJedlicka\Admin\FieldCollection
+     * @return self
+     */
+    public function onlyFields(FieldCollection $fields) : self
+    {
+        $this->onlyFields = $fields;
+
+        return $this;
+    }
+
+    /**
      * Limits fields to single view type
      *
      * @return self
@@ -196,6 +228,9 @@ abstract class Resource implements Arrayable
 
             'policies' => $this->getPolicies(),
             'fields' => $this->getFields()
+                ->filter(function (Field $field) {
+                    return $this->onlyFields ? array_search($field->getName(), $this->onlyFields->names()) !== false : true;
+                })
                 ->filter(function (Field $field) {
                     return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
                 })
