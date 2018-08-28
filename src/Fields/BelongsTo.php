@@ -6,8 +6,9 @@ use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Admin\Fields\Traits\HasForeignKey;
 
-class BelongsTo extends Field
+class BelongsTo extends RelationshipField
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
 
@@ -18,39 +19,36 @@ class BelongsTo extends Field
 
     public function persist(Model $model, $value)
     {
-        $foreignKey = $model->{$this->getName()}()->getForeignKey();
-
-        $model->setAttribute($foreignKey, $value);
+        $model->setAttribute($this->getForeignKeyName(), $value);
     }
 
     public function exports(Resource $resource)
     {
-        $model = $resource->newModel();
-        $relationship = $model->{$this->getName()}();
-        $relatedModel = $relationship->getRelated();
-        $relatedResource = Resources::forModel($relatedModel);
-
         return [
-            'relatedResourceName' => $relatedResource->name(),
+            'relatedResourceName' => $this->relatedResource->name(),
         ];
     }
 
     public function meta(Resource $resource, Model $model)
     {
         $relatedModel = $model->{$this->getName()};
-
-        if ($relatedModel) {
-            $relatedResource = Resources::forModel($relatedModel);
-            $title = $relatedResource->title();
-        }
+        $this->relatedResource->setModel($relatedModel);
 
         return [
-            'title' => $title ?? null,
+            'title' => $this->relatedResource->title(),
         ];
     }
 
-    protected function resolveName(string $displayName) : string
+    /**
+     * Returns name of the foreign key
+     *
+     * BUG : BelongsTo has getForeignKey instead of getForeignKeyName
+     *       Create pull request to Laravel?
+     *
+     * @return string
+     */
+    public function getForeignKeyName() : string
     {
-        return Str::camel($displayName);
+        return $this->relationship->getForeignKey();
     }
 }

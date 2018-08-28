@@ -102,13 +102,15 @@ abstract class Field implements Arrayable
      *
      * @param string $displayName
      * @param mixed $options
+     * @param \Illuminate\Http\Resources\Json\Resource|null $resource
      */
-    protected function __construct(string $displayName, $options = null)
+    protected function __construct(string $displayName, $options = null, $resource = null)
     {
         $this->type = (new \ReflectionClass($this))->getShortName();
         $this->displayName = $displayName;
+        $this->resource = $resource ?? $options;
 
-        if (is_null($options)) {
+        if ($options instanceof Resource) {
             $this->name = $this->resolveName($displayName);
         } else if (is_string($options)) {
             $this->name = $options;
@@ -128,6 +130,17 @@ abstract class Field implements Arrayable
      */
     public static function make(...$args) : self
     {
+        foreach (debug_backtrace() as $trace) {
+            if (!array_has($trace, 'class')) continue;
+
+            $class = $trace['class'];
+
+            if (is_subclass_of($class, Resource::class)) {
+                $args[] = new $class;
+                break;
+            }
+        }
+
         return new static(...$args);
     }
 
