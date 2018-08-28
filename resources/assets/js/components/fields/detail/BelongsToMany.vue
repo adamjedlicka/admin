@@ -1,8 +1,16 @@
 <template>
-    <Panel :name="field.displayName">
+    <Panel :title="field.displayName">
+
+        <template slot="buttons">
+            <router-link v-if="field.exports.policies.attach"
+                :to="attachUrl"
+                class="btn btn-blue" >
+                Attach
+            </router-link>
+        </template>
 
         <template slot="body">
-            <Dial :source="source" :name="field.name" />
+            <Dial :source="source" :name="field.name" isPivot />
         </template>
 
     </Panel>
@@ -22,6 +30,14 @@ export default {
 
             return `/api/resources/${resource}/${resourceKey}/belongsToMany/${relationship}`
         },
+
+        attachUrl() {
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
+            let relationship = this.field.name
+
+            return `/resources/${resource}/${resourceKey}/attach/${relationship}`
+        }
     }
 }
 </script>

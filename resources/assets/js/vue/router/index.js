@@ -31,10 +31,6 @@ export default new VueRouter({
                     path: 'resources/:resource/:resourceKey/attach/:relationship',
                     component: require('~/pages/resources/attach'),
                 },
-                {
-                    path: 'relationships/:resource/:resourceKey/belongsToMany/:relationship/:relationshipKey/edit',
-                    component: require('~/pages/relationships/belongsToMany/edit'),
-                }
             ]
         },
         {

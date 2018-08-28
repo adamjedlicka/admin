@@ -52,4 +52,7 @@ Route::group([
     Route::get('/resources/{resource}/{resourceKey}/belongsToMany/{relationship}', 'BelongsToManyController@index')
         ->name('resources.belongsToMany');
 
+        Route::get('/resources/{resource}/{resourceKey}/belongsToMany/{relationship}/attach', 'BelongsToManyController@create')
+        ->name('resources.belongsToMany.create');
+
 });

@@ -1,28 +1,25 @@
 <template>
-    <Panel v-if="attach" :displayName="attach.title">
+    <ResourceDetail v-if="resource"
+        :resource="resource"
+        :value="model"
+        :errors="errors"
+        title="Attach"
+        action="edit"
+        @input="onInput" >
 
         <template slot="buttons">
-            <a class="btn btn-green" @click="onAttach">Attach</a>
-        </template>
-
-        <template slot="body">
-
-            <Field v-for="field in attach.fields" :key="field.name"
-                    v-model="attach.data[field.name]"
-                    :field="field"
-                    :errors="errors[field.name]"
-                    action="edit" />
 
         </template>
 
-    </Panel>
+    </ResourceDetail>
 </template>
 
 <script>
 export default {
     data() {
         return {
-            attach: null,
+            resource: null,
+            model: {},
             errors: {},
         }
     },
@@ -37,17 +34,16 @@ export default {
             let resourceKey = this.$route.params.resourceKey
             let relationship = this.$route.params.relationship
 
-            this.attach = await this.$get(`/api/relationships/${resource}/${resourceKey}/belongsToMany/${relationship}/attach`)
+            this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}/belongsToMany/${relationship}/attach`)
+
+            this.resource.fields.forEach(field => {
+                this.model[field.name] = field.value
+            })
         },
 
-        async onAttach() {
-            let response = await this.$post(this.attach.links.attach, this.attach.data)
-
-            if (response.status == 'success') {
-                this.$router.go(-1)
-            } else if (response.errors) {
-                this.errors = response.errors
-            }
+        onInput(field, value) {
+            this.$set(this.model, field, value)
+            this.$forceUpdate()
         }
     }
 }

@@ -7,10 +7,13 @@ use AdamJedlicka\Admin\Resource;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\FieldCollection;
 use Illuminate\Database\Eloquent\Model;
+use AdamJedlicka\Admin\Traits\Authorizes;
 use AdamJedlicka\Admin\Facades\ResourceService;
 
 class BelongsToMany extends RelationshipField
 {
+    use Authorizes;
+
     protected $visibleOn = ['detail'];
 
     protected $panel = true;
@@ -21,6 +24,7 @@ class BelongsToMany extends RelationshipField
     {
         return [
             'relatedResourceName' => $this->relatedResource->name(),
+            'policies' => $this->getPolicies(),
         ];
     }
 
@@ -42,5 +46,15 @@ class BelongsToMany extends RelationshipField
     public function getRelatedPivotKeyName() : string
     {
         return $this->relationship->getRelatedPivotKeyName();
+    }
+
+    public function getPolicies()
+    {
+        $name = $this->relatedResource->name();
+        $model = $this->resource->getModel();
+
+        return [
+            'attach' => $this->authorizeIfPolicyExists("attach$name", $model),
+        ];
     }
 }
