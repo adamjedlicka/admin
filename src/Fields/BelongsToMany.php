@@ -34,8 +34,8 @@ class BelongsToMany extends RelationshipField
     public function getFields() : FieldCollection
     {
         return (new FieldCollection($this->fields))
-            ->each(function (Field $field) {
-                $field->isPivot();
+            ->map(function (Field $field) {
+                return $field->isPivot();
             });
     }
 

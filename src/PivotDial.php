@@ -7,17 +7,39 @@ use AdamJedlicka\Admin\Fields\Text;
 use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\FieldCollection;
 use AdamJedlicka\Admin\Fields\BelongsTo;
+use AdamJedlicka\Admin\Facades\Resources;
+use Illuminate\Database\Eloquent\Builder;
+use AdamJedlicka\Admin\Fields\PivotBelongsTo;
 
 class PivotDial extends Dial
 {
-    protected $pivotFields = [];
+    /**
+     * @var \AdamJedlicka\Admin\FieldCollection
+     */
+    protected $pivotFields;
+
+    public function __construct(Resource $resource, $relationship)
+    {
+        parent::__construct($resource);
+
+        $this->query = $relationship;
+
+        $relatedResource = Resources::forModel($this->query->getRelated());
+
+        $this->pivotFields = new FieldCollection([
+
+            PivotBelongsTo::make($relatedResource->name(), $this->query->getRelationName(), $this->resource)
+                ->isPivot(),
+
+        ]);
+    }
 
     /**
      * Sets pivot fields
      */
     public function withPivot($fields) : self
     {
-        $this->pivotFields = $fields;
+        $this->pivotFields = $this->pivotFields->merge($fields);
 
         return $this;
     }
@@ -27,7 +49,10 @@ class PivotDial extends Dial
         [$data, $pagination] = parent::paginated();
 
         $data = $data->each(function (Resource $resource) {
-            $resource->extraFields($this->pivotFields);
+            $resource->extraFields($this->pivotFields->map(function ($field) use ($resource) {
+                $field->setModel($resource->getModel());
+                return $field;
+            }));
         });
 
         return [$data, $pagination];
@@ -35,11 +60,6 @@ class PivotDial extends Dial
 
     protected function fields() : FieldCollection
     {
-        return parent::fields()
-            ->filter(function (Field $field) {
-                return $field instanceof Id;
-            })
-            ->merge($this->pivotFields)
-            ->values();
+        return $this->pivotFields;
     }
 }

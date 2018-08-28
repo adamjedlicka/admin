@@ -12,8 +12,7 @@ class BelongsToManyController extends Controller
     {
         $field = $request->resource()->getFields()->named($request->relationship);
 
-        return (new PivotDial($request->relatedResource()))
-            ->query($request->relationship())
+        return (new PivotDial($request->resource(), $request->relationship()))
             ->withPivot($field->getFields());
     }
 }

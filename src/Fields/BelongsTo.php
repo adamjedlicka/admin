@@ -32,10 +32,14 @@ class BelongsTo extends RelationshipField
     public function meta(Resource $resource, Model $model)
     {
         $relatedModel = $model->{$this->getName()};
-        $this->relatedResource->setModel($relatedModel);
+
+        if ($relatedModel) {
+            $this->relatedResource->setModel($relatedModel);
+            $title = $this->relatedResource->title();
+        }
 
         return [
-            'title' => $this->relatedResource->title(),
+            'title' => $title ?? null,
         ];
     }
 

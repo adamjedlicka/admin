@@ -139,14 +139,16 @@ abstract class Field implements Arrayable
      */
     public static function make(...$args) : self
     {
-        foreach (debug_backtrace() as $trace) {
-            if (!array_has($trace, 'class')) continue;
+        if (count($args) < 3) {
+            foreach (debug_backtrace() as $trace) {
+                if (!array_has($trace, 'class')) continue;
 
-            $class = $trace['class'];
+                $class = $trace['class'];
 
-            if (is_subclass_of($class, Resource::class)) {
-                $args[] = new $class;
-                break;
+                if (is_subclass_of($class, Resource::class)) {
+                    $args[] = new $class;
+                    break;
+                }
             }
         }
 
@@ -341,6 +343,17 @@ abstract class Field implements Arrayable
      */
     public function retrieve(Model $model)
     {
+        return $model->getAttribute($this->name);
+    }
+
+    /**
+     * Returns the value of field for certain model
+     *
+     * @param Model $model
+     * @return mixed
+     */
+    protected function value(Model $model)
+    {
         if ($this->isPivot) {
             $model = $model->pivot;
         }
@@ -353,7 +366,7 @@ abstract class Field implements Arrayable
             return null;
         }
 
-        return $model->getAttribute($this->name);
+        return $this->retrieve($model);
     }
 
     /**
@@ -554,7 +567,7 @@ abstract class Field implements Arrayable
 
             'exports' => $this->resource instanceof Resource ? $this->exports($this->resource) : [],
             'meta' => $this->model ? $this->meta($this->resource, $this->model) : null,
-            'value' => $this->model ? $this->retrieve($this->model) : null,
+            'value' => $this->model ? $this->value($this->model) : null,
         ];
     }
 }
