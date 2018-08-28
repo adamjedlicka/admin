@@ -1,17 +1,8 @@
 <template>
-    <Panel :displayName="field.displayName">
-
-        <template slot="buttons">
-
-            <router-link :to="attachUrl"
-                class="btn btn-blue" >
-                Attach
-            </router-link>
-
-        </template>
+    <Panel :name="field.displayName">
 
         <template slot="body">
-            <Dial :source="source" :prefix="field.name" />
+            <Dial :source="source" :name="field.name" />
         </template>
 
     </Panel>
@@ -29,16 +20,8 @@ export default {
             let resourceKey = this.$route.params.resourceKey
             let relationship = this.field.name
 
-            return `/api/relationships/${resource}/${resourceKey}/belongsToMany/${relationship}`
+            return `/api/resources/${resource}/${resourceKey}/belongsToMany/${relationship}`
         },
-
-        attachUrl() {
-            let resource = this.$route.params.resource
-            let resourceKey = this.$route.params.resourceKey
-            let relationship = this.field.name
-
-            return `/resources/${resource}/${resourceKey}/attach/${relationship}`
-        }
     }
 }
 </script>

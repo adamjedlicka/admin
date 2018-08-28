@@ -44,6 +44,13 @@ abstract class Resource implements Arrayable
     protected $onlyFieldsFor = null;
 
     /**
+     * Extra fields to display. For eaxmple for pivot table
+     *
+     * @var \AdamJedlicka\Admin\FieldCollection
+     */
+    protected $extraFields = null;
+
+    /**
      * Definition of fields
      *
      * @return array
@@ -219,6 +226,23 @@ abstract class Resource implements Arrayable
         return $this;
     }
 
+    /**
+     * Sets extra fields to display. For example for pivot table.
+     *
+     * @return self
+     */
+    public function extraFields(FieldCollection $fields) : self
+    {
+        $this->extraFields = $fields->each(function (Field $field) {
+            $field->setResource($this);
+            $field->setModel($this->modelInstance);
+
+            return $field;
+        });
+
+        return $this;
+    }
+
     public function toArray()
     {
         return [
@@ -235,6 +259,7 @@ abstract class Resource implements Arrayable
                 ->filter(function (Field $field) {
                     return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
                 })
+                ->merge($this->extraFields)
                 ->values(),
         ];
     }

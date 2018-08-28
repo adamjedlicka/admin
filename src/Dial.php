@@ -82,7 +82,7 @@ class Dial implements Arrayable
         return [$data, $pagination];
     }
 
-    protected function fields()
+    protected function fields() : FieldCollection
     {
         return $this->resource->getFields()
             ->onlyFor('index')

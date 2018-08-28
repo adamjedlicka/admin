@@ -44,27 +44,12 @@ Route::group([
      * HasManyController
      */
     Route::get('/resources/{resource}/{resourceKey}/hasMany/{relationship}', 'HasManyController@index')
-        ->name('relationships.hasMany');
+        ->name('resources.hasMany');
 
     /**
      * BelongsToManyController
      */
-    Route::get('/relationships/{resource}/{key}/belongsToMany/{relationship}', 'BelongsToManyController@index')
+    Route::get('/resources/{resource}/{resourceKey}/belongsToMany/{relationship}', 'BelongsToManyController@index')
         ->name('resources.belongsToMany');
-
-    Route::get('/relationships/{resource}/{key}/belongsToMany/{relationship}/attach', 'BelongsToManyController@create')
-        ->name('resources.belongsToMany.create');
-
-    Route::post('/relationships/{resource}/{key}/belongsToMany/{relationship}/attach', 'BelongsToManyController@attach')
-        ->name('resources.belongsToMany.attach');
-
-    Route::get('/relationships/{resource}/{key}/belongsToMany/{relationship}/{what}/edit', 'BelongsToManyController@edit')
-        ->name('resources.belongsToMany.edit');
-
-    Route::put('/relationships/{resource}/{key}/belongsToMany/{relationship}/{what}', 'BelongsToManyController@update')
-        ->name('resources.belongsToMany.update');
-
-    Route::delete('/relationships/{resource}/{key}/belongsToMany/{relationship}/detach/{what}', 'BelongsToManyController@detach')
-        ->name('resources.belongsToMany.detach');
 
 });

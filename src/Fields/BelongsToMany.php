@@ -4,25 +4,23 @@ namespace AdamJedlicka\Admin\Fields;
 
 use Illuminate\Support\Str;
 use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\FieldCollection;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Facades\ResourceService;
 
-class BelongsToMany extends Field
+class BelongsToMany extends RelationshipField
 {
     protected $visibleOn = ['detail'];
 
     protected $panel = true;
 
-    /**
-     * @var array
-     */
     protected $fields = [];
 
-    public function meta(Resource $resource)
+    public function exports(Resource $resource)
     {
         return [
-            'name' => $this->relatedResource($resource)->name(),
+            'relatedResourceName' => $this->relatedResource->name(),
         ];
     }
 
@@ -30,50 +28,19 @@ class BelongsToMany extends Field
     {
         $this->fields = $fields;
 
-        foreach ($this->fields as $field) {
-            $field->options(function ($model) use ($field) {
-                return $model->pivot->{$field->getName()};
-            });
-        }
-
         return $this;
     }
 
-    public function getFields(Resource $resource) : FieldCollection
+    public function getFields() : FieldCollection
     {
-        $relatedResource = $this->relatedResource($resource);
-        $relatedPivotKeyName = $this->relatedPivotKeyName($resource);
-
-        return (new FieldCollection([
-
-            PivotBelongsTo::make($relatedResource->name(), $relatedPivotKeyName)
-                ->relationship($this->getName())
-                ->sortable(),
-
-        ]))->merge($this->fields)
-            ->each(function ($field) use ($resource) {
-                $field->setResource($resource);
+        return (new FieldCollection($this->fields))
+            ->each(function (Field $field) {
+                $field->isPivot();
             });
     }
 
-    protected function resolveName(string $displayName) : string
+    public function getRelatedPivotKeyName() : string
     {
-        return Str::camel($displayName);
-    }
-
-    protected function relatedResource(Resource $resource) : Resource
-    {
-        $model = $resource->model()::make();
-        $relationship = $model->{$this->getName()}();
-
-        return ResourceService::getResourceFromModel($relationship->getRelated());
-    }
-
-    protected function relatedPivotKeyName(Resource $resource) : string
-    {
-        $model = $resource->model()::make();
-        $relationship = $model->{$this->getName()}();
-
-        return $relationship->getRelatedPivotKeyName();
+        return $this->relationship->getRelatedPivotKeyName();
     }
 }
