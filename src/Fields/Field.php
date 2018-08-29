@@ -449,10 +449,6 @@ abstract class Field implements Arrayable
      */
     public function setModel(Model $model)
     {
-        if ($this->isPivot) {
-            info(spl_object_id($this) . ' :: ' . $this->getName() . ' :: ' . $model->getKey());
-        }
-
         $this->model = $model;
     }
 
