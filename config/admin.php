@@ -6,8 +6,4 @@ return [
 
     'directory' => 'Admin',
 
-    'models' => [
-        'namespace' => 'App',
-    ]
-
 ];
