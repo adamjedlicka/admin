@@ -58,6 +58,11 @@ class BelongsToMany extends RelationshipField
             ->first();
     }
 
+    public function getForeignKeyName() : string
+    {
+        return $this->relationship->getForeignPivotKeyName();
+    }
+
     public function getRelatedPivotKeyName() : string
     {
         return $this->relationship->getRelatedPivotKeyName();

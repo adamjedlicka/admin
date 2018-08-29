@@ -38,6 +38,8 @@ abstract class RelationshipField extends Field
         $this->relationship = $model->{$this->getName()}();
         $this->relatedModel = $this->relationship->getRelated();
         $this->relatedResource = Resources::forModel($this->relatedModel);
+
+        $this->sortsAs = $this->getForeignKeyName();
     }
 
     /**

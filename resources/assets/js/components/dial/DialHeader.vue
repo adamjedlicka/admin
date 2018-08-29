@@ -13,9 +13,9 @@
                     {{ field.displayName }}
 
                     <span v-if="field.isSortable">
-                        <i v-if="sort != field.name" class="fas fa-sort text-grey"></i>
-                        <i v-if="sort == field.name && order == 'asc'" class="fas fa-sort-up"></i>
-                        <i v-if="sort == field.name && order == 'desc'" class="fas fa-sort-down"></i>
+                        <i v-if="sort != field.sortsAs" class="fas fa-sort text-grey"></i>
+                        <i v-if="sort == field.sortsAs && order == 'asc'" class="fas fa-sort-up"></i>
+                        <i v-if="sort == field.sortsAs && order == 'desc'" class="fas fa-sort-down"></i>
                     </span>
                 </div>
 
@@ -66,15 +66,15 @@ export default {
         onClick(field) {
             if (!field.isSortable) return
 
-            if (field.name == this.sort) {
-                this.sort = field.name
+            if (field.sortsAs == this.sort) {
+                this.sort = field.sortsAs
                 this.order = {
                     null: 'asc',
                     asc: 'desc',
                     desc: null,
                 }[this.order]
             } else {
-                this.sort = field.name
+                this.sort = field.sortsAs
                 this.order = 'asc'
             }
 

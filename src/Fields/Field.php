@@ -98,6 +98,14 @@ abstract class Field implements Arrayable
     protected $default = null;
 
     /**
+     * Sets database column name by which field is sorted.
+     * Useful if field name does not correspond to databse column name (relationship fields).
+     *
+     * @var string
+     */
+    protected $sortsAs = null;
+
+    /**
      * Represents field on the pivot table?
      *
      * @var bool
@@ -319,6 +327,20 @@ abstract class Field implements Arrayable
     public function default($default) : self
     {
         $this->default = $default;
+
+        return $this;
+    }
+
+    /**
+     * Sets database column name by which field is sorted.
+     * Useful if field name does not correspond to databse column name (relationship fields).
+     *
+     * @var string $name
+     * @return self
+     */
+    public function sortsAs(string $name) : self
+    {
+        $this->sortsAs = $name;
 
         return $this;
     }
@@ -562,6 +584,7 @@ abstract class Field implements Arrayable
             'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'default' => $this->getDefault(),
+            'sortsAs' => $this->sortsAs ?? $this->getName(),
             'isSortable' => $this->isSortable(),
             'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
