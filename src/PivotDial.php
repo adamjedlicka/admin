@@ -48,11 +48,8 @@ class PivotDial extends Dial
     {
         [$data, $pagination] = parent::paginated();
 
-        $data = $data->each(function (Resource $resource) {
-            $resource->extraFields($this->pivotFields->map(function ($field) use ($resource) {
-                $field->setModel($resource->getModel());
-                return $field;
-            }));
+        $data = $data->map(function (Resource $resource) {
+            return $resource->extraFields($this->fields());
         });
 
         return [$data, $pagination];

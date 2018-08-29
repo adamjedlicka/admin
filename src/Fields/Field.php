@@ -449,6 +449,10 @@ abstract class Field implements Arrayable
      */
     public function setModel(Model $model)
     {
+        if ($this->isPivot) {
+            info(spl_object_id($this) . ' :: ' . $this->getName() . ' :: ' . $model->getKey());
+        }
+
         $this->model = $model;
     }
 
@@ -584,9 +588,10 @@ abstract class Field implements Arrayable
             'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
 
-            'exports' => $this->resource instanceof Resource ? $this->exports($this->resource) : [],
+            'exports' => $this->resource ? $this->exports($this->resource) : [],
             'meta' => $this->model ? $this->meta($this->resource, $this->model) : null,
             'value' => $this->model ? $this->value($this->model) : null,
+            'modelKey' => $this->model ? $this->model->getKey() : null,
         ];
     }
 }

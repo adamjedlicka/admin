@@ -41,4 +41,11 @@ class FieldCollection extends Collection
             return $field->isVisibleOn($view);
         })->values();
     }
+
+    public function clone()
+    {
+        return $this->map(function ($field) {
+            return clone $field;
+        });
+    }
 }

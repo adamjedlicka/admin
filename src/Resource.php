@@ -115,6 +115,7 @@ abstract class Resource implements Arrayable
     public function getFields() : FieldCollection
     {
         return (new FieldCollection($this->fields()))
+            ->merge($this->extraFields)
             ->each(function (Field $field) {
                 $field->setResource($this);
                 if ($this->modelInstance) $field->setModel($this->modelInstance);
@@ -233,12 +234,10 @@ abstract class Resource implements Arrayable
      */
     public function extraFields(FieldCollection $fields) : self
     {
-        $this->extraFields = $fields->each(function (Field $field) {
-            $field->setResource($this);
-            $field->setModel($this->modelInstance);
-
-            return $field;
-        });
+        /**
+         * We need to clone fields so we won't interfere with other references
+         */
+        $this->extraFields = $fields->clone();
 
         return $this;
     }
@@ -259,7 +258,6 @@ abstract class Resource implements Arrayable
                 ->filter(function (Field $field) {
                     return $this->onlyFieldsFor === null || $field->isVisibleOn($this->onlyFieldsFor);
                 })
-                ->merge($this->extraFields)
                 ->values(),
         ];
     }
