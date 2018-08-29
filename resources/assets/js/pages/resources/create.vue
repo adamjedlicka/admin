@@ -26,31 +26,22 @@
 </template>
 
 <script>
+import HasResource from './HasResource'
+
 export default {
-    data() {
-        return {
-            resource: null,
-            model: {},
-            errors: {},
+    mixins: [
+        HasResource,
+    ],
+
+    computed: {
+        source() {
+            let resource = this.$route.params.resource
+
+            return `/api/resources/${resource}/create`
         }
     },
 
-    mounted() {
-        this.fetchData()
-    },
-
     methods: {
-        async fetchData() {
-            let resource = this.$route.params.resource
-            let resourceKey = this.$route.params.resourceKey
-
-            this.resource = await this.$get(`/api/resources/${resource}/create`)
-
-            this.resource.fields.forEach(field => {
-                this.model[field.name] = field.value
-            })
-        },
-
         async onCreate() {
             let response = await this.$post(`/api/resources/${this.resource.name}`, this.model)
 
@@ -65,9 +56,8 @@ export default {
             this.$router.go(-1)
         },
 
-        onInput(field, value) {
-            this.$set(this.model, field, value)
-            this.$forceUpdate()
+        valueOf(field) {
+            return field.value || field.default
         }
     }
 }

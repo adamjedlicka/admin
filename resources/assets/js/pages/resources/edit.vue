@@ -26,31 +26,23 @@
 </template>
 
 <script>
+import HasResource from './HasResource'
+
 export default {
-    data() {
-        return {
-            resource: null,
-            model: {},
-            errors: {},
-        }
-    },
+    mixins: [
+        HasResource,
+    ],
 
-    mounted() {
-        this.fetchData()
-    },
-
-    methods: {
-        async fetchData() {
+    computed: {
+        source() {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
 
-            this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}/edit`)
+            return `/api/resources/${resource}/${resourceKey}/edit`
+        }
+    },
 
-            this.resource.fields.forEach(field => {
-                this.model[field.name] = field.value
-            })
-        },
-
+    methods: {
         async onUpdate() {
             let response = await this.$put(`/api/resources/${this.resource.name}/${this.resource.key}`, this.model)
 
@@ -64,11 +56,6 @@ export default {
         onCancel() {
             this.$router.go(-1)
         },
-
-        onInput(field, value) {
-            this.$set(this.model, field, value)
-            this.$forceUpdate()
-        }
     }
 }
 </script>

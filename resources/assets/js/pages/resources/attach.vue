@@ -8,9 +8,14 @@
         @input="onInput" >
 
         <template slot="buttons">
+            <a @click="onCancel"
+                class="btn btn-blue" >
+                Cancel
+            </a>
+
             <a v-if="resource.policies.attach"
                 @click="onAttach"
-                class="btn btn-blue" >
+                class="btn btn-green" >
                 Attach
             </a>
         </template>
@@ -19,14 +24,12 @@
 </template>
 
 <script>
+import HasResource from './HasResource'
+
 export default {
-    data() {
-        return {
-            resource: null,
-            model: {},
-            errors: {},
-        }
-    },
+    mixins: [
+        HasResource,
+    ],
 
     computed: {
         source() {
@@ -36,33 +39,21 @@ export default {
 
             return `/api/resources/${resource}/${resourceKey}/belongsToMany/${relationship}/attach`;
         }
-
-    },
-
-    mounted() {
-        this.fetchData()
     },
 
     methods: {
-        async fetchData() {
-            this.resource = await this.$get(this.source)
-
-            this.resource.fields.forEach(field => {
-                this.model[field.name] = field.value ? field.value : field.default
-            })
-        },
-
         async onAttach() {
             let response = await this.$post(this.source, this.model)
 
             if (response.status == 'success') {
                 this.$router.go(-1)
+            } else {
+                this.errors = response.errors
             }
         },
 
-        onInput(field, value) {
-            this.$set(this.model, field, value)
-            this.$forceUpdate()
+        onCancel() {
+            this.$router.go(-1)
         }
     }
 }

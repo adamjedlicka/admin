@@ -27,6 +27,10 @@ class BelongsToManyController extends Controller
 
     public function store(AttachRequest $request)
     {
+        $request->validate([
+            $request->relationship => 'required',
+        ]);
+
         $request->relationship()->attach(
             $request->get($request->relationship),
             $request->except($request->relationship)

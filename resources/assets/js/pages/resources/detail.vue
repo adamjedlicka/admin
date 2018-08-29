@@ -25,30 +25,23 @@
 </template>
 
 <script>
+import HasResource from './HasResource'
+
 export default {
-    data() {
-        return {
-            resource: null,
-            model: {},
-        }
-    },
+    mixins: [
+        HasResource,
+    ],
 
-    mounted() {
-        this.fetchData()
-    },
-
-    methods: {
-        async fetchData() {
+    computed: {
+        source() {
             let resource = this.$route.params.resource
             let resourceKey = this.$route.params.resourceKey
 
-            this.resource = await this.$get(`/api/resources/${resource}/${resourceKey}`)
+            return `/api/resources/${resource}/${resourceKey}`
+        }
+    },
 
-            this.resource.fields.forEach(field => {
-                this.model[field.name] = field.value
-            })
-        },
-
+    methods: {
         async onDelete() {
             let ok = await modalConfirm('Delete', `Delete this record: ${this.resource.title} ?`, true)
             if (!ok) return
@@ -57,7 +50,7 @@ export default {
             if (response.status == 'success') {
                 this.$router.push(`/resources/${this.resource.name}`)
             }
-        }
+        },
     }
 }
 </script>

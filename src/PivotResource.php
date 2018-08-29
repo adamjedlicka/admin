@@ -41,7 +41,7 @@ class PivotResource extends Resource
         $this->belongsToManyField = $this->parentResource->getFields()->named($request->relationship);
 
         $this->fields = new FieldCollection([
-            BelongsTo::make(
+            PivotBelongsTo::make(
                 $this->relatedResource->name(),
                 $this->belongsToManyField->getName(),
                 $this->parentResource
