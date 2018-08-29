@@ -98,11 +98,6 @@ abstract class Field implements Arrayable
     protected $default = null;
 
     /**
-     * Sets custom name for export to API
-     */
-    protected $exportAs = null;
-
-    /**
      * Represents field on the pivot table?
      *
      * @var bool
@@ -324,19 +319,6 @@ abstract class Field implements Arrayable
     public function default($default) : self
     {
         $this->default = $default;
-
-        return $this;
-    }
-
-    /**
-     * Sets custom name for field when exporting to API
-     *
-     * @param string $name
-     * @return self
-     */
-    public function exportAs(string $name) : self
-    {
-        $this->exportAs = $name;
 
         return $this;
     }
@@ -577,7 +559,7 @@ abstract class Field implements Arrayable
     {
         return [
             'type' => $this->getType(),
-            'name' => $this->exportAs ?? $this->getName(),
+            'name' => $this->getName(),
             'displayName' => $this->getDisplayName(),
             'default' => $this->getDefault(),
             'isSortable' => $this->isSortable(),
