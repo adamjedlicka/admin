@@ -12,6 +12,13 @@ class BelongsTo extends RelationshipField
 {
     protected $visibleOn = ['index', 'detail', 'edit'];
 
+    protected function __construct(...$args)
+    {
+        parent::__construct(...$args);
+
+        $this->sortsAs = $this->getForeignKeyName();
+    }
+
     public function retrieve(Model $model)
     {
         return optional($model->getAttribute($this->name))->getKey();

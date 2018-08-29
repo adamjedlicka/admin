@@ -29,6 +29,7 @@ class PivotDial extends Dial
         $this->pivotFields = new FieldCollection([
 
             PivotBelongsTo::make($relatedResource->name(), $this->query->getRelationName(), $this->resource)
+                ->sortable()
                 ->isPivot(),
 
         ]);

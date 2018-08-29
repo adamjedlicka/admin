@@ -23,4 +23,9 @@ class PivotBelongsTo extends BelongsTo
     {
         return 'BelongsTo';
     }
+
+    public function getForeignKeyName() : string
+    {
+        return $this->relationship->getRelatedPivotKeyName();
+    }
 }
