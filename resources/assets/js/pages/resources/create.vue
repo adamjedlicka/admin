@@ -9,6 +9,11 @@
 
         <template slot="buttons">
 
+            <a @click="onCancel"
+                class="btn btn-blue" >
+                Cancel
+            </a>
+
             <a v-if="resource.policies.create"
                 @click="onCreate"
                 class="btn btn-green" >
@@ -54,6 +59,10 @@ export default {
             } else {
                 this.errors = response.errors
             }
+        },
+
+        onCancel() {
+            this.$router.go(-1)
         },
 
         onInput(field, value) {
