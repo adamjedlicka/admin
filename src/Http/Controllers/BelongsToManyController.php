@@ -27,9 +27,14 @@ class BelongsToManyController extends Controller
 
     public function store(AttachRequest $request)
     {
-        $request->validate([
-            $request->relationship => 'required',
-        ]);
+        $field = $request->resource()->getFields()->named($request->relationship);
+
+        $table = $request->relationship()->getTable();
+        $column = $request->relationship()->getRelatedPivotKeyName();
+
+        $request->validate(array_merge([
+            $request->relationship => ['required', "unique:$table,$column"],
+        ], $field->getCreationRules()));
 
         $request->relationship()->attach(
             $request->get($request->relationship),

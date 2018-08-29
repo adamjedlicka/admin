@@ -43,6 +43,34 @@ class BelongsToMany extends RelationshipField
     }
 
     /**
+     * Returns computed array of all creation rules
+     *
+     * @return array
+     */
+    public function getCreationRules() : array
+    {
+        return $this->getFields()
+            ->mapWithKeys(function (Field $field) {
+                return [$field->getName() => $field->getCreationRules()];
+            })
+            ->toArray();
+    }
+
+    /**
+     * Returns computed array of all update rules
+     *
+     * @return array
+     */
+    public function getUpdateRules() : array
+    {
+        return $this->getFields()
+            ->mapWithKeys(function (Field $field) {
+                return [$field->getName() => $field->getUpdateRules()];
+            })
+            ->toArray();
+    }
+
+    /**
      * Returns related field
      *
      * @return \AdamJedlicka\Admin\Fields\Field
