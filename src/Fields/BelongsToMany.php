@@ -8,7 +8,6 @@ use AdamJedlicka\Admin\Fields\Field;
 use AdamJedlicka\Admin\FieldCollection;
 use Illuminate\Database\Eloquent\Model;
 use AdamJedlicka\Admin\Traits\Authorizes;
-use AdamJedlicka\Admin\Facades\ResourceService;
 
 class BelongsToMany extends RelationshipField
 {
