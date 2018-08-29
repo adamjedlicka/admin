@@ -43,6 +43,21 @@ class BelongsToMany extends RelationshipField
             });
     }
 
+    /**
+     * Returns related field
+     *
+     * @return \AdamJedlicka\Admin\Fields\Field
+     */
+    public function getRelatedField() : Field
+    {
+        return collect($this->relatedResource->fields())
+            ->filter(function ($field) {
+                return $field instanceof BelongsToMany
+                    && $field->getRelatedPivotKeyName() == $this->relationship->getForeignPivotKeyName();
+            })
+            ->first();
+    }
+
     public function getRelatedPivotKeyName() : string
     {
         return $this->relationship->getRelatedPivotKeyName();

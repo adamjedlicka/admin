@@ -14,10 +14,9 @@ class RelationshipRequest extends IndexRequest
      */
     public function authorize()
     {
-        $model = $this->resource()->getModel();
-        $relatedModel = $model->{$this->relationship}()->getRelated();
+        $relatedModel = $this->relatedResource()::$model;
 
-        return parent::authorize() && $this->authorizeIfPolicyExists('viewAny', get_class($relatedModel));
+        return parent::authorize() && $this->authorizeIfPolicyExists('viewAny', $relatedModel);
     }
 
     /**

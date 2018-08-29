@@ -4,8 +4,10 @@ namespace AdamJedlicka\Admin\Http\Controllers;
 
 use AdamJedlicka\Admin\PivotDial;
 use AdamJedlicka\Admin\Fields\Text;
+use AdamJedlicka\Admin\PivotResource;
 use AdamJedlicka\Admin\FieldCollection;
 use AdamJedlicka\Admin\Fields\BelongsTo;
+use AdamJedlicka\Admin\Http\Requests\AttachRequest;
 use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
 
 class BelongsToManyController extends Controller
@@ -18,20 +20,20 @@ class BelongsToManyController extends Controller
             ->withPivot($field->getFields());
     }
 
-    public function create(RelationshipRequest $request)
+    public function create(AttachRequest $request)
     {
-        $field = $request->resource()->getFields()->named($request->relationship);
+        return (new PivotResource($request));
+    }
 
-        $fields = new FieldCollection([
-            BelongsTo::make(
-                $request->relatedResource()->name(),
-                $request->relationship,
-                $request->resource()
-            ),
+    public function store(AttachRequest $request)
+    {
+        $request->relationship()->attach(
+            $request->get($request->relationship),
+            $request->except($request->relationship)
+        );
+
+        return response()->json([
+            'status' => 'success',
         ]);
-
-        return [
-            'fields' => $fields->merge($field->getFields()),
-        ];
     }
 }
