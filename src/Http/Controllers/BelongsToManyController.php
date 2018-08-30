@@ -21,7 +21,7 @@ class BelongsToManyController extends Controller
             ->withPivot($field->getFields());
     }
 
-    public function create(AttachRequest $request)
+    public function create(RelationshipRequest $request)
     {
         return PivotResource::fromRequest($request);
     }

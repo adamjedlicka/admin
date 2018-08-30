@@ -106,7 +106,7 @@ class BelongsToMany extends RelationshipField
         $model = $this->resource->getModel();
 
         return [
-            'attach' => $this->authorizeIfPolicyExists("attach$name", $model),
+            'attachAny' => $this->authorizeIfPolicyExists("attachAny$name", $model),
         ];
     }
 }

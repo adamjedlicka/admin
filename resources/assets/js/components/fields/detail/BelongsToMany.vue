@@ -2,7 +2,7 @@
     <Panel :title="field.displayName">
 
         <template slot="buttons">
-            <router-link v-if="field.exports.policies.attach"
+            <router-link v-if="field.exports.policies.attachAny"
                 :to="attachUrl"
                 class="btn btn-blue" >
                 Attach

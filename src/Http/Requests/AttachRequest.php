@@ -11,9 +11,10 @@ class AttachRequest extends RelationshipRequest
      */
     public function authorize()
     {
-        $model = $this->resource()->getModel();
         $name = $this->relatedResource()->name();
+        $model = $this->resource()->getModel();
+        $relatedModel = $this->relatedResource()::$model::findOrFail($this->get($this->relationship));
 
-        return parent::authorize() && $this->authorizeIfPolicyExists("attach$name", $model);
+        return parent::authorize() && $this->authorizeIfPolicyExists("attach$name", $model, $relatedModel);
     }
 }

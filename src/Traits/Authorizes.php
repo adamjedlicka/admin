@@ -11,12 +11,12 @@ trait Authorizes
      * @param \Illuminate\Database\Eloquent\Model|string $model
      * @return bool
      */
-    public function authorizeIfPolicyExists(string $policy, $model) : bool
+    public function authorizeIfPolicyExists(string $policy, $model, ...$args) : bool
     {
         $policyClass = policy($model);
 
         if ($policyClass && method_exists($policyClass, $policy)) {
-            return auth()->user()->can($policy, $model);
+            return auth()->user()->can($policy, array_merge([$model], $args));
         }
 
         return true;

@@ -11,9 +11,11 @@ class DetachRequest extends RelationshipRequest
      */
     public function authorize()
     {
-        $model = $this->resource()->getModel();
         $name = $this->relatedResource()->name();
+        $model = $this->resource()->getModel();
+        $relatedModel = $this->relationship()->getRelated();
 
-        return parent::authorize() && $this->authorizeIfPolicyExists("detach$name", $model);
+        return parent::authorize()
+            && $this->authorizeIfPolicyExists("detach$name", $model, $relatedModel);
     }
 }
