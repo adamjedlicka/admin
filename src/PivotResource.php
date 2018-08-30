@@ -97,8 +97,8 @@ class PivotResource extends Resource
         $name = $this->resource->name();
 
         return [
-            'attach' => $this->authorizeIfPolicyExists("attach$name", $this->modelInstance),
-            'detach' => $this->authorizeIfPolicyExists("detach$name", $this->modelInstance),
+            'attach' => $this->authorizeIfPolicyExists("attach$name", $this->parentResource->getModel()),
+            'detach' => $this->authorizeIfPolicyExists("detach$name", $this->parentResource->getModel()),
         ];
     }
 }
