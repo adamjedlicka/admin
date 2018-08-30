@@ -70,6 +70,7 @@ export default class Request {
             method: this._method,
             headers: {
                 'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         }
 

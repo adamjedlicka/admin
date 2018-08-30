@@ -6,4 +6,9 @@ return [
 
     'directory' => 'Admin',
 
+    'middleware' => [
+        'web',
+        'auth',
+    ],
+
 ];
