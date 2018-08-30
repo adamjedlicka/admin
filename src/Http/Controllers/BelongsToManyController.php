@@ -7,9 +7,10 @@ use AdamJedlicka\Admin\Fields\Text;
 use AdamJedlicka\Admin\PivotResource;
 use AdamJedlicka\Admin\FieldCollection;
 use AdamJedlicka\Admin\Fields\BelongsTo;
-use AdamJedlicka\Admin\Http\Requests\AttachRequest;
-use AdamJedlicka\Admin\Http\Requests\DetachRequest;
 use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
+use AdamJedlicka\Admin\Http\Requests\BelongsToManyStoreRequest;
+use AdamJedlicka\Admin\Http\Requests\BelongsToManyCreateRequest;
+use AdamJedlicka\Admin\Http\Requests\BelongsToManyDeleteRequest;
 
 class BelongsToManyController extends Controller
 {
@@ -21,12 +22,12 @@ class BelongsToManyController extends Controller
             ->withPivot($field->getFields());
     }
 
-    public function create(RelationshipRequest $request)
+    public function create(BelongsToManyCreateRequest $request)
     {
         return PivotResource::fromRequest($request);
     }
 
-    public function store(AttachRequest $request)
+    public function store(BelongsToManyStoreRequest $request)
     {
         $field = $request->resource()->getFields()->named($request->relationship);
 
@@ -44,7 +45,7 @@ class BelongsToManyController extends Controller
         ]);
     }
 
-    public function delete(DetachRequest $request)
+    public function delete(BelongsToManyDeleteRequest $request)
     {
         $request->relationship()->detach($request->relationshipKey);
 

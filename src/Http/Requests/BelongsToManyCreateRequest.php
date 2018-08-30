@@ -2,7 +2,10 @@
 
 namespace AdamJedlicka\Admin\Http\Requests;
 
-class DetachRequest extends RelationshipRequest
+use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Admin\Facades\Resources;
+
+class BelongsToManyCreateRequest extends RelationshipRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,9 +16,7 @@ class DetachRequest extends RelationshipRequest
     {
         $name = $this->relatedResource()->name();
         $model = $this->resource()->getModel();
-        $relatedModel = $this->relationship()->getRelated();
 
-        return parent::authorize()
-            && $this->authorizeIfPolicyExists("detach$name", $model, $relatedModel);
+        return parent::authorize() && $this->authorizeIfPolicyExists("attachAny$name", $model);
     }
 }
