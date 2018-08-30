@@ -11,6 +11,7 @@ use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
 use AdamJedlicka\Admin\Http\Requests\BelongsToManyStoreRequest;
 use AdamJedlicka\Admin\Http\Requests\BelongsToManyCreateRequest;
 use AdamJedlicka\Admin\Http\Requests\BelongsToManyDeleteRequest;
+use AdamJedlicka\Admin\Http\Requests\BelongsToManyUpdateRequest;
 
 class BelongsToManyController extends Controller
 {
@@ -37,6 +38,29 @@ class BelongsToManyController extends Controller
 
         $request->relationship()->attach(
             $request->get($request->relationship),
+            $request->except($request->relationship)
+        );
+
+        return response()->json([
+            'status' => 'success',
+        ]);
+    }
+
+    public function edit(BelongsToManyUpdateRequest $request)
+    {
+        return PivotResource::fromRequest($request);
+    }
+
+    public function update(BelongsToManyUpdateRequest $request)
+    {
+        $field = $request->resource()->getFields()->named($request->relationship);
+
+        $request->validate(array_merge([
+            $request->relationship => ['required'],
+        ], $field->getPivotCreationRules()));
+
+        $request->relationship()->updateExistingPivot(
+            $request->relationshipKey,
             $request->except($request->relationship)
         );
 

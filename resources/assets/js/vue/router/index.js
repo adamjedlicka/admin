@@ -31,6 +31,10 @@ export default new VueRouter({
                     path: 'resources/:resource/:resourceKey/attach/:relationship',
                     component: require('~/pages/resources/attach'),
                 },
+                {
+                    path: 'resources/:resource/:resourceKey/editPivot/:relationship/:relationshipKey',
+                    component: require('~/pages/resources/editPivot'),
+                },
             ]
         },
         {

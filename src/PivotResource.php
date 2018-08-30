@@ -58,7 +58,7 @@ class PivotResource extends Resource
                 $this->resource->name(),
                 $this->belongsToManyField->getName(),
                 $this->parentResource
-            )
+            )->cannotBeChanged()
         ]);
     }
 
@@ -99,6 +99,7 @@ class PivotResource extends Resource
         return [
             'attachAny' => $this->authorizeIfPolicyExists("attachAny$name", $this->parentResource->getModel()),
             'attach' => $this->authorizeIfPolicyExists("attach$name", $this->parentResource->getModel(), $this->modelInstance),
+            'update' => $this->authorizeIfPolicyExists("update$name", $this->parentResource->getModel(), $this->modelInstance),
             'detach' => $this->authorizeIfPolicyExists("detach$name", $this->parentResource->getModel(), $this->modelInstance),
         ];
     }

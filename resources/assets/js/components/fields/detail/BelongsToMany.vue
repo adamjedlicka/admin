@@ -13,7 +13,15 @@
             <Dial ref="dial" :source="source" :name="field.name">
 
                 <template slot="buttons" slot-scope="scope">
-                    <a v-if="scope.resource.policies.detach" @click="onDetach(scope.resource)"
+                    <router-link v-if="scope.resource.policies.update"
+                        :to="editUrl(scope.resource)"
+                        title="Update"
+                        class="text-grey hover:text-black cursor-pointer" >
+                        <i class="py-4 px-1 far fa-edit"></i>
+                    </router-link>
+
+                    <a v-if="scope.resource.policies.detach"
+                        @click="onDetach(scope.resource)"
                         title="Detach"
                         class="text-grey hover:text-red cursor-pointer" >
                         <i class="py-4 px-1 fas fa-unlink"></i>
@@ -61,6 +69,14 @@ export default {
                 this.$refs.dial.fetchData()
             }
         },
+
+        editUrl({ key, name }) {
+            let resource = this.$route.params.resource
+            let resourceKey = this.$route.params.resourceKey
+            let relationship = this.field.name
+
+            return `/resources/${resource}/${resourceKey}/editPivot/${relationship}/${key}`
+        }
     }
 }
 </script>
