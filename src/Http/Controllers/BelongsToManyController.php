@@ -31,7 +31,7 @@ class BelongsToManyController extends Controller
 
         $request->validate(array_merge([
             $request->relationship => ['required'],
-        ], $field->getCreationRules()));
+        ], $field->getPivotCreationRules()));
 
         $request->relationship()->attach(
             $request->get($request->relationship),

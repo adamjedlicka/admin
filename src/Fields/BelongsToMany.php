@@ -47,7 +47,7 @@ class BelongsToMany extends RelationshipField
      *
      * @return array
      */
-    public function getCreationRules() : array
+    public function getPivotCreationRules() : array
     {
         return $this->getFields()
             ->mapWithKeys(function (Field $field) {
@@ -61,7 +61,7 @@ class BelongsToMany extends RelationshipField
      *
      * @return array
      */
-    public function getUpdateRules() : array
+    public function getPivotUpdateRules() : array
     {
         return $this->getFields()
             ->mapWithKeys(function (Field $field) {
