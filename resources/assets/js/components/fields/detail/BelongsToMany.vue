@@ -10,7 +10,7 @@
         </template>
 
         <template slot="body">
-            <Dial :source="source" :name="field.name">
+            <Dial ref="dial" :source="source" :name="field.name">
 
                 <template slot="buttons" slot-scope="scope">
                     <a v-if="scope.resource.policies.detach" @click="onDetach(scope.resource)"
@@ -48,10 +48,19 @@ export default {
 
             return `/resources/${resource}/${resourceKey}/attach/${relationship}`
         },
+    },
 
+    methods: {
         async onDetach(resource) {
-            console.log(resource)
-        }
+            let ok = await modalConfirm('Detach', `Detach this record: ${resource.title} ?`, true)
+            if (!ok) return
+
+            let response = await this.$delete(`${this.source}/${resource.key}`)
+
+            if (response.status == 'success') {
+                this.$refs.dial.fetchData()
+            }
+        },
     }
 }
 </script>
