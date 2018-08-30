@@ -22,7 +22,7 @@ class BelongsToManyController extends Controller
 
     public function create(AttachRequest $request)
     {
-        return (new PivotResource($request));
+        return PivotResource::fromRequest($request);
     }
 
     public function store(AttachRequest $request)

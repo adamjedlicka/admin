@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin;
 
 use AdamJedlicka\Admin\FieldCollection;
 use AdamJedlicka\Admin\Fields\BelongsTo;
+use AdamJedlicka\Admin\Fields\BelongsToMany;
 use AdamJedlicka\Admin\Fields\PivotBelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
@@ -13,14 +14,18 @@ class PivotResource extends Resource
     public static $model = Pivot::class;
 
     /**
+     * Resource this pivot is representing
+     *
+     * @var \AdamJedlicka\Admin\Resource
+     */
+    protected $resource;
+
+    /**
+     * Parent resource which is queried to get this resource
+     *
      * @var \AdamJedlicka\Admin\Resource
      */
     protected $parentResource;
-
-    /**
-     * @var \AdamJedlicka\Admin\Resource
-     */
-    protected $relatedResource;
 
     /**
      * @var \AdamJedlicka\Admin\FieldCollection
@@ -28,25 +33,36 @@ class PivotResource extends Resource
     protected $fields;
 
     /**
+     * BelongsToMany field on $parentResource
+     *
      * @var \AdamJedlicka\Admin\Fields\BelongsToMany
      */
     protected $belongsToManyField;
 
-    public function __construct(RelationshipRequest $request)
+    protected function __construct(Resource $resource, Resource $parentResource, BelongsToMany $field)
     {
-        $this->parentResource = $request->resource();
-        $this->relatedResource = $request->relatedResource();
-        $this->modelInstance = $this->parentResource->getModel();
+        $this->resource = $resource;
+        $this->parentResource = $parentResource;
+        $this->belongsToManyField = $field;
 
-        $this->belongsToManyField = $this->parentResource->getFields()->named($request->relationship);
+        $this->modelInstance = $this->resource->getModel();
 
         $this->fields = new FieldCollection([
             PivotBelongsTo::make(
-                $this->relatedResource->name(),
+                $this->resource->name(),
                 $this->belongsToManyField->getName(),
                 $this->parentResource
             )
         ]);
+    }
+
+    public static function fromRequest(RelationshipRequest $request)
+    {
+        return new static(
+            $request->relatedResource(),
+            $request->resource(),
+            $request->resource()->getFields()->named($request->relationship)
+        );
     }
 
     public function fields()
@@ -62,7 +78,7 @@ class PivotResource extends Resource
 
     public function getPolicies() : array
     {
-        $name = $this->relatedResource->name();
+        $name = $this->resource->name();
 
         return [
             'attach' => $this->authorizeIfPolicyExists("attach$name", $this->modelInstance),
