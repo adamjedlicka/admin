@@ -29,11 +29,8 @@ class BelongsToManyController extends Controller
     {
         $field = $request->resource()->getFields()->named($request->relationship);
 
-        $table = $request->relationship()->getTable();
-        $column = $request->relationship()->getRelatedPivotKeyName();
-
         $request->validate(array_merge([
-            $request->relationship => ['required', "unique:$table,$column"],
+            $request->relationship => ['required'],
         ], $field->getCreationRules()));
 
         $request->relationship()->attach(
