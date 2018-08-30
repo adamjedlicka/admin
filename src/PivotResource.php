@@ -4,6 +4,7 @@ namespace AdamJedlicka\Admin;
 
 use AdamJedlicka\Admin\FieldCollection;
 use AdamJedlicka\Admin\Fields\BelongsTo;
+use AdamJedlicka\Admin\Facades\Resources;
 use AdamJedlicka\Admin\Fields\BelongsToMany;
 use AdamJedlicka\Admin\Fields\PivotBelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -12,6 +13,11 @@ use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
 class PivotResource extends Resource
 {
     public static $model = Pivot::class;
+
+    public function title()
+    {
+        return $this->resource->title();
+    }
 
     /**
      * Resource this pivot is representing
@@ -65,6 +71,13 @@ class PivotResource extends Resource
         );
     }
 
+    public static function fromResource(Resource $resource, Resource $parentResource, string $fieldName)
+    {
+        $belongsToManyField = $parentResource->getFields()->named($fieldName);
+
+        return new static($resource, $parentResource, $belongsToManyField);
+    }
+
     public function fields()
     {
         throw new \BadMethodCallException('Do not call PivotResource::field directly-');
@@ -73,7 +86,10 @@ class PivotResource extends Resource
     public function getFields() : FieldCollection
     {
         return $this->fields
-            ->merge($this->belongsToManyField->getFields());
+            ->merge($this->belongsToManyField->getFields())
+            ->each(function ($field) {
+                $field->setModel($this->modelInstance);
+            });
     }
 
     public function getPolicies() : array

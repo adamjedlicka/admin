@@ -95,6 +95,11 @@ class BelongsToMany extends RelationshipField
         return $this->relationship->getRelatedPivotKeyName();
     }
 
+    public function getRelationName() : string
+    {
+        return $this->relationship->getRelationName();
+    }
+
     public function getPolicies()
     {
         $name = $this->relatedResource->name();

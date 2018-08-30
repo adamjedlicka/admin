@@ -50,7 +50,9 @@ class PivotDial extends Dial
         [$data, $pagination] = parent::paginated();
 
         $data = $data->map(function (Resource $resource) {
-            return $resource->extraFields($this->fields());
+            $resource = $resource->extraFields($this->fields());
+
+            return PivotResource::fromResource($resource, $this->resource, $this->query->getRelationName());
         });
 
         return [$data, $pagination];

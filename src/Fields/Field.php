@@ -378,6 +378,7 @@ abstract class Field implements Arrayable
     {
         if ($this->isPivot) {
             $model = $model->pivot;
+            if (!$model) return null;
         }
 
         if (is_callable($this->options)) {
@@ -588,9 +589,10 @@ abstract class Field implements Arrayable
             'isSortable' => $this->isSortable(),
             'isUnchangeable' => $this->isUnchangeable(),
             'isPanel' => $this->isPanel(),
+            'isPivot' => $this->isPivot,
 
             'exports' => $this->resource ? $this->exports($this->resource) : [],
-            'meta' => $this->model ? $this->meta($this->resource, $this->model) : null,
+            'meta' => $this->model ? $this->meta($this->resource, $this->model) : [],
             'value' => $this->model ? $this->value($this->model) : null,
             'modelKey' => $this->model ? $this->model->getKey() : null,
         ];
