@@ -12,8 +12,29 @@
 
                 <DialBody
                     :rows="dial.data"
-                    :links="dial.links"
-                    @update="fetchData" >
+                    :links="dial.links" >
+
+                    <template slot="buttons" slot-scope="scope">
+                        <slot name="buttons" :resource="scope.resource">
+                            <router-link v-if="scope.resource.policies.view" :to="detailUrl(scope.resource)"
+                                title="Detail"
+                                class="text-grey hover:text-black cursor-pointer" >
+                                <i class="py-4 px-1 far fa-eye"></i>
+                            </router-link>
+
+                            <router-link v-if="scope.resource.policies.update" :to="editUrl(scope.resource)"
+                                title="Edit"
+                                class="text-grey hover:text-black cursor-pointer" >
+                                <i class="py-4 px-1 far fa-edit"></i>
+                            </router-link>
+
+                            <a v-if="scope.resource.policies.delete" @click="onDelete(scope.resource)"
+                                title="Detail"
+                                class="text-grey hover:text-red cursor-pointer" >
+                                <i class="py-4 px-1 far fa-trash-alt"></i>
+                            </a>
+                        </slot>
+                    </template>
 
                 </DialBody>
 
@@ -69,6 +90,27 @@ export default {
                 .syncQueryString(this.name)
 
             this.$emit('update', this.dial)
+        },
+
+        detailUrl(resource) {
+            return `/resources/${resource.name}/${resource.key}`
+        },
+
+        editUrl(resource) {
+            return `/resources/${resource.name}/${resource.key}/edit`
+        },
+
+        deleteUrl(resource) {
+            return `/api/resources/${resource.name}/${resource.key}`
+        },
+
+        async onDelete(resource) {
+            let ok = await modalConfirm('Delete', `Delete ${resource.title} ?`, true)
+            if (!ok) return
+
+            let response = await this.$delete(this.deleteUrl(resource))
+            if (response.status == 'success') this.fetchData()
+
         },
     },
 

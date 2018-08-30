@@ -10,7 +10,17 @@
         </template>
 
         <template slot="body">
-            <Dial :source="source" :name="field.name" isPivot />
+            <Dial :source="source" :name="field.name">
+
+                <template slot="buttons" slot-scope="scope">
+                    <a v-if="scope.resource.policies.detach" @click="onDetach(scope.resource)"
+                        title="Detach"
+                        class="text-grey hover:text-red cursor-pointer" >
+                        <i class="py-4 px-1 fas fa-unlink"></i>
+                    </a>
+                </template>
+
+            </Dial>
         </template>
 
     </Panel>
@@ -37,6 +47,10 @@ export default {
             let relationship = this.field.name
 
             return `/resources/${resource}/${resourceKey}/attach/${relationship}`
+        },
+
+        async onDetach(resource) {
+            console.log(resource)
         }
     }
 }

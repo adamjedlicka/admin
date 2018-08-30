@@ -4,8 +4,11 @@
         <DialBodyRow v-for="(row, i) in rows" :key="i"
             class="hover:bg-grey-lighter"
             :row="row"
-            :links="links"
-            @update="$emit('update')" >
+            :links="links" >
+
+            <template slot="buttons" slot-scope="scope">
+                <slot name="buttons" :resource="scope.resource" />
+            </template>
 
         </DialBodyRow>
 
