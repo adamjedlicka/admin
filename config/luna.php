@@ -2,9 +2,9 @@
 
 return [
 
-    'prefix' => 'admin',
+    'prefix' => 'luna',
 
-    'directory' => 'Admin',
+    'directory' => 'Luna',
 
     'middleware' => [
         'web',

@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Support;
+namespace AdamJedlicka\Luna\Support;
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Luna\Resource;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,13 +13,13 @@ class Resources
      * Returns resource for given name
      *
      * @param string $name Case insensitive name of the resource
-     * @return \AdamJedlicka\Admin\Resource
+     * @return \AdamJedlicka\Luna\Resource
      */
     public function forName(string $name) : Resource
     {
         $namespace = app()->getNamespace();
 
-        $files = (new Finder)->in(app_path(config('admin.directory')))
+        $files = (new Finder)->in(app_path(config('luna.directory')))
             ->files()->name("/$name/i");
 
         foreach ($files as $file) {
@@ -36,7 +36,7 @@ class Resources
      * Returns resource for given model
      *
      * @param \Illuminate\Database\Eloquent\Model $model
-     * @return \AdamJedlicka\Admin\Resource
+     * @return \AdamJedlicka\Luna\Resource
      */
     public function forModel(Model $model) : Resource
     {

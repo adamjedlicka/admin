@@ -1,9 +1,9 @@
 <?php
 
 Route::group([
-    'namespace' => 'AdamJedlicka\Admin\Http\Controllers',
-    'middleware' => config('admin.middleware'),
-    'prefix' => config('admin.prefix') . '/api',
+    'namespace' => 'AdamJedlicka\Luna\Http\Controllers',
+    'middleware' => config('luna.middleware'),
+    'prefix' => config('luna.prefix') . '/api',
 ], function () {
 
     /**

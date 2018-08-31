@@ -1,10 +1,10 @@
 <?php
 
-namespace AdamJedlicka\Admin\Support;
+namespace AdamJedlicka\Luna\Support;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Facades\Resources;
 
 class Models
 {

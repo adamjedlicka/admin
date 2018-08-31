@@ -1,10 +1,10 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use AdamJedlicka\Admin\Facades\Models;
-use AdamJedlicka\Admin\Http\Requests\StoreReqeust;
+use AdamJedlicka\Luna\Facades\Models;
+use AdamJedlicka\Luna\Http\Requests\StoreReqeust;
 
 class StoreController extends Controller
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Facades\Models;
-use AdamJedlicka\Admin\Http\Requests\UpdateRequest;
+use AdamJedlicka\Luna\Facades\Models;
+use AdamJedlicka\Luna\Http\Requests\UpdateRequest;
 
 class UpdateController extends Controller
 {

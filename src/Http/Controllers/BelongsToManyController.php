@@ -1,17 +1,17 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\PivotDial;
-use AdamJedlicka\Admin\Fields\Text;
-use AdamJedlicka\Admin\PivotResource;
-use AdamJedlicka\Admin\FieldCollection;
-use AdamJedlicka\Admin\Fields\BelongsTo;
-use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
-use AdamJedlicka\Admin\Http\Requests\BelongsToManyStoreRequest;
-use AdamJedlicka\Admin\Http\Requests\BelongsToManyCreateRequest;
-use AdamJedlicka\Admin\Http\Requests\BelongsToManyDeleteRequest;
-use AdamJedlicka\Admin\Http\Requests\BelongsToManyUpdateRequest;
+use AdamJedlicka\Luna\PivotDial;
+use AdamJedlicka\Luna\Fields\Text;
+use AdamJedlicka\Luna\PivotResource;
+use AdamJedlicka\Luna\FieldCollection;
+use AdamJedlicka\Luna\Fields\BelongsTo;
+use AdamJedlicka\Luna\Http\Requests\RelationshipRequest;
+use AdamJedlicka\Luna\Http\Requests\BelongsToManyStoreRequest;
+use AdamJedlicka\Luna\Http\Requests\BelongsToManyCreateRequest;
+use AdamJedlicka\Luna\Http\Requests\BelongsToManyDeleteRequest;
+use AdamJedlicka\Luna\Http\Requests\BelongsToManyUpdateRequest;
 
 class BelongsToManyController extends Controller
 {

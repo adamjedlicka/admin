@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Requests;
+namespace AdamJedlicka\Luna\Http\Requests;
 
 class BelongsToManyDeleteRequest extends RelationshipRequest
 {

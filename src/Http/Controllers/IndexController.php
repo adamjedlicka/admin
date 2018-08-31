@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Dial;
-use AdamJedlicka\Admin\Http\Requests\IndexRequest;
+use AdamJedlicka\Luna\Dial;
+use AdamJedlicka\Luna\Http\Requests\IndexRequest;
 
 class IndexController extends Controller
 {

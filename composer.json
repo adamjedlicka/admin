@@ -1,5 +1,5 @@
 {
-    "name": "adamjedlicka/admin",
+    "name": "adamjedlicka/luna",
     "description": "Admin panel for Laravel",
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "AdamJedlicka\\Admin\\": "src/"
+            "AdamJedlicka\\Luna\\": "src/"
         },
         "files": [
             "src/Support/helpers.php"
@@ -24,7 +24,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AdamJedlicka\\Admin\\ServiceProvider"
+                "AdamJedlicka\\Luna\\ServiceProvider"
             ]
         }
     }

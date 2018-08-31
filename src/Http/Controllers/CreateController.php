@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Create;
-use AdamJedlicka\Admin\Http\Requests\CreateRequest;
+use AdamJedlicka\Luna\Create;
+use AdamJedlicka\Luna\Http\Requests\CreateRequest;
 
 class CreateController extends Controller
 {

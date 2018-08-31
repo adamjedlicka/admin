@@ -1,8 +1,8 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Facades\Resources;
 
 class HasOneController extends Controller
 {

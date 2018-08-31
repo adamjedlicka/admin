@@ -1,10 +1,10 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Facades\Resources;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 abstract class RelationshipField extends Field
@@ -20,12 +20,12 @@ abstract class RelationshipField extends Field
     protected $relatedModel;
 
     /**
-     * @var \AdamJedlicka\Admin\Resource
+     * @var \AdamJedlicka\Luna\Resource
      */
     protected $relatedResource;
 
     /**
-     * @var \AdamJedlicka\Admin\Fields\Field
+     * @var \AdamJedlicka\Luna\Fields\Field
      */
     protected $relatedField;
 
@@ -43,7 +43,7 @@ abstract class RelationshipField extends Field
     /**
      * Returns related field
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return \AdamJedlicka\Luna\Fields\Field
      */
     public function getRelatedField() : Field
     {

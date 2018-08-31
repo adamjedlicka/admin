@@ -1,13 +1,13 @@
 <?php
 
 Route::group([
-    'namespace' => 'AdamJedlicka\Admin\Http\Controllers',
-    'middleware' => config('admin.middleware'),
-    'prefix' => config('admin.prefix'),
+    'namespace' => 'AdamJedlicka\Luna\Http\Controllers',
+    'middleware' => config('luna.middleware'),
+    'prefix' => config('luna.prefix'),
 ], function () {
 
     Route::get('/{any?}', function () {
-        return view('admin::index');
+        return view('luna::index');
     })->where('any', '.*');
 
 });

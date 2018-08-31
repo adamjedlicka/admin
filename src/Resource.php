@@ -1,13 +1,13 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Luna;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use AdamJedlicka\Admin\Fields\Field;
-use AdamJedlicka\Admin\Fields\HasMany;
+use AdamJedlicka\Luna\Fields\Field;
+use AdamJedlicka\Luna\Fields\HasMany;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Traits\Authorizes;
+use AdamJedlicka\Luna\Traits\Authorizes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -32,7 +32,7 @@ abstract class Resource implements Arrayable
     /**
      * Limits fields to be displayed
      *
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $onlyFields = null;
 
@@ -46,7 +46,7 @@ abstract class Resource implements Arrayable
     /**
      * Extra fields to display. For eaxmple for pivot table
      *
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $extraFields = null;
 
@@ -64,7 +64,7 @@ abstract class Resource implements Arrayable
      */
     public function title()
     {
-        return $this->name() . ' ' . $this->getModel()->getKey();
+        return $this->name() . ($this->getModel() ? (' ' . $this->getModel()->getKey()) : '');
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class Resource implements Arrayable
     /**
      * Returns filtered out fields without panels
      *
-     * @return \AdamJedlicka\Admin\FieldCollection
+     * @return \AdamJedlicka\Luna\FieldCollection
      */
     public function getFields() : FieldCollection
     {
@@ -125,7 +125,7 @@ abstract class Resource implements Arrayable
     /**
      * Returns related field
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return \AdamJedlicka\Luna\Fields\Field
      */
     public function getRelatedFieldOf(string $field) : Field
     {
@@ -205,7 +205,7 @@ abstract class Resource implements Arrayable
     /**
      * Sets which fields are displayed
      *
-     * @param \AdamJedlicka\Admin\FieldCollection
+     * @param \AdamJedlicka\Luna\FieldCollection
      * @return self
      */
     public function onlyFields(FieldCollection $fields) : self

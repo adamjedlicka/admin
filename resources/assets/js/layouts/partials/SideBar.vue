@@ -6,7 +6,7 @@
                 AdamJedlicka
             </span>
             <span class="text-xl">
-                Admin
+                Luna
             </span>
         </div>
 

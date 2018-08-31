@@ -1,8 +1,8 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Http\Requests\DeleteRequest;
+use AdamJedlicka\Luna\Http\Requests\DeleteRequest;
 
 class DeleteController extends Controller
 {

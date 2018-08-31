@@ -1,14 +1,14 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Luna;
 
-use AdamJedlicka\Admin\FieldCollection;
-use AdamJedlicka\Admin\Fields\BelongsTo;
-use AdamJedlicka\Admin\Facades\Resources;
-use AdamJedlicka\Admin\Fields\BelongsToMany;
-use AdamJedlicka\Admin\Fields\PivotBelongsTo;
+use AdamJedlicka\Luna\FieldCollection;
+use AdamJedlicka\Luna\Fields\BelongsTo;
+use AdamJedlicka\Luna\Facades\Resources;
+use AdamJedlicka\Luna\Fields\BelongsToMany;
+use AdamJedlicka\Luna\Fields\PivotBelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
-use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
+use AdamJedlicka\Luna\Http\Requests\RelationshipRequest;
 
 class PivotResource extends Resource
 {
@@ -22,26 +22,26 @@ class PivotResource extends Resource
     /**
      * Resource this pivot is representing
      *
-     * @var \AdamJedlicka\Admin\Resource
+     * @var \AdamJedlicka\Luna\Resource
      */
     protected $resource;
 
     /**
      * Parent resource which is queried to get this resource
      *
-     * @var \AdamJedlicka\Admin\Resource
+     * @var \AdamJedlicka\Luna\Resource
      */
     protected $parentResource;
 
     /**
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $fields;
 
     /**
      * BelongsToMany field on $parentResource
      *
-     * @var \AdamJedlicka\Admin\Fields\BelongsToMany
+     * @var \AdamJedlicka\Luna\Fields\BelongsToMany
      */
     protected $belongsToManyField;
 

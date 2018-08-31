@@ -1,11 +1,11 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Dial;
-use AdamJedlicka\Admin\Create;
-use AdamJedlicka\Admin\Facades\Resources;
-use AdamJedlicka\Admin\Http\Requests\RelationshipRequest;
+use AdamJedlicka\Luna\Dial;
+use AdamJedlicka\Luna\Create;
+use AdamJedlicka\Luna\Facades\Resources;
+use AdamJedlicka\Luna\Http\Requests\RelationshipRequest;
 
 class HasManyController extends Controller
 {

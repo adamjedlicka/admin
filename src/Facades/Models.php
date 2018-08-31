@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Facades;
+namespace AdamJedlicka\Luna\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -11,6 +11,6 @@ class Models extends Facade
 {
     public static function getFacadeAccessor()
     {
-        return 'admin.models';
+        return 'luna.models';
     }
 }

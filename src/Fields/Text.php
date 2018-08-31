@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
 class Text extends Field
 {

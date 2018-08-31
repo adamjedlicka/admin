@@ -1,13 +1,13 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Resource;
-use AdamJedlicka\Admin\Fields\Field;
-use AdamJedlicka\Admin\FieldCollection;
+use AdamJedlicka\Luna\Resource;
+use AdamJedlicka\Luna\Fields\Field;
+use AdamJedlicka\Luna\FieldCollection;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Traits\Authorizes;
+use AdamJedlicka\Luna\Traits\Authorizes;
 
 class BelongsToMany extends RelationshipField
 {
@@ -73,7 +73,7 @@ class BelongsToMany extends RelationshipField
     /**
      * Returns related field
      *
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return \AdamJedlicka\Luna\Fields\Field
      */
     public function getRelatedField() : Field
     {

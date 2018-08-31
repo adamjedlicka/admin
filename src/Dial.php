@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Luna;
 
-use AdamJedlicka\Admin\Traits\HasLinks;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Traits\HasLinks;
+use AdamJedlicka\Luna\Facades\Resources;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -12,7 +12,7 @@ class Dial implements Arrayable
     use HasLinks;
 
     /**
-     * @var \AdamJedlicka\Admin\Resource
+     * @var \AdamJedlicka\Luna\Resource
      */
     protected $resource;
 
@@ -22,7 +22,7 @@ class Dial implements Arrayable
     protected $query;
 
     /**
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $hiddenFields;
 

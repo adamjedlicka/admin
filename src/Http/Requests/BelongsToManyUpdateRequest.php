@@ -1,10 +1,10 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Requests;
+namespace AdamJedlicka\Luna\Http\Requests;
 
-use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Luna\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Facades\Resources;
 
 class BelongsToManyUpdateRequest extends RelationshipRequest
 {
@@ -29,7 +29,7 @@ class BelongsToManyUpdateRequest extends RelationshipRequest
     /**
      * Returns related resource for current request
      *
-     * @return \AdamJedlicka\Admin\Resource
+     * @return \AdamJedlicka\Luna\Resource
      */
     public function relatedResource() : Resource
     {

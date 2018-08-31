@@ -1,16 +1,16 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Luna\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Support\Arrayable;
 
 abstract class Field implements Arrayable
 {
     /**
-     * @var \AdamJedlicka\Admin\Resource|null
+     * @var \AdamJedlicka\Luna\Resource|null
      */
     protected $resource = null;
 
@@ -406,7 +406,7 @@ abstract class Field implements Arrayable
     /**
      * Returns extra information which gets send to frontend API
      *
-     * @param \AdamJedlicka\Admin\Resource $resource
+     * @param \AdamJedlicka\Luna\Resource $resource
      * @return array
      */
     public function exports(Resource $resource)
@@ -417,7 +417,7 @@ abstract class Field implements Arrayable
     /**
      * Returns custom meta information about the field for current model
      *
-     * @param \AdamJedlicka\Admin\Resource $resource
+     * @param \AdamJedlicka\Luna\Resource $resource
      * @param \Illuminate\Database\Eloquent\Model $model
      * @return mixed
      */
@@ -440,7 +440,7 @@ abstract class Field implements Arrayable
     /**
      * Sets the coresponding resource
      *
-     * @param \AdamJedlicka\Admin\Resource $resource
+     * @param \AdamJedlicka\Luna\Resource $resource
      */
     public function setResource(Resource $resource)
     {

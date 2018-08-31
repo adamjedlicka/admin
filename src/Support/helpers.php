@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Luna\Resource;
 use Illuminate\Database\Eloquent\Model;
 
 function get_metadata_from_file($filename)
@@ -62,7 +62,7 @@ function get_namespace_from_file($filename)
 function get_resource_from_name(string $name) : Resource
 {
     $fileName = Str::studly($name) . '.php';
-    $path = app_path(config('admin.directory') . '/Resources');
+    $path = app_path(config('luna.directory') . '/Resources');
 
     $class = get_class_from_file($path . '/' . $fileName);
 

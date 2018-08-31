@@ -1,8 +1,8 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Http\Requests\ViewRequest;
+use AdamJedlicka\Luna\Http\Requests\ViewRequest;
 
 class ShowController extends Controller
 {

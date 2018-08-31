@@ -1,8 +1,8 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
-use AdamJedlicka\Admin\Http\Requests\EditRequest;
+use AdamJedlicka\Luna\Http\Requests\EditRequest;
 
 
 class EditController extends Controller

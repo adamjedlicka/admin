@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Requests;
+namespace AdamJedlicka\Luna\Http\Requests;
 
-use AdamJedlicka\Admin\Resource;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Resource;
+use AdamJedlicka\Luna\Facades\Resources;
 
 class CreateRequest extends IndexRequest
 {
@@ -22,7 +22,7 @@ class CreateRequest extends IndexRequest
     /**
      * Returns resource for current request
      *
-     * @return \AdamJedlicka\Admin\Resource
+     * @return \AdamJedlicka\Luna\Resource
      */
     public function resource() : Resource
     {

@@ -6,7 +6,7 @@ export default class Request {
 
     constructor(method, url, options = {}) {
         this._method = method
-        this._url = url.prefix('/admin')
+        this._url = url.prefix('/luna')
         this._options = options
     }
 

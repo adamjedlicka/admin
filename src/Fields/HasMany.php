@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
-use AdamJedlicka\Admin\Resource;
-use AdamJedlicka\Admin\Fields\Traits\HasForeignKey;
+use AdamJedlicka\Luna\Resource;
+use AdamJedlicka\Luna\Fields\Traits\HasForeignKey;
 
 class HasMany extends RelationshipField
 {

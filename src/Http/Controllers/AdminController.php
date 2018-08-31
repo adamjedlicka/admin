@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Http\Controllers;
+namespace AdamJedlicka\Luna\Http\Controllers;
 
 class AdminController extends Controller
 {
@@ -8,7 +8,7 @@ class AdminController extends Controller
     {
         $resources = [];
 
-        foreach (glob(app_path(config('admin.directory') . '/Resources/' . '*\.php')) as $file) {
+        foreach (glob(app_path(config('luna.directory') . '/Resources/' . '*\.php')) as $file) {
             $resourceClass = get_class_from_file($file);
             $resource = new $resourceClass;
 

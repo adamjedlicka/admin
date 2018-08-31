@@ -1,11 +1,11 @@
 <?php
 
-namespace AdamJedlicka\Admin\Fields;
+namespace AdamJedlicka\Luna\Fields;
 
 use Illuminate\Support\Str;
-use AdamJedlicka\Admin\Resource;
+use AdamJedlicka\Luna\Resource;
 use Illuminate\Database\Eloquent\Model;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Facades\Resources;
 
 class HasOne extends RelationshipField
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace AdamJedlicka\Admin\Traits;
+namespace AdamJedlicka\Luna\Traits;
 
 trait Authorizes
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Luna;
 
 use Illuminate\Support\Collection;
-use AdamJedlicka\Admin\Fields\Field;
+use AdamJedlicka\Luna\Fields\Field;
 
 class FieldCollection extends Collection
 {
@@ -26,7 +26,7 @@ class FieldCollection extends Collection
      * Returns field of specified name
      *
      * @param string $name
-     * @return \AdamJedlicka\Admin\Fields\Field
+     * @return \AdamJedlicka\Luna\Fields\Field
      */
     public function named(string $name) : Field
     {

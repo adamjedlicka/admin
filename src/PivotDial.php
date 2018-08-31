@@ -1,20 +1,20 @@
 <?php
 
-namespace AdamJedlicka\Admin;
+namespace AdamJedlicka\Luna;
 
-use AdamJedlicka\Admin\Fields\Id;
-use AdamJedlicka\Admin\Fields\Text;
-use AdamJedlicka\Admin\Fields\Field;
-use AdamJedlicka\Admin\FieldCollection;
-use AdamJedlicka\Admin\Fields\BelongsTo;
-use AdamJedlicka\Admin\Facades\Resources;
+use AdamJedlicka\Luna\Fields\Id;
+use AdamJedlicka\Luna\Fields\Text;
+use AdamJedlicka\Luna\Fields\Field;
+use AdamJedlicka\Luna\FieldCollection;
+use AdamJedlicka\Luna\Fields\BelongsTo;
+use AdamJedlicka\Luna\Facades\Resources;
 use Illuminate\Database\Eloquent\Builder;
-use AdamJedlicka\Admin\Fields\PivotBelongsTo;
+use AdamJedlicka\Luna\Fields\PivotBelongsTo;
 
 class PivotDial extends Dial
 {
     /**
-     * @var \AdamJedlicka\Admin\FieldCollection
+     * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $pivotFields;
 
