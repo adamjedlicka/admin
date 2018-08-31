@@ -1,5 +1,5 @@
 <template>
-    <div class="flex pb-4">
+    <div class="flex px-4 pt-4 bg-grey-lighter rounded-lg">
         <input
             type="text"
             placeholder="Search..."
@@ -15,7 +15,7 @@ import debounce from "lodash/debounce"
 
 export default {
     props: [
-        'value'
+        'value',
     ],
 
     methods: {

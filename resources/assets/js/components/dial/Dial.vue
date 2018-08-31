@@ -1,54 +1,51 @@
 <template>
-    <div v-if="dial">
+    <div v-if="dial" class="bg-white rounded-lg shadow-md min-w-100">
 
-        <DialSearch :v-if="dial.search" :value="url.search" @search="onSearch" />
+        <DialSearch v-if="dial.search" :value="url.search" @search="onSearch" />
 
-        <div class="bg-white shadow-md rounded-lg min-w-100" >
+        <div class="rounded-t-lg overflow-x-auto">
+            <table class="w-full">
 
-            <div class="rounded-t-lg overflow-x-auto">
-                <table class="w-full">
+                <DialHeader
+                    :prefix="name"
+                    :fields="dial.fields"
+                    @sort="onSort" />
 
-                    <DialHeader
-                        :prefix="name"
-                        :fields="dial.fields"
-                        @sort="onSort" />
+                <DialBody
+                    :rows="dial.data"
+                    :links="dial.links" >
 
-                    <DialBody
-                        :rows="dial.data"
-                        :links="dial.links" >
+                    <template slot="buttons" slot-scope="scope">
+                        <slot name="buttons" :resource="scope.resource">
+                            <router-link v-if="scope.resource.policies.view" :to="detailUrl(scope.resource)"
+                                title="Detail"
+                                class="text-grey hover:text-black cursor-pointer" >
+                                <i class="py-4 px-1 far fa-eye"></i>
+                            </router-link>
 
-                        <template slot="buttons" slot-scope="scope">
-                            <slot name="buttons" :resource="scope.resource">
-                                <router-link v-if="scope.resource.policies.view" :to="detailUrl(scope.resource)"
-                                    title="Detail"
-                                    class="text-grey hover:text-black cursor-pointer" >
-                                    <i class="py-4 px-1 far fa-eye"></i>
-                                </router-link>
+                            <router-link v-if="scope.resource.policies.update" :to="editUrl(scope.resource)"
+                                title="Edit"
+                                class="text-grey hover:text-black cursor-pointer" >
+                                <i class="py-4 px-1 far fa-edit"></i>
+                            </router-link>
 
-                                <router-link v-if="scope.resource.policies.update" :to="editUrl(scope.resource)"
-                                    title="Edit"
-                                    class="text-grey hover:text-black cursor-pointer" >
-                                    <i class="py-4 px-1 far fa-edit"></i>
-                                </router-link>
+                            <a v-if="scope.resource.policies.delete" @click="onDelete(scope.resource)"
+                                title="Detail"
+                                class="text-grey hover:text-red cursor-pointer" >
+                                <i class="py-4 px-1 far fa-trash-alt"></i>
+                            </a>
+                        </slot>
+                    </template>
 
-                                <a v-if="scope.resource.policies.delete" @click="onDelete(scope.resource)"
-                                    title="Detail"
-                                    class="text-grey hover:text-red cursor-pointer" >
-                                    <i class="py-4 px-1 far fa-trash-alt"></i>
-                                </a>
-                            </slot>
-                        </template>
+                </DialBody>
 
-                    </DialBody>
-
-                </table>
-            </div>
-
-            <DialPagination
-                :pagination="dial.pagination"
-                @page="onPageChange" />
-
+            </table>
         </div>
+
+        <DialPagination
+            :pagination="dial.pagination"
+            @page="onPageChange" />
+
     </div>
 </template>
 
