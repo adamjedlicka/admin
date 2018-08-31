@@ -85,20 +85,22 @@ class Dial implements Arrayable
 
     protected function applySearch($search)
     {
-        $model = $this->query->getModel();
+        $this->query->where(function ($query) use ($search) {
+            $model = $query->getModel();
 
-        foreach ($this->resource::$search as $searchable) {
-            if ($searchable == $model->getKeyName()) {
-                $type = $model->getKeyType();
+            foreach ($this->resource::$search as $searchable) {
+                if ($searchable == $model->getKeyName()) {
+                    $type = $model->getKeyType();
 
-                if ($type == 'int') {
-                    $this->query->orWhere($searchable, (int)$search);
-                    continue;
+                    if ($type == 'int') {
+                        $query->orWhere($searchable, (int)$search);
+                        continue;
+                    }
                 }
-            }
 
-            $this->query->orWhere($searchable, 'like', "%$search%");
-        }
+                $query->orWhere($searchable, 'like', "%$search%");
+            }
+        });
     }
 
     protected function fields() : FieldCollection
