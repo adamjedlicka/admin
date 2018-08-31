@@ -1,18 +1,18 @@
 <template>
-    <Panel title="Index">
+    <div class="p-4">
+        <div class="flex justify-between pb-4">
+            <h1 class="h1">Index</h1>
 
-        <template slot="buttons">
-            <router-link :to="`/resources/${resource}/create`"
-                class="btn btn-blue">
-                Create
-            </router-link>
-        </template>
+            <div class="buttons">
+                <router-link :to="`/resources/${resource}/create`"
+                    class="btn btn-blue">
+                    Create
+                </router-link>
+            </div>
+        </div>
 
-        <template slot="body">
-            <Dial :source="`/api/resources/${resource}`" />
-        </template>
-
-    </Panel>
+        <Dial :source="`/api/resources/${resource}`" />
+    </div>
 </template>
 
 <script>

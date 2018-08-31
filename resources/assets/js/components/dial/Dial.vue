@@ -1,56 +1,61 @@
 <template>
-    <div v-if="dial"
-        class="bg-white shadow-md rounded-lg min-w-100" >
+    <div v-if="dial">
 
-        <div class="rounded-t-lg overflow-x-auto">
-            <table class="w-full">
+        <DialSearch :v-if="dial.search" :value="url.search" @search="onSearch" />
 
-                <DialHeader
-                    :prefix="name"
-                    :fields="dial.fields"
-                    @sort="onSort" />
+        <div class="bg-white shadow-md rounded-lg min-w-100" >
 
-                <DialBody
-                    :rows="dial.data"
-                    :links="dial.links" >
+            <div class="rounded-t-lg overflow-x-auto">
+                <table class="w-full">
 
-                    <template slot="buttons" slot-scope="scope">
-                        <slot name="buttons" :resource="scope.resource">
-                            <router-link v-if="scope.resource.policies.view" :to="detailUrl(scope.resource)"
-                                title="Detail"
-                                class="text-grey hover:text-black cursor-pointer" >
-                                <i class="py-4 px-1 far fa-eye"></i>
-                            </router-link>
+                    <DialHeader
+                        :prefix="name"
+                        :fields="dial.fields"
+                        @sort="onSort" />
 
-                            <router-link v-if="scope.resource.policies.update" :to="editUrl(scope.resource)"
-                                title="Edit"
-                                class="text-grey hover:text-black cursor-pointer" >
-                                <i class="py-4 px-1 far fa-edit"></i>
-                            </router-link>
+                    <DialBody
+                        :rows="dial.data"
+                        :links="dial.links" >
 
-                            <a v-if="scope.resource.policies.delete" @click="onDelete(scope.resource)"
-                                title="Detail"
-                                class="text-grey hover:text-red cursor-pointer" >
-                                <i class="py-4 px-1 far fa-trash-alt"></i>
-                            </a>
-                        </slot>
-                    </template>
+                        <template slot="buttons" slot-scope="scope">
+                            <slot name="buttons" :resource="scope.resource">
+                                <router-link v-if="scope.resource.policies.view" :to="detailUrl(scope.resource)"
+                                    title="Detail"
+                                    class="text-grey hover:text-black cursor-pointer" >
+                                    <i class="py-4 px-1 far fa-eye"></i>
+                                </router-link>
 
-                </DialBody>
+                                <router-link v-if="scope.resource.policies.update" :to="editUrl(scope.resource)"
+                                    title="Edit"
+                                    class="text-grey hover:text-black cursor-pointer" >
+                                    <i class="py-4 px-1 far fa-edit"></i>
+                                </router-link>
 
-            </table>
+                                <a v-if="scope.resource.policies.delete" @click="onDelete(scope.resource)"
+                                    title="Detail"
+                                    class="text-grey hover:text-red cursor-pointer" >
+                                    <i class="py-4 px-1 far fa-trash-alt"></i>
+                                </a>
+                            </slot>
+                        </template>
+
+                    </DialBody>
+
+                </table>
+            </div>
+
+            <DialPagination
+                :pagination="dial.pagination"
+                @page="onPageChange" />
+
         </div>
-
-        <DialPagination
-            :pagination="dial.pagination"
-            @page="onPageChange" />
-
     </div>
 </template>
 
 <script>
 import DialPagination from './DialPagination'
 import DialHeader from './DialHeader'
+import DialSearch from './DialSearch'
 import DialBody from './DialBody'
 import Url from '~/support/Url'
 
@@ -82,6 +87,11 @@ export default {
         onSort(sort, order) {
             this.url.sortBy = sort
             this.url.orderBy = order
+            this.fetchData()
+        },
+
+        onSearch(value) {
+            this.url.search = value
             this.fetchData()
         },
 
@@ -117,6 +127,7 @@ export default {
     components: {
         DialPagination,
         DialHeader,
+        DialSearch,
         DialBody,
     }
 }

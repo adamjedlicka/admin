@@ -2,15 +2,12 @@
 
 namespace AdamJedlicka\Luna;
 
-use AdamJedlicka\Luna\Traits\HasLinks;
 use AdamJedlicka\Luna\Facades\Resources;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Support\Arrayable;
 
 class Dial implements Arrayable
 {
-    use HasLinks;
-
     /**
      * @var \AdamJedlicka\Luna\Resource
      */
@@ -60,6 +57,10 @@ class Dial implements Arrayable
             $this->query->orderBy($sortBy, request('orderBy', 'asc'));
         }
 
+        if ($search = request('search')) {
+            $this->applySearch($search);
+        }
+
         return $this->paginated();
     }
 
@@ -82,6 +83,24 @@ class Dial implements Arrayable
         return [$data, $pagination];
     }
 
+    protected function applySearch($search)
+    {
+        $model = $this->query->getModel();
+
+        foreach ($this->resource::$search as $searchable) {
+            if ($searchable == $model->getKeyName()) {
+                $type = $model->getKeyType();
+
+                if ($type == 'int') {
+                    $this->query->orWhere($searchable, (int)$search);
+                    continue;
+                }
+            }
+
+            $this->query->orWhere($searchable, 'like', "%$search%");
+        }
+    }
+
     protected function fields() : FieldCollection
     {
         return $this->resource->getFields()
@@ -100,7 +119,7 @@ class Dial implements Arrayable
             'fields' => $this->fields(),
             'data' => $data,
             'pagination' => $pagination,
-            'links' => $this->links,
+            'search' => $this->resource::$search,
         ];
     }
 }

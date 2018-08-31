@@ -23,6 +23,13 @@ abstract class Resource implements Arrayable
     public static $model;
 
     /**
+     * Array of fields that are searchable
+     *
+     * @var array|null
+     */
+    public static $search = null;
+
+    /**
      * Instance of coresponding model
      *
      * @var \Illuminate\Database\Eloquent\Model|null
