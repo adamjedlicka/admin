@@ -18,8 +18,10 @@ export default class Request {
             prefix += '.'
         }
 
+        // Get parameters from the URL barl
         let parameters = router.app.$route.query
 
+        // Save every parameter that starts with prefix in current query string of this request
         for (let parameter in parameters) {
             if (!parameter.startsWith(prefix)) continue
 
@@ -30,7 +32,17 @@ export default class Request {
             this._url[woPrefix] = parameters[parameter]
         }
 
+        // Now we create new query string for url bar
         let query = {}
+
+        // Preserve all parameters except for current request
+        for (let parameter in parameters) {
+            if (parameter.startsWith(prefix)) continue
+
+            query[parameter] = parameters[parameter]
+        }
+
+        // Store parameters of current request in the URL bar
         for (let parameter in this._url.parameters()) {
             query[prefix + parameter] = this._url[parameter]
         }
