@@ -1,0 +1,23 @@
+<?php
+
+namespace DummyNamespace;
+
+use AdamJedlicka\Luna\Resource;
+use AdamJedlicka\Luna\Fields\Id;
+
+class DummyClass extends Resource
+{
+
+    public static $model = \DummyRootNamespaceDummyClass::class;
+
+    public function fields()
+    {
+        return [
+
+            Id::make('Id')
+                ->sortable(),
+
+        ];
+    }
+
+}
