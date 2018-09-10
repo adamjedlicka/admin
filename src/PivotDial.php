@@ -14,6 +14,11 @@ use AdamJedlicka\Luna\Fields\PivotBelongsTo;
 class PivotDial extends Dial
 {
     /**
+     * @var \AdamJedlicka\Luna\Resource
+     */
+    protected $relatedResource;
+
+    /**
      * @var \AdamJedlicka\Luna\FieldCollection
      */
     protected $pivotFields;
@@ -24,11 +29,11 @@ class PivotDial extends Dial
 
         $this->query = $relationship;
 
-        $relatedResource = Resources::forModel($this->query->getRelated());
+        $this->relatedResource = Resources::forModel($this->query->getRelated());
 
         $this->pivotFields = new FieldCollection([
 
-            PivotBelongsTo::make($relatedResource->name(), $this->query->getRelationName(), $this->resource)
+            PivotBelongsTo::make($this->relatedResource->name(), $this->query->getRelationName(), $this->resource)
                 ->sortable()
                 ->isPivot(),
 
@@ -61,5 +66,10 @@ class PivotDial extends Dial
     protected function fields() : FieldCollection
     {
         return $this->pivotFields;
+    }
+
+    protected function search()
+    {
+        return $this->relatedResource::$search;
     }
 }

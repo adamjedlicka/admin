@@ -88,7 +88,7 @@ class Dial implements Arrayable
         $this->query->where(function ($query) use ($search) {
             $model = $query->getModel();
 
-            foreach ($this->resource::$search as $searchable) {
+            foreach ($this->search() as $searchable) {
                 if ($searchable == $model->getKeyName()) {
                     $type = $model->getKeyType();
 
@@ -113,15 +113,20 @@ class Dial implements Arrayable
             ->values();
     }
 
+    protected function search()
+    {
+        return $this->resource::$search;
+    }
+
     public function toArray()
     {
         [$data, $pagination] = $this->data();
 
         return [
             'fields' => $this->fields(),
+            'search' => $this->search(),
             'data' => $data,
             'pagination' => $pagination,
-            'search' => $this->resource::$search,
         ];
     }
 }
