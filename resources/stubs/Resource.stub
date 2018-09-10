@@ -7,9 +7,18 @@ use AdamJedlicka\Luna\Fields\Id;
 
 class DummyClass extends Resource
 {
-
+    /**
+     * Fully qualified name of the coresponding model class
+     *
+     * @var string
+     */
     public static $model = \DummyRootNamespaceDummyClass::class;
 
+    /**
+     * Definition of resource fields
+     *
+     * @return array
+     */
     public function fields()
     {
         return [
@@ -19,5 +28,4 @@ class DummyClass extends Resource
 
         ];
     }
-
 }
