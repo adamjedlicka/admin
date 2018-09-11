@@ -4,6 +4,7 @@
             type="text"
             :value="value"
             @input="onInput"
+            :disabled="field.isUnchangeable"
             class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline w-96 max-w-full" >
     </div>
 </template>

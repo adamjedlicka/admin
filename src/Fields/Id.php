@@ -6,5 +6,5 @@ class Id extends Field
 {
     protected $visibleOn = ['index', 'detail'];
 
-    protected $indexSize = 'small';
+    protected $cannotBeChanged = true;
 }
