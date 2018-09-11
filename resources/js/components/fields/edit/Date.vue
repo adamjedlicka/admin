@@ -3,7 +3,7 @@
         <input
             ref="input"
             type="text"
-            :value="display"
+            :value="value"
             @input="onInput"
             class="border border-grey rounded-lg py-2 px-4 outline-none focus:shadow-outline w-96 max-w-full" >
     </div>
@@ -18,19 +18,11 @@ export default {
         value: null,
     },
 
-    computed: {
-        display() {
-            return new Date(this.value).toLocaleString(document.documentElement.lang)
-        },
-    },
-
     mounted() {
         flatpickr(this.$refs.input, {
-            enableTime: true,
-            dateFormat: 'Z',
-            time_24hr: true,
+            dateFormat: 'Y-m-d',
             altInput: true,
-            altFormat: 'd. m. Y H:i:S'
+            altFormat: 'd. m. Y'
         })
     },
 

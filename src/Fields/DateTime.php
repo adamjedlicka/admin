@@ -2,33 +2,25 @@
 
 namespace AdamJedlicka\Luna\Fields;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
-class DateTime extends Field
+class DateTime extends Date
 {
-    protected $visibleOn = ['index', 'detail', 'edit'];
-
     /**
-     * Retrieves the model from the database
+     * Returns formated value for API to use
+     * Uses ISO 8601 format
      *
-     * @param Model $model Coresponding model
-     * @return mixed
+     * @param mixed $value
+     * @return string
      */
-    public function retrieve(Model $model)
+    protected function formatValue($value)
     {
-        return (new Carbon($model->getAttribute($this->name)))
-            ->toIso8601String();
-    }
+        if (is_null($value)) return null;
 
-    /**
-     * Default value getter
-     *
-     * @return mixed
-     */
-    public function getDefault()
-    {
-        return (new Carbon($this->default))
-            ->toIso8601String();
+        if ($value instanceof Carbon) {
+            return $value->toIso8601String();
+        } else {
+            return (new Carbon($value))->toIso8601String();
+        }
     }
 }

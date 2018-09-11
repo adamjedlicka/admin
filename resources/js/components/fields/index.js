@@ -9,6 +9,7 @@ let registerComponent = (component) => {
 let components = [
     'Id',
     'Text',
+    'Date',
     'DateTime',
 
     'BelongsTo',
